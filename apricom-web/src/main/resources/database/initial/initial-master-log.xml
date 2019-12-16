@@ -7,6 +7,6 @@
                    http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
-<!--    <include file=".xml" relativeToChangelogFile="true"/>-->
+    <include file="2019-12-14-auth-tables.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

@@ -27,11 +27,19 @@
             <groupId>ru.apricom</groupId>
             <artifactId>hibernate-utils</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>ru.apricom</groupId>
             <artifactId>pdf-template</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.apricom</groupId>
+            <artifactId>liquibase-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
 
         <!--  Databases -->
@@ -87,12 +95,8 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-c3p0</artifactId>
             <version>${hibernate.version}</version>
-            <!--<exclusions>
-                <exclusion>
-                    <groupId>org.hibernate</groupId>
-                    <artifactId>hibernate-core</artifactId>
-                </exclusion>
-            </exclusions>-->
+            <exclusions>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -116,6 +120,13 @@
             </exclusions>
         </dependency>
 
+        <!-- Authentication -->
+        <dependency>
+            <groupId>org.tynamo</groupId>
+            <artifactId>tapestry-security</artifactId>
+            <version>0.7.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -129,8 +140,8 @@
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
-                    <include>*/*.tml</include>
-                    <include>*/*.properties</include>
+                    <include>**/*.tml</include>
+                    <include>**/*.properties</include>
                 </includes>
             </resource>
         </resources>
