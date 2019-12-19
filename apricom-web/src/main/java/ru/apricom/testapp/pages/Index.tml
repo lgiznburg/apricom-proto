@@ -1,4 +1,10 @@
-<html t:type="layout" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
+<html t:type="layout" t:pageTitle="APriCom Главная"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter"><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="shortcut icon" href="${context:static/icons/favicon.ico}" type="image/x-icon" />
+</head>
+<body>
 
 <div class="content">
     <h4>Начало</h4>

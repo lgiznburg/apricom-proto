@@ -1,0 +1,208 @@
+/* nav bar styles */
+
+nav.nav_apricom {
+    position: fixed;
+    left: 0; top: 0;
+    display: block;
+    border-bottom: 1px #edf5f7;
+    margin: 0 auto 0;
+    box-shadow: #edf5f7;
+    z-index: 9998;
+}
+
+ul.nav_apricom {
+    position: fixed;
+    left: 0; top: 0;
+    width: 100%;
+    list-style: none;
+    margin: 0 auto 0;
+    z-index: 9998;
+    background: #065755;
+    color: white;
+    padding: 0.1em 0 0.1em 0;
+    border-bottom: #edf5f7;
+}
+
+li.nav_apricom {display: inline; color: white; padding: 0em 0;}
+
+img.nav_apricom {
+    height: 35px;
+    margin-top: 6px;
+}
+
+div.mobile-menu {
+    max-height: 100%;
+    width: 30%;
+    z-index: 9123;
+    position: fixed;
+    right: 0; top: 47px;
+    display: block;
+    background: #043f3e;
+    color: white;
+    overflow: scroll;
+    scrollbar-width: none;
+}
+
+div.mobile-menu::-webkit-scrollbar {
+    display: none;
+}
+
+div.mobile-submenu {
+    width: 100%;
+    z-index: 9123;
+    right: 0; top: 47px;
+    display: inline;
+    background: #065958;
+    color: white;
+}
+
+@media only screen and (max-width: 425px) {
+    div.mobile-menu {
+        width: 100%;
+    }
+}
+
+button.mobile-menu {
+    background: #043f3e;
+    width: 100%;
+    padding: 0.9em 0.5em;
+    border: none;
+    color: white !important;
+}
+
+button.mobile-menu.panel_apricom {
+    display: inline;
+}
+
+button.mobile-menu:hover {
+    background: #055453;
+}
+
+button.mobile-menu:focus {
+    outline: none;
+}
+
+button.mobile-submenu {
+    background: #065958;
+    width: 100%;
+    padding: 0.9em 0.5em;
+    border: none;
+    color: white !important;
+}
+
+button.mobile-submenu:hover {
+    background: antiquewhite;
+    color: black !important;
+}
+
+button.mobile-submenu:focus {
+    outline: none;
+}
+
+button.mobile-submenu.disabled:active,
+button.mobile-submenu.disabled:focus,
+button.mobile-submenu.disabled:hover {
+    background: #065958;
+    color: white;
+}
+
+button.mobile-menu.disabled:active,
+button.mobile-menu.disabled:focus,
+button.mobile-menu.disabled:hover {
+    background: #043f3e;
+    color: white;
+}
+
+button.mobile-menu.activated,
+button.mobile-menu.activated:active,
+button.mobile-menu.activated:focus,
+button.mobile-menu.activated:hover {
+    background: #055453;
+}
+
+button.mobile-menu.bottom,
+button.mobile-menu.bottom:active,
+button.mobile-menu.bottom:focus,
+button.mobile-menu.bottom:hover {
+    opacity: 15%;
+    height: 100% !important;
+}
+
+/* buttons */
+
+button.nav_apricom {
+    background-color: #065755;
+    display: inline-block;
+    color: #FFFFFF;
+    padding: 0.9em 0.5em;
+    border: none;
+    transition: .2s ease;
+}
+
+button.nav_apricom.disabled:hover,
+button.nav_apricom.disabled:active,
+button.nav_apricom.disabled:focus {
+    background-color: #065755 !important;
+    outline: none;
+}
+
+button.nav_apricom:hover {
+    background-color: #076664;
+}
+
+button.nav_apricom:active {
+    background-color: #087674;
+}
+
+button.nav_apricom:focus {
+    outline: none;
+}
+
+div.panel_apricom {
+    height: 100%;
+    width: 200px;
+    z-index: 9123;
+    left: -180px; top: 47px;
+    position: fixed;
+    background: #065958;
+    color: white;
+    transition: left ease 200ms;
+}
+
+div.panel_apricom:hover {
+    left: 0;
+    transition: left ease 200ms;
+}
+
+div.panel_apricom_toggle {
+    background: #076664; !important;
+}
+
+span.errortext {
+    color: darkred;
+    font-weight: bold;
+    font-style: italic;
+}
+
+div.disabler {
+    position: fixed;
+    z-index: 8888;
+    left: 0; top: 0;
+    height: 100%; width: 100%;
+    background: black;
+    opacity: 0.5;
+}
+
+/* hide if not desktop */
+@media only screen and (max-width: 425px) {
+    .desktop {
+        display: none;
+    }
+}
+
+/* hide if desktop */
+@media only screen and (min-width: 426px) {
+    .mobile {
+        display: none;
+    }
+}

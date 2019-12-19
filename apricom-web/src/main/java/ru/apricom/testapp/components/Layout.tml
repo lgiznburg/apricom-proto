@@ -1,9 +1,105 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 <head>
-    <title>test</title>
+    <title>APriCom</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="shortcut icon" href="${context:static/icons/favicon.ico}" type="image/x-icon" />
 </head>
 <body>
-    <t:body/>
+
+<div>
+    <nav class="nav_apricom">
+        <ul class="nav_apricom" >
+            <li style="float: left; padding: 0 1em 0 1em">
+                <!--<t:pagelink page="index">-->
+                    <img class="nav_apricom" src="${context:static/img/logoRNIMUwhite.svg}" title="На главную"/>
+                <!--</t:pagelink>-->
+            </li>
+            <li class="mobile" style="float: right">
+                <t:if test="auth">
+                        <button class="nav_apricom" id="nav_toggle">
+                            <span style="padding: 0 2em" class="glyphicon glyphicon-align-justify"/>
+                        </button>
+                    <p:else>
+                        <t:pagelink page="login">
+                            <button class="nav_apricom">
+                                <span style="padding: 0 2em" class="glyphicon glyphicon-user"/>
+                            </button>
+                        </t:pagelink>
+                    </p:else>
+                </t:if>
+            </li>
+            <li class="desktop" style="float: right">
+                <t:if test="auth">
+                    <button class="nav_apricom disabled">
+                        <span>Добро пожаловать, ${user}</span>
+                    </button>
+                    <p:else>
+                        <div style="margin-right: 15px;">
+                            <t:pagelink page="login">
+                                <button class="nav_apricom">
+                                    <span>Войти или зарегистрироваться</span>
+                                </button>
+                            </t:pagelink>
+                        </div>
+                    </p:else>
+                </t:if>
+            </li>
+        </ul>
+    </nav>
+</div>
+<div class="mobile">
+    <div class="mobile-menu hidden" id="mobile_nav">
+        <div>
+            <t:pagelink page="index">
+                <button class="mobile-menu">Кнопка 1</button>
+            </t:pagelink>
+        </div>
+        <div>
+            <button class="mobile-menu submenu_toggle" val="drop">Кнопка 2</button>
+            <div class="mobile-submenu submenu_element hidden" id="drop">
+                <t:pagelink page="index">
+                    <button class="mobile-submenu"><span>Подкнопка 1</span></button>
+                </t:pagelink>
+                <t:pagelink page="index">
+                    <button class="mobile-submenu"><span>Подкнопка 2</span></button>
+                </t:pagelink>
+                <t:pagelink page="index">
+                    <button class="mobile-submenu"><span>Подкнопка 3</span></button>
+                </t:pagelink>
+            </div>
+        </div>
+    </div>
+</div>
+<t:if test="auth">
+    <div class="desktop panel_apricom">
+        <div style="width: 180px; height: 100%; display: inline-flex; flex-direction: column">
+            <t:pagelink page="index">
+                <button class="mobile-menu" style="display: inline-flex">Кнопка 1</button>
+            </t:pagelink>
+            <div>
+                <button style="display: inline-flex" class="mobile-menu submenu_toggle" val="drop_desktop">Кнопка 2</button>
+                <div class="mobile-submenu submenu_element hidden" id="drop_desktop">
+                    <t:pagelink page="index">
+                        <button class="mobile-submenu panel_apricom"><span>Подкнопка 1</span></button>
+                    </t:pagelink>
+                    <t:pagelink page="index">
+                        <button class="mobile-submenu panel_apricom"><span>Подкнопка 2</span></button>
+                    </t:pagelink>
+                    <t:pagelink page="index">
+                        <button class="mobile-submenu panel_apricom"><span>Подкнопка 3</span></button>
+                    </t:pagelink>
+                </div>
+            </div>
+        </div>
+        <div style="width: 20px; height: 100%; display: inline-flex;">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </div>
+    </div>
+</t:if>
+
+    <div class="container" style="top: 55px; position:absolute" role="main">
+        <t:body/>
+    </div>
 </body>
 </html>
