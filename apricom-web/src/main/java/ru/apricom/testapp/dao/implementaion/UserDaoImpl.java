@@ -3,7 +3,9 @@ package ru.apricom.testapp.dao.implementaion;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import ru.apricom.testapp.dao.UserDao;
+import ru.apricom.testapp.entities.auth.RolesNames;
 import ru.apricom.testapp.entities.auth.User;
+import ru.apricom.testapp.entities.auth.UserRole;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -33,6 +35,13 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         } catch ( NoSuchAlgorithmException e ) {
             throw new RuntimeException( e );
         }
+    }
+
+    @Override
+    public UserRole findRoleByName( RolesNames roleName ) {
+        Criteria criteria = session.createCriteria( UserRole.class )
+                .add( Restrictions.eq( "authority", roleName.name() ) );
+        return (UserRole) criteria.uniqueResult();
     }
 
 }

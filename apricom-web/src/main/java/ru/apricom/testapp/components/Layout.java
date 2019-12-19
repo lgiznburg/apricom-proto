@@ -2,6 +2,10 @@ package ru.apricom.testapp.components;
 
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.tynamo.security.services.SecurityService;
+import ru.apricom.testapp.dao.UserDao;
+import ru.apricom.testapp.entities.auth.User;
 
 /**
  * @author leonid.
@@ -9,14 +13,26 @@ import org.apache.tapestry5.annotations.Property;
 @Import(stylesheet = "context:static/css/apricom.css", module = "layout")
 public class Layout {
 
-    @Property
-    private Boolean auth;
+    @Inject
+    private SecurityService securityService;
 
-    @Property
-    private String user;
+    @Inject
+    private UserDao userDao;
 
     public void setupRender() {
-        this.auth = true;
-        this.user = "Иван Иваныч";
+    }
+
+    public String getUser() {
+        if ( !securityService.isUser() ) {
+            return ""; // no user
+        }
+        String username = (String) securityService.getSubject().getPrincipal();
+        User user = userDao.findByUserName( username );
+        StringBuilder nameBuilder = new StringBuilder(user.getFirstName());
+        if ( !user.getMiddleName().isEmpty() ) {
+            nameBuilder.append( " " )
+                    .append( user.getMiddleName() );
+        }
+        return nameBuilder.toString();
     }
 }

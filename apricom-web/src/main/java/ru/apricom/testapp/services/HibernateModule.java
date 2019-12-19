@@ -3,6 +3,7 @@ package ru.apricom.testapp.services;
 import org.apache.tapestry5.hibernate.HibernateTransactionAdvisor;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.ImportModule;
 import org.apache.tapestry5.ioc.annotations.Match;
 import ru.apricom.seedentity.hibernate.SeedEntity;
 import ru.apricom.seedentity.hibernate.SeedEntityImpl;
@@ -13,6 +14,7 @@ import ru.apricom.testapp.dao.implementaion.UserDaoImpl;
  * @author leonid.
  *
  */
+@ImportModule( PopulateDataModule.class )
 public class HibernateModule {
 
     public static void bind( ServiceBinder binder)
