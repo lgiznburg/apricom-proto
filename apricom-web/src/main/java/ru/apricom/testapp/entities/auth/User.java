@@ -5,8 +5,11 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
+import javax.annotation.RegEx;
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -27,18 +30,23 @@ public class User implements Serializable {
 
     @Column(unique = true)
     @Email
+    @NotBlank
     private String username;
 
     @Column
     private String password;
 
     @Column
+    @NotBlank
+    @Pattern( regexp = "[А-Яа-я0-9 ]*")
     private String firstName;
 
     @Column
     private String middleName;
 
     @Column
+    @NotBlank
+    @Pattern( regexp = "[А-Яа-я0-9 ]*")
     private String lastName;
 
     @Column
