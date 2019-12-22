@@ -92,12 +92,12 @@ public class Register {
     public void onValidateFromRegistrationForm() {
         if ( !password.equals( confirmation ) ) {
             // password should match
-            registrationForm.recordError( "Password should match" );
+            registrationForm.recordError( messages.get("confirm-should-match") );
         }
         User previous = userDao.findByUserName( entrant.getUsername() );
         if ( previous != null ) {
             // userName already in use
-            registrationForm.recordError( emailField, "Already in use" );
+            registrationForm.recordError( emailField, messages.get("already-in-use") );
         }
 
     }

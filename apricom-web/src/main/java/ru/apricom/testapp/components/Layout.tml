@@ -31,9 +31,15 @@
             </li>
             <li class="desktop" style="float: right">
                 <t:security.user>
-                    <button class="nav_apricom disabled">
-                        <span>Добро пожаловать, ${user}</span>
+                    <div class="dropdown">
+                    <button class="nav_apricom dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" id="userDropdown" aria-expanded="false">
+                        <span>Добро пожаловать, ${user}</span><span class="caret"/>
                     </button>
+                        <ul class="dropdown-menu bg-light" aria-labelledby="userDropdown">
+                            <li><t:eventlink event="logout">${message:navbar.logout}</t:eventlink></li>
+                        </ul>
+                    </div>
+
                 </t:security.user>
                 <t:security.guest>
                     <div style="margin-right: 15px;">
