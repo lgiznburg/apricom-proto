@@ -7,7 +7,15 @@
                    http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
-    <include file="2019-12-14-auth-tables.xml" relativeToChangelogFile="true"/>
-    <include file="2019-12-23-catalog-table.xml" relativeToChangelogFile="true"/>
-
+    <changeSet id="1" author="leonid">
+        <createTable tableName="catalogs">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="code" type="INT"/>
+            <column name="catalog" type="${string.type}"/>
+            <column name="title" type="${string.type}"/>
+            <column name="short_title" type="${string.type}"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

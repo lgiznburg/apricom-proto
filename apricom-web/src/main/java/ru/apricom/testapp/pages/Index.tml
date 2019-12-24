@@ -3,7 +3,16 @@
       xmlns:p="tapestry:parameter">
 
 <div class="content">
-    <h4>Начало</h4>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-2">
+        <h4>Начало</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-2">
+            <t:pagelink page="requests/list" class="btn btn-success">Список заявок</t:pagelink>
+        </div>
+    </div>
 </div>
 
 </html>
