@@ -1,9 +1,13 @@
-<html t:type="layout" t:pageTitle="Список заявок"
+<html t:type="layout"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
 <div class="content">
     <h4>здесь будет список</h4>
+</div>
+
+<div class="eg">
+    <t:grid source="listRows" rowsPerPage="4" pagerPosition="top"/>
 </div>
 
 </html>

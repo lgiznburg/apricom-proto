@@ -2,6 +2,7 @@ package ru.apricom.testapp.services;
 
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.annotations.Contribute;
+import ru.apricom.seedentity.SeedEntityIdentifier;
 import ru.apricom.seedentity.hibernate.SeedEntity;
 import ru.apricom.testapp.entities.auth.RolesNames;
 import ru.apricom.testapp.entities.auth.User;
@@ -76,12 +77,11 @@ public class PopulateDataModule {
         headMaser.getRoles().add( headMaster );
         configuration.add( "headMasterUser", headMaser );
 
-/*
+        configuration.add("11", new SeedEntityIdentifier(AdmissionType.class, "title"));
         configuration.add("BASE_ADMISSION", new AdmissionType( 1, "общий конкурс", "общий"));
         configuration.add("TARGET_ADMISSION", new AdmissionType(2, "целевой прием", "целевой"));
         configuration.add("NO_EXAMS", new AdmissionType(3, "без вступительных испытаний", "без ВИ"));
         configuration.add("SPECIAL_QUOTE", new AdmissionType(4, "особая квота", "по квоте"));
         configuration.add( "CONTRACT", new AdmissionType(5, "по договору", "по договору"));
-*/
     }
 }

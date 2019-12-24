@@ -28,6 +28,7 @@ public class AppModule {
         configuration.add(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
         configuration.add(SymbolConstants.PRODUCTION_MODE, "false");
         configuration.add(SymbolConstants.RESTRICTIVE_ENVIRONMENT, "true");
+        configuration.add(SymbolConstants.CHARSET, "utf-8");
 
         // Generate a random HMAC key for form signing (not cluster safe).
         // Normally it would be better to use a fixed password-like string, but
