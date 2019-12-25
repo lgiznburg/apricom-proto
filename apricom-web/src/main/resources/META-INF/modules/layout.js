@@ -9,20 +9,7 @@ define( ["jquery"], function ($) {
         toggleTable();
     });
 
-    function tryError() {
-        $.ajax({
-            type: "get",
-            url: "test/error",
-            data: {},
-            success: function () {
-
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                environmentError(jqXHR.status, jqXHR.responseText);
-            }
-        })
-    }
-
+    //call like this: environmentError(jqXHR.status, jqXHR.responseText);
     function environmentError(code, text) {
         if (countdown == 0) {
             $("#err_text").text(code + " " + parseError(text, "error") + ': "' + parseError(text, "message") + '".');
@@ -74,41 +61,24 @@ define( ["jquery"], function ($) {
         });
     }
 
-    function switchLocale() {
+    function toggleMenuMobile() {
+        var exposed = $("#navmenu").hasClass("xposed");
 
-        $.ajax({
-            type: "GET",
-            url: "checklocale",
-            data: {},
-            success: function (response) {
-                var pathname = window.location.pathname;
-                pathname += response == "ru" ? "?lang=en" : "?lang=ru";
-                window.location.replace(pathname);
-            },
-            error: function () {
-                alert("error");
-            }
-        });
+        if (exposed) {
+            $("#navmenu").removeClass("xposed");
+            $("#disabler").addClass("hidden");
+            $(".submenu_element").addClass("hidden");
+            $(".submenu_toggle").removeClass("activated");
+        } else {
+            $("#navmenu").addClass("xposed");
+            $("#disabler").removeClass("hidden");
+        }
     }
 
     function mobileOpenNav() {
         $("#nav_toggle").on("click", function () {
-            toggleNav();
+            toggleMenuMobile();
         });
-    }
-
-    function toggleNav() {
-        var hidden = $("#mobile_nav").hasClass("hidden");
-
-        if (hidden) {
-            $("#mobile_nav").removeClass("hidden");
-            $("#disabler").removeClass("hidden");
-        } else {
-            $("#mobile_nav").addClass("hidden");
-            $(".submenu_element").addClass("hidden");
-            $("#disabler").addClass("hidden");
-            $(".submenu_toggle").removeClass("activated");
-        }
     }
 
     function openSubMenu() {
@@ -130,9 +100,9 @@ define( ["jquery"], function ($) {
 
     function closeMenus() {
         $("#disabler").on('click', function () {
-            var hidden = $("#mobile_nav").hasClass("hidden");
-            if (!hidden) {
-                toggleNav();
+            var exposed = $("#navmenu").hasClass("xposed");
+            if (exposed) {
+                toggleMenuMobile();
             }
         })
     }

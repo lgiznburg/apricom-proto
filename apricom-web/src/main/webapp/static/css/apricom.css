@@ -169,6 +169,16 @@ div.panel_apricom {
     transition: left ease 200ms;
 }
 
+@media only screen and (max-width: 425px) {
+    div.panel_apricom {
+        left: -200px !important;
+    }
+}
+
+div.panel_apricom.xposed {
+    left: 0 !important;
+}
+
 div.panel_apricom:hover {
     left: 0;
     transition: left ease 200ms;
@@ -204,5 +214,19 @@ div.disabler {
 @media only screen and (min-width: 426px) {
     .mobile {
         display: none;
+    }
+}
+
+@media only screen and (max-width: 425px) {
+    .body_container {
+        position: fixed;
+        top: 60px; left: 15px;
+    }
+}
+
+@media only screen and (min-width: 426px) {
+    .body_container {
+        position: fixed;
+        top: 60px; left: 30px;
     }
 }
