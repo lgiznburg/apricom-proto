@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<t:container xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+             xmlns:p="tapestry:parameter" >
+
+    <!--
+     >>>>NAMING conventions for buttons and submenus to work:<<<<
+     >> parameter "val" of the <button> must be same as the "id" of the submenu container <div>;
+     >> "id" of the submenu container <div> must be formed as its "val" + '_btn';
+     -->
+
+    <div>
+        <t:pagelink page="index">
+            <button class="mobile-menu">Кнопка 1</button>
+        </t:pagelink>
+    </div>
+    <div>
+        <button class="mobile-menu submenu_toggle" val="drop" id="drop_btn">Кнопка 2</button>
+        <div class="mobile-submenu submenu_element hidden" id="drop">
+            <t:pagelink page="index">
+                <button class="mobile-submenu"><span>Подкнопка 1</span></button>
+            </t:pagelink>
+            <t:pagelink page="index">
+                <button class="mobile-submenu"><span>Подкнопка 2</span></button>
+            </t:pagelink>
+            <t:pagelink page="index">
+                <button class="mobile-submenu"><span>Подкнопка 3</span></button>
+            </t:pagelink>
+        </div>
+    </div>
+
+</t:container>

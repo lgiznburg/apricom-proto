@@ -33,7 +33,7 @@
                 <t:security.user>
                     <div class="dropdown">
                     <button class="nav_apricom dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" id="userDropdown" aria-expanded="false">
-                        <span>Добро пожаловать, ${user}</span><span class="caret"/>
+                        <span>${message:welcome} ${user}</span><span class="caret"/>
                     </button>
                         <ul class="dropdown-menu bg-light" aria-labelledby="userDropdown">
                             <li><t:eventlink event="logout">${message:navbar.logout}</t:eventlink></li>
@@ -45,7 +45,7 @@
                     <div style="margin-right: 15px;">
                         <t:pagelink page="login">
                             <button class="nav_apricom">
-                                <span>Войти или зарегистрироваться</span>
+                                <span>${message:login_or_register}</span>
                             </button>
                         </t:pagelink>
                     </div>
@@ -55,57 +55,18 @@
     </nav>
 </div>
 <t:security.user>
-    <div class="mobile">
-        <div class="mobile-menu hidden" id="mobile_nav">
-            <div>
-                <t:pagelink page="index">
-                    <button class="mobile-menu">Кнопка 1</button>
-                </t:pagelink>
-            </div>
-            <div>
-                <button class="mobile-menu submenu_toggle" value="drop">Кнопка 2</button>
-                <div class="mobile-submenu submenu_element hidden" id="drop">
-                    <t:pagelink page="index">
-                        <button class="mobile-submenu"><span>Подкнопка 1</span></button>
-                    </t:pagelink>
-                    <t:pagelink page="index">
-                        <button class="mobile-submenu"><span>Подкнопка 2</span></button>
-                    </t:pagelink>
-                    <t:pagelink page="index">
-                        <button class="mobile-submenu"><span>Подкнопка 3</span></button>
-                    </t:pagelink>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="desktop panel_apricom">
+    <div id="navmenu" class="panel_apricom">
         <div style="width: 180px; height: 100%; display: inline-flex; flex-direction: column">
-            <t:pagelink page="index">
-                <button class="mobile-menu" style="display: inline-flex">Кнопка 1</button>
-            </t:pagelink>
-            <div>
-                <button style="display: inline-flex" class="mobile-menu submenu_toggle" value="drop_desktop">Кнопка 2</button>
-                <div class="mobile-submenu submenu_element hidden" id="drop_desktop">
-                    <t:pagelink page="index">
-                        <button class="mobile-submenu panel_apricom"><span>Подкнопка 1</span></button>
-                    </t:pagelink>
-                    <t:pagelink page="index">
-                        <button class="mobile-submenu panel_apricom"><span>Подкнопка 2</span></button>
-                    </t:pagelink>
-                    <t:pagelink page="index">
-                        <button class="mobile-submenu panel_apricom"><span>Подкнопка 3</span></button>
-                    </t:pagelink>
-                </div>
-            </div>
+            <t:navmenu/>
         </div>
         <div style="width: 20px; height: 100%; display: inline-flex;">
-            <span class="glyphicon glyphicon-chevron-right"></span>
+            <span class="glyphicon glyphicon-chevron-right"/>
         </div>
     </div>
 </t:security.user>
-
-    <div class="container" style="top: 55px; position:absolute" role="main">
-        <t:body/>
-    </div>
+<div class="disabler hidden" id="disabler"/>
+<div class="container body_container" role="main">
+    <t:body/>
+</div>
 </body>
 </html>
