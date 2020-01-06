@@ -9,5 +9,7 @@
 
     <include file="2019-12-14-auth-tables.xml" relativeToChangelogFile="true"/>
     <include file="2019-12-23-catalog-table.xml" relativeToChangelogFile="true"/>
+    <include file="2019-12-24-persons-tables.xml" relativeToChangelogFile="true"/>
+    <include file="2019-12-25-base-tables.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

@@ -1,0 +1,149 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="1" author="leonid">
+        <createTable tableName="specialities">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="code" type="${string.type}">
+                <constraints unique="true"/>
+            </column>
+            <column name="title" type="${string.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="short_title" type="${string.type}"/>
+            <column name="education_level" type="${string.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="leonid">
+        <createTable tableName="educational_programs">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="speciality_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="education_form_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="semesters" type="INT"/>
+            <column name="based_on" type="${string.type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="leonid">
+        <createTable tableName="program_requirements">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="min_score" type="INT"/>
+            <column name="program_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subject_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sequence_number" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="leonid">
+        <addUniqueConstraint tableName="educational_programs" columnNames="speciality_id,education_form_id"/>
+    </changeSet>
+
+    <changeSet id="5" author="leonid">
+        <addUniqueConstraint tableName="program_requirements" columnNames="program_id,subject_id"/>
+    </changeSet>
+
+    <changeSet id="6" author="leonid">
+        <createIndex tableName="educational_programs" indexName="fk_program_specialities">
+            <column name="speciality_id"/>
+        </createIndex>
+        <createIndex tableName="educational_programs" indexName="fk_program_forms">
+            <column name="education_form_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="7" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="speciality_id" baseTableName="educational_programs"
+                                 constraintName="fk_program_specialities"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="specialities" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="education_form_id" baseTableName="educational_programs"
+                                 constraintName="fk_program_forms"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="catalogs" validate="true"/>
+    </changeSet>
+
+    <changeSet id="8" author="leonid">
+        <createIndex tableName="program_requirements" indexName="fk_requirement_programs">
+            <column name="program_id"/>
+        </createIndex>
+        <createIndex tableName="program_requirements" indexName="fk_requirement_subjects">
+            <column name="subject_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="9" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="program_id" baseTableName="program_requirements"
+                                 constraintName="fk_requirement_programs"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="educational_programs" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="subject_id" baseTableName="program_requirements"
+                                 constraintName="fk_requirement_subjects"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="catalogs" validate="true"/>
+    </changeSet>
+
+    <changeSet id="10" author="leonid">
+        <createTable tableName="competitions">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="admission_id" type="${id.type}" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="program_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="financing" type="${string.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sequence_number" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="11" author="leonid">
+        <addUniqueConstraint tableName="competitions" columnNames="program_id,admission_id,financing"/>
+    </changeSet>
+
+    <changeSet id="12" author="leonid">
+        <createIndex tableName="competitions" indexName="fk_competition_programs">
+            <column name="program_id"/>
+        </createIndex>
+        <createIndex tableName="competitions" indexName="fk_competition_admissions">
+            <column name="admission_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="13" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="program_id" baseTableName="competitions"
+                                 constraintName="fk_competition_programs"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="educational_programs" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="admission_id" baseTableName="competitions"
+                                 constraintName="fk_competition_admissions"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="catalogs" validate="true"/>
+    </changeSet>
+
+</databaseChangeLog>
