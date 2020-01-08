@@ -1,0 +1,9 @@
+<html t:type="layout" t:pageTitle="Список заявок"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+<div class="content">
+    <h4>здесь будет список</h4>
+</div>
+
+</html>

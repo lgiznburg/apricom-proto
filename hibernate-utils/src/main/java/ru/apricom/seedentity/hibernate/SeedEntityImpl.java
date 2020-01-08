@@ -3,13 +3,15 @@ package ru.apricom.seedentity.hibernate;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.tapestry5.hibernate.HibernateSessionSource;
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
 import org.slf4j.Logger;
 import ru.apricom.seedentity.SeedEntityIdentifier;
@@ -22,25 +24,28 @@ import javax.persistence.UniqueConstraint;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * copied from tynamo-hibernate-seedentity because of Hibernate version incompatible
+ * copied from tynamo-hibernate-seedentity because of Hibernate version incompatibility
  *
- * fixes: metadata.getIdentifier(entityUpdater.getOriginalEntity(), EntityMode.POJO) does not allow EntityMode as second argument
+ * fixes:
+ * - metadata.getIdentifier(entityUpdater.getOriginalEntity(), EntityMode.POJO) does not allow EntityMode as second argument
  * use session instead
+ * - UniqueConstraints annotation contains column names. They need to be translated to property names
+ * - Query-by-example does not support association, so use Criteria to find unique entity
  *
  * @author leonid.
  */
 @EagerLoad
 public class SeedEntityImpl implements SeedEntity {
-    @SuppressWarnings("unchecked")
-    private Map<Class, SeedEntityIdentifier> typeIdentifiers = new HashMap<Class, SeedEntityIdentifier>();
+    private Map<String, SeedEntityIdentifier> typeIdentifiers = new HashMap<>();
     private SessionFactory sessionFactory;
     private Logger logger;
     // track newly added entities so you know to update only those ones and otherwise ignore by default
-    private List<Object> newlyAddedEntities = new ArrayList<Object>();
+    private List<Object> newlyAddedEntities = new ArrayList<>();
 
     public SeedEntityImpl(Logger logger, HibernateSessionSource sessionSource, List<Object> entities) {
         // Create a new session for this rather than participate in the existing session (through SessionManager)
@@ -87,10 +92,10 @@ public class SeedEntityImpl implements SeedEntity {
             String uniquelyIdentifyingProperty = null;
             if (object instanceof SeedEntityIdentifier ) {
                 // SeedEntityIdentifier interface can be used for setting identifier for specific entity only
-                // or for all enties of the same type
+                // or for all entities of the same type
                 SeedEntityIdentifier entityIdentifier = (SeedEntityIdentifier) object;
                 if (entityIdentifier.getEntity() instanceof Class ) {
-                    typeIdentifiers.put((Class) entityIdentifier.getEntity(), entityIdentifier);
+                    typeIdentifiers.put(((Class) entityIdentifier.getEntity()).getName(), entityIdentifier);
                     continue;
                 } else {
                     uniquelyIdentifyingProperty = entityIdentifier.getUniquelyIdentifyingProperty();
@@ -103,8 +108,8 @@ public class SeedEntityImpl implements SeedEntity {
                 continue;
             }
 
-            if (typeIdentifiers.containsKey(object.getClass()))
-                uniquelyIdentifyingProperty = typeIdentifiers.get(object.getClass()).getUniquelyIdentifyingProperty();
+            if (typeIdentifiers.containsKey(object.getClass().getName()))
+                uniquelyIdentifyingProperty = typeIdentifiers.get(object.getClass().getName()).getUniquelyIdentifyingProperty();
 
             // Note that using example ignores identifier - so seed entities with manually set ids will be re-seeded
 
@@ -114,30 +119,30 @@ public class SeedEntityImpl implements SeedEntity {
             // based on Trails descriptors and ognl accomplished this in just a few lines) and
             // wasn't really interested in creating the criteria using only unique attributes from scratch
 
-            // TODO it'd be nice if we could use Hibernate ClassMetadata rather than BeanUtils for this
+            //  it'd be nice if we could use Hibernate ClassMetadata rather than BeanUtils for this
             // but I don't know how to find unique properties by using Hibernate API only
             PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors( entity.getClass() );
-            Set<String> nonUniqueProperties = new HashSet<String>(descriptors.length);
-            for ( PropertyDescriptor descriptor : descriptors)
-                nonUniqueProperties.add(descriptor.getName());
 
             Set<Set<String>> setsOfUniqueProperties;
             if (uniquelyIdentifyingProperty == null)
                 setsOfUniqueProperties = findPossiblePropertiesWithUniqueColumnAnnotation(entity, descriptors);
             else {
-                setsOfUniqueProperties = new HashSet<Set<String>>();
-                setsOfUniqueProperties.add(new HashSet<String>( Arrays.asList(uniquelyIdentifyingProperty)));
+                setsOfUniqueProperties = new HashSet<>();
+                setsOfUniqueProperties.add( new HashSet<>( Collections.singletonList( uniquelyIdentifyingProperty ) ));
             }
 
             boolean entityWithSameValuesFound = false;
             for ( Set<String> uniqueProperties : setsOfUniqueProperties) {
-                HashSet<String> nonUniquePropertiesCopy = new HashSet<String>(nonUniqueProperties);
-                nonUniquePropertiesCopy.removeAll(uniqueProperties);
-                Example example = Example.create(entity);
-                for ( String nonUniqueProperty : nonUniquePropertiesCopy)
-                    example.excludeProperty(nonUniqueProperty);
-                List<Object> results = session.createCriteria(entity.getClass()).add(example).list();
-
+                Criteria criteria = session.createCriteria( entity.getClass() );
+                for ( String uniqueProperty : uniqueProperties ) {
+                    try {
+                        criteria.add( Restrictions.eq( uniqueProperty, PropertyUtils.getProperty( entity, uniqueProperty ) ) );
+                    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                        logger.info( "The entity '" + entity + "' of type '" +
+                                entity.getClass().getSimpleName() + "' has no property '" + uniqueProperty + "'" );
+                    }
+                }
+                List<Object> results = criteria.list();
                 if (results.size() > 0) {
                     logger.info("At least one existing entity with same unique properties as '" + entity + "' of type '"
                             + entity.getClass().getSimpleName() + "' already exists, skipping seeding this entity");
@@ -166,15 +171,33 @@ public class SeedEntityImpl implements SeedEntity {
     }
 
     private Set<Set<String>> findPossiblePropertiesWithUniqueColumnAnnotation( Object entity, PropertyDescriptor[] descriptors) {
-        Set<Set<String>> uniqueProperties = new HashSet<Set<String>>();
+        Set<Set<String>> uniqueProperties = new HashSet<>();
 
         Class<?> entityClass = entity.getClass();
         for(;;) {
             if (entityClass.isAnnotationPresent( Table.class)) {
                 Table annotation = entityClass.getAnnotation( Table.class);
                 if (annotation.uniqueConstraints() != null) {
-                    for ( UniqueConstraint uniqueConstraint : annotation.uniqueConstraints())
-                        uniqueProperties.add(new HashSet<String>( Arrays.asList(uniqueConstraint.columnNames())));
+                    // unique constraint keeps column names but not property names. we have to convert columns to properties
+                    AbstractEntityPersister metadata = (AbstractEntityPersister) sessionFactory.getClassMetadata(entity.getClass());  // AbstractEntityPersister is main ClassMetadata implementation
+
+                    for ( UniqueConstraint uniqueConstraint : annotation.uniqueConstraints()) {
+                        HashSet<String> translatedUniqueNames = new HashSet<>();
+                        HashSet<String> uniqueConstraintColumnNames = new HashSet<>( Arrays.asList( uniqueConstraint.columnNames() ) );
+                        for ( String propertyName : metadata.getPropertyNames() ) {
+                            if ( uniqueConstraintColumnNames.contains( propertyName ) ) {
+                                translatedUniqueNames.add( propertyName );
+                            }
+                            else {
+                                for ( String columnName : metadata.getPropertyColumnNames( propertyName ) ) {
+                                    if ( uniqueConstraintColumnNames.contains( columnName ) ) {
+                                        translatedUniqueNames.add( propertyName );
+                                    }
+                                }
+                            }
+                        }
+                        uniqueProperties.add( translatedUniqueNames );
+                    }
                 }
             }
 
@@ -187,7 +210,7 @@ public class SeedEntityImpl implements SeedEntity {
                     continue;
                 PropertyDescriptor descriptor = findPropertyForMethod(method, descriptors);
                 if (descriptor != null)
-                    uniqueProperties.add(new HashSet<String>( Arrays.asList(descriptor.getName())));
+                    uniqueProperties.add(new HashSet<String>( Collections.singletonList( descriptor.getName() ) ));
             }
 
             // Fields
@@ -199,7 +222,7 @@ public class SeedEntityImpl implements SeedEntity {
                 Column columnAnnotation = currentField.getAnnotation( Column.class);
                 if (columnAnnotation != null && !columnAnnotation.unique())
                     continue;
-                uniqueProperties.add(new HashSet<String>( Arrays.asList(currentField.getName())));
+                uniqueProperties.add(new HashSet<String>( Collections.singletonList( currentField.getName() ) ));
             }
             ClassMetadata superClassMetadata = sessionFactory.getClassMetadata(entityClass.getSuperclass());
             if(!(superClassMetadata instanceof SingleTableEntityPersister)) break;
