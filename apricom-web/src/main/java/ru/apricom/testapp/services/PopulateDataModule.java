@@ -12,7 +12,12 @@ import ru.apricom.testapp.entities.base.EducationalProgram;
 import ru.apricom.testapp.entities.base.ProgramRequirement;
 import ru.apricom.testapp.entities.base.Speciality;
 import ru.apricom.testapp.entities.catalogs.*;
+import ru.apricom.testapp.entities.catalogs.Country;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -24,6 +29,12 @@ public class PopulateDataModule {
     //populate with initial values
     @Contribute(SeedEntity.class)
     public static void addSeedEntities( OrderedConfiguration<Object> configuration) {
+        populateUsers( configuration );
+        populateBaseObjects( configuration );
+        populateCountries( configuration );
+    }
+
+    private static void populateUsers( OrderedConfiguration<Object> configuration ) {
         //Roles:
         UserRole adminRole = null;
         UserRole headMaster = null;
@@ -80,7 +91,9 @@ public class PopulateDataModule {
         headMaser.setRoles( new LinkedList<>() );
         headMaser.getRoles().add( headMaster );
         configuration.add( "headMasterUser", headMaser );
+    }
 
+    private static void populateBaseObjects( OrderedConfiguration<Object> configuration ) {
         configuration.add( "admissionType", new SeedEntityIdentifier( AdmissionType.class, "title" ) );
         AdmissionType baseAdmission = new AdmissionType( 1, "общий конкурс", "общий");
         configuration.add("BASE_ADMISSION", baseAdmission );
@@ -124,8 +137,8 @@ public class PopulateDataModule {
         //configuration.add( "", new EducationalSubject( 1, "", "") );
 
         configuration.add( "EducationBase", new SeedEntityIdentifier( EducationBase.class, "title" ) );
-        configuration.add( "BUDGET", new EducationBase( 1, "бюджет", "бюджет") );
-        configuration.add( "CONTRACT", new EducationBase( 2, "договор", "договор") );
+        configuration.add( "BUDGET", new EducationBase( FinancingType.BUDGET.ordinal()+1, "бюджет", "бюджет") );
+        configuration.add( "CONTRACT", new EducationBase( FinancingType.CONTRACT.ordinal()+1, "договор", "договор") );
 
         configuration.add( "EducationDocumentType", new SeedEntityIdentifier( EducationDocumentType.class, "title" ) );
         configuration.add( "DIPLOMA", new EducationDocumentType( 1, "Аттестат о среднем общем образовании", "АОО") );
@@ -294,7 +307,31 @@ public class PopulateDataModule {
                         new Competition( admissionType, program, FinancingType.BUDGET, sequenceNumber++ ) );
             }
             configuration.add( program.getSpeciality().getTitle()+contractAdmission.getShortTitle(),
-                    new Competition( contractAdmission, program, FinancingType.CONTRACT, sequenceNumber++ ) );
+                    new Competition( contractAdmission, program, FinancingType.CONTRACT, sequenceNumber ) );
+        }
+    }
+
+    private static void populateCountries( OrderedConfiguration<Object> configuration ) {
+        InputStream is = PopulateDataModule.class
+                .getClassLoader().getResourceAsStream( "catalogs/countries.csv" );
+        if ( is != null ) {
+            BufferedReader br = new BufferedReader(new InputStreamReader( is ));
+            boolean skipFirstLine = true;
+            try {
+                for ( String strLine; (strLine = br.readLine()) != null; ) {
+                    if ( skipFirstLine ) {
+                        skipFirstLine = false;
+                        continue;
+                    }
+                    String[] parts = strLine.split( ";" );
+                    if ( parts.length > 5 ) {
+                        Country country = new Country( parts[0], parts[1], parts[2], parts[3], parts[4] );
+                        configuration.add( parts[3], country );
+                    }
+                }
+            } catch (IOException e) {
+                // Unable to read countries
+            }
         }
     }
 }
