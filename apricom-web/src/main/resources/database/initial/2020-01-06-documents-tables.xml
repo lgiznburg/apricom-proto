@@ -1,0 +1,178 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="create_countries_table" author="leonid">
+        <createTable tableName="countries">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="short_name" type="${string.type}"/>
+            <column name="name" type="${string.type}"/>
+            <column name="iso3" type="${string.type}"/>
+            <column name="iso2" type="${string.type}"/>
+            <column name="oksm" type="${string.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_stored_files_table" author="leonid">
+        <createTable tableName="stored_files">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="filename" type="${string.type}"/>
+            <column name="mime_type" type="${string.type}"/>
+            <column name="content" type="${blob.type}"/>
+            <column name="thumbnail" type="${blob.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-base-documents-table" author="leonid">
+        <createTable tableName="documents">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="document_type_id" type="${id.type}"/>
+            <column name="document_number" type="${string.type}"/>
+            <column name="issuance_date" type="date"/>
+            <column name="file_id" type="${id.type}"/>
+            <column name="entrant_id" type="${id.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-base-document-indices" author="leonid">
+        <createIndex tableName="documents" indexName="fk_document_files">
+            <column name="file_id"/>
+        </createIndex>
+        <createIndex tableName="documents" indexName="fk_document_entrants">
+            <column name="entrant_id"/>
+        </createIndex>
+        <createIndex tableName="documents" indexName="fk_document_types">
+            <column name="document_type_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-base-document-foreign-keys" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="file_id" baseTableName="documents"
+                                 constraintName="fk_document_files"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="stored_files" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="document_type_id" baseTableName="documents"
+                                 constraintName="fk_document_types"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="catalogs" validate="true"/>
+    </changeSet>
+
+    <changeSet id="create-id-document-table" author="leonid">
+        <createTable tableName="id_documents">
+            <column name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="id_document_type_id" type="${id.type}"/>
+            <column name="series_number" type="${string.type}"/>
+            <column name="id_document_number" type="${string.type}"/>
+            <column name="issued_by" type="${string.type}"/>
+            <column name="issued_by_code" type="${string.type}"/>
+            <column name="citizenship_id" type="${id.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-id-document-unique-key" author="leonid">
+        <addUniqueConstraint tableName="id_documents" columnNames="series_number,id_document_number"/>
+    </changeSet>
+
+    <changeSet id="create-id-document-indices" author="leonid">
+        <createIndex tableName="id_documents" indexName="fk_id_document_types">
+            <column name="id_document_type_id"/>
+        </createIndex>
+        <createIndex tableName="id_documents" indexName="fk_id_document_countries">
+            <column name="citizenship_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-id-document-foreign-keys" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="id_documents"
+                                 constraintName="fk_id_documents_hierarchy_key"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="documents" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="id_document_type_id" baseTableName="id_documents"
+                                 constraintName="fk_id_document_types"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="catalogs" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="citizenship_id" baseTableName="id_documents"
+                                 constraintName="fk_id_document_countries"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="countries" validate="true"/>
+    </changeSet>
+
+    <changeSet id="create-snils-table" author="leonid">
+        <createTable tableName="snils_documents">
+            <column name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-snils-document-foreign-keys" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="snils_documents"
+                                 constraintName="fk_snils_documents_hierarchy_key"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="documents" validate="true"/>
+    </changeSet>
+
+    <changeSet id="create-diploma-table" author="leonid">
+        <createTable tableName="diploma_documents">
+            <column name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="diploma_type_id" type="${id.type}"/>
+            <column name="original" type="boolean"/>
+            <column name="organization_name" type="${string.type}"/>
+            <column name="level_type" type="${string.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-diploma_documents-indices" author="leonid">
+        <createIndex tableName="diploma_documents" indexName="fk_diploma_document_types">
+            <column name="diploma_type_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-diploma-document-foreign-keys" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="diploma_documents"
+                                 constraintName="fk_diploma_documents_hierarchy_key"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="documents" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="diploma_type_id" baseTableName="diploma_documents"
+                                 constraintName="fk_diploma_document_types"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="catalogs" validate="true"/>
+    </changeSet>
+
+    <changeSet id="create-other_documents-table" author="leonid">
+        <createTable tableName="other_documents">
+            <column name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="${string.type}"/>
+            <column name="description" type="${string.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-other_documents-foreign-keys" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="other_documents"
+                                 constraintName="fk_other_documents_hierarchy_key"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="documents" validate="true"/>
+    </changeSet>
+
+    <changeSet id="add-average-score" author="leonid">
+        <addColumn tableName="diploma_documents">
+            <column name="average_score" type="int"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

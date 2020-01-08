@@ -1,0 +1,74 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="1" author="leonid">
+        <createTable tableName="person_names">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="${string.type}"/>
+            <column name="patronymic" type="${string.type}"/>
+            <column name="surname" type="${string.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="leonid">
+        <createTable tableName="addresses">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="post_code" type="${string.type}"/>
+            <column name="country" type="${string.type}"/>
+            <column name="region" type="${string.type}"/>
+            <column name="city" type="${string.type}"/>
+            <column name="street" type="${string.type}"/>
+            <column name="buildings" type="${string.type}"/>
+            <column name="additional" type="${string.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="leonid">
+        <createTable tableName="persons_info">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name_id" type="${id.type}"/>
+            <column name="current_address_id" type="${id.type}"/>
+            <column name="registration_address_id" type="${id.type}"/>
+            <column name="contact_phone" type="${string.type}"/>
+            <column name="mobile_phone" type="${string.type}"/>
+            <column name="home_phone" type="${string.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="leonid" id="4">
+        <createIndex indexName="fk_person_name_index" tableName="persons_info">
+            <column name="name_id"/>
+        </createIndex>
+        <createIndex indexName="fk_person_current_address_index" tableName="persons_info">
+            <column name="current_address_id"/>
+        </createIndex>
+        <createIndex indexName="fk_person_registration_address_index" tableName="persons_info">
+            <column name="registration_address_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="leonid" id="5">
+        <addForeignKeyConstraint baseColumnNames="name_id" baseTableName="persons_info"
+                                 constraintName="fk_person_name_index"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="person_names" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="current_address_id" baseTableName="persons_info"
+                                 constraintName="fk_person_current_address_index"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="addresses" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="registration_address_id" baseTableName="persons_info"
+                                 constraintName="fk_person_registration_address_index"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="addresses" validate="true"/>
+    </changeSet>
+
+</databaseChangeLog>

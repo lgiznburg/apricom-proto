@@ -27,11 +27,19 @@
             <groupId>ru.apricom</groupId>
             <artifactId>hibernate-utils</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>ru.apricom</groupId>
             <artifactId>pdf-template</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.apricom</groupId>
+            <artifactId>liquibase-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
 
         <!--  Databases -->
@@ -87,12 +95,8 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-c3p0</artifactId>
             <version>${hibernate.version}</version>
-            <!--<exclusions>
-                <exclusion>
-                    <groupId>org.hibernate</groupId>
-                    <artifactId>hibernate-core</artifactId>
-                </exclusion>
-            </exclusions>-->
+            <exclusions>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -116,6 +120,13 @@
             </exclusions>
         </dependency>
 
+        <!-- Authentication -->
+        <dependency>
+            <groupId>org.tynamo</groupId>
+            <artifactId>tapestry-security</artifactId>
+            <version>0.7.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -129,10 +140,27 @@
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
-                    <include>*/*.tml</include>
-                    <include>*/*.properties</include>
+                    <include>**/*.tml</include>
+                    <include>**/*.properties</include>
                 </includes>
             </resource>
         </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <changeLogDirectory>src/main/resources</changeLogDirectory>
+                    <changeLogFile>database/change_log.xml</changeLogFile>
+                    <driver>${hibernate.connection.driver_class}</driver>
+                    <url>${hibernate.connection.url}</url>
+                    <username>${hibernate.connection.username}</username>
+                    <password>${hibernate.connection.password}</password>
+                    <defaultSchemaName>${hibernate.default_schema}</defaultSchemaName>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>

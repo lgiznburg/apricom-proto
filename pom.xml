@@ -14,6 +14,7 @@
     <module>pdf-template</module>
     <module>hibernate-utils</module>
     <module>apricom-web</module>
+    <module>liquibase-service</module>
   </modules>
 
   <properties>
@@ -23,7 +24,8 @@
 
     <tapestry-release-version>5.4.5</tapestry-release-version>
     <slf4j-release-version>1.7.19</slf4j-release-version>
-    <hibernate.version>5.4.4.Final</hibernate.version>
+    <hibernate.version>4.3.11.Final</hibernate.version> <!--5.4.4.Final 4.3.11.Final -->
+    <servlet-api-release-version>2.5</servlet-api-release-version>
   </properties>
 
   <repositories>
@@ -108,4 +110,22 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <properties>
+        <hibernate.connection.driver_class>com.mysql.cj.jdbc.Driver</hibernate.connection.driver_class>
+        <hibernate.connection.url>jdbc:mysql://127.0.0.1/apricom_proto?serverTimezone=Europe/Moscow</hibernate.connection.url>
+        <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
+        <hibernate.default_schema>apricom_proto</hibernate.default_schema>
+        <hibernate.connection.username>apricom</hibernate.connection.username>
+        <hibernate.connection.password>abiensabi</hibernate.connection.password>
+      </properties>
+    </profile>
+  </profiles>
 </project>

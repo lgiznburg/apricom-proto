@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+<head>
+    <title>APriCom</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="shortcut icon" href="${context:static/icons/favicon.ico}" type="image/x-icon" />
+</head>
+<body>
+
+<div>
+    <nav class="nav_apricom">
+        <ul class="nav_apricom" >
+            <li style="float: left; padding: 0 1em 0 1em">
+                <!--<t:pagelink page="index">-->
+                    <img class="nav_apricom" src="${context:static/img/logoRNIMUwhite.svg}" title="На главную"/>
+                <!--</t:pagelink>-->
+            </li>
+            <li class="mobile" style="float: right">
+                <t:security.user>
+                        <button class="nav_apricom" id="nav_toggle">
+                            <span style="padding: 0 2em" class="glyphicon glyphicon-align-justify"/>
+                        </button>
+                </t:security.user>
+                <t:security.guest>
+                    <t:pagelink page="login">
+                        <button class="nav_apricom">
+                            <span style="padding: 0 2em" class="glyphicon glyphicon-user"/>
+                        </button>
+                    </t:pagelink>
+                </t:security.guest>
+            </li>
+            <li class="desktop" style="float: right">
+                <t:security.user>
+                    <div class="dropdown">
+                    <button class="nav_apricom dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" id="userDropdown" aria-expanded="false">
+                        <span>${message:welcome} ${user}</span><span class="caret"/>
+                    </button>
+                        <ul class="dropdown-menu bg-light" aria-labelledby="userDropdown">
+                            <li><t:eventlink event="logout">${message:navbar.logout}</t:eventlink></li>
+                        </ul>
+                    </div>
+
+                </t:security.user>
+                <t:security.guest>
+                    <div style="margin-right: 15px;">
+                        <t:pagelink page="login">
+                            <button class="nav_apricom">
+                                <span>${message:login_or_register}</span>
+                            </button>
+                        </t:pagelink>
+                    </div>
+                </t:security.guest>
+            </li>
+        </ul>
+    </nav>
+</div>
+<t:security.user>
+    <div id="navmenu" class="panel_apricom">
+        <div style="width: 180px; height: 100%; display: inline-flex; flex-direction: column">
+            <t:navmenu/>
+        </div>
+        <div style="width: 20px; height: 100%; display: inline-flex;">
+            <span class="glyphicon glyphicon-chevron-right"/>
+        </div>
+    </div>
+</t:security.user>
+<div class="disabler hidden" id="disabler"/>
+<div class="container body_container" role="main">
+    <t:body/>
+</div>
+</body>
+</html>

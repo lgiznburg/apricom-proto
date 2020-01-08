@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="1" author="leonid">
+        <createTable tableName="roles">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="authority" type="${string.type}">
+                <constraints unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="leonid">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="enabled" type="BIT(1)"/>
+            <column name="firstName" type="${string.type}"/>
+            <column name="lastName" type="${string.type}"/>
+            <column name="middleName" type="${string.type}"/>
+            <column name="password" type="${string.type}"/>
+            <column name="username" type="${string.type}">
+                <constraints unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="leonid">
+        <createTable tableName="granted_permissions">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="permission" type="${string.type}">
+                <constraints unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="leonid">
+        <createTable tableName="user_roles">
+            <column name="user_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="leonid">
+        <createTable tableName="user_permissions">
+            <column name="user_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="permission_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="6" author="leonid">
+        <createTable tableName="role_permissions">
+            <column name="permission_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="leonid" id="7">
+        <createIndex indexName="fk_user_roles_index" tableName="user_roles">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex indexName="fk_user_roles_inverse" tableName="user_roles">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="leonid" id="8">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_roles"
+                                 constraintName="fk_user_roles_index"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_roles"
+                                 constraintName="fk_user_roles_inverse"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="roles" validate="true"/>
+    </changeSet>
+
+    <changeSet author="leonid" id="9">
+        <createIndex indexName="fk_user_permissions_index" tableName="user_permissions">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex indexName="fk_user_permissions_inverse" tableName="user_permissions">
+            <column name="permission_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="leonid" id="10">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_permissions"
+                                 constraintName="fk_user_permissions_index"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="permission_id" baseTableName="user_permissions"
+                                 constraintName="fk_user_permissions_inverse"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="granted_permissions" validate="true"/>
+    </changeSet>
+
+    <changeSet author="leonid" id="11">
+        <createIndex indexName="fk_role_permissions_index" tableName="role_permissions">
+            <column name="role_id"/>
+        </createIndex>
+        <createIndex indexName="fk_role_permissions_inverse" tableName="role_permissions">
+            <column name="permission_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="leonid" id="12">
+        <addForeignKeyConstraint baseColumnNames="permission_id" baseTableName="role_permissions"
+                                 constraintName="fk_role_permissions_inverse"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="granted_permissions" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="role_permissions"
+                                 constraintName="fk_role_permissions_index"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="roles" validate="true"/>
+    </changeSet>
+
+
+</databaseChangeLog>

@@ -1,0 +1,105 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="create_entrants_table" author="leonid">
+        <createTable tableName="entrants">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="person_info_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="case_number" type="${string.type}"/>
+            <column name="status" type="${string.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-entrants-indices" author="leonid">
+        <createIndex tableName="entrants" indexName="fk_entrant_persons_info">
+            <column name="person_info_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-entrants-foreign-keys" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="person_info_id" baseTableName="entrants"
+                                 constraintName="fk_entrant_person_info"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="persons_info" validate="true"/>
+    </changeSet>
+
+    <changeSet id="create-base-document-entrants-foreign-keys" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="entrant_id" baseTableName="documents"
+                                 constraintName="fk_document_entrants"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="entrants" validate="true"/>
+    </changeSet>
+
+    <changeSet id="create_entrant_requests_table" author="leonid">
+        <createTable tableName="entrant_requests">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="entrant_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="request_number" type="int"/>
+            <column name="status" type="${string.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-entrant_requests-indices" author="leonid">
+        <createIndex tableName="entrant_requests" indexName="fk_request_entrants">
+            <column name="entrant_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-entrant_requests-foreign-keys" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="entrant_id" baseTableName="entrant_requests"
+                                 constraintName="fk_request_entrants"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="entrants" validate="true"/>
+    </changeSet>
+
+    <changeSet id="create_requested_competitions_table" author="leonid">
+        <createTable tableName="requested_competitions">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="competition_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="request_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sequence_number" type="int"/>
+            <column name="status" type="${string.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-requested_competitions-indices" author="leonid">
+        <createIndex tableName="requested_competitions" indexName="fk_requested_competitions">
+            <column name="competition_id"/>
+        </createIndex>
+        <createIndex tableName="requested_competitions" indexName="fk_competition_requests">
+            <column name="request_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-requested_competitions-foreign-keys" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="competition_id" baseTableName="requested_competitions"
+                                 constraintName="fk_requested_competitions"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="competitions" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="request_id" baseTableName="requested_competitions"
+                                 constraintName="fk_competition_requests"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="entrant_requests" validate="true"/>
+    </changeSet>
+
+
+</databaseChangeLog>
