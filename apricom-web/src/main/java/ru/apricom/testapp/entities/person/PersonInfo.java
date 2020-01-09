@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -41,6 +42,10 @@ public class PersonInfo implements Serializable {
 
     @Column(name = "home_phone")
     private String homePhone;
+
+    @Column(name = "birth_date")
+    @Temporal( TemporalType.DATE )
+    private Date birthDate;
 
     public long getId() {
         return id;
@@ -96,6 +101,14 @@ public class PersonInfo implements Serializable {
 
     public void setHomePhone( String homePhone ) {
         this.homePhone = homePhone;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate( Date birthDate ) {
+        this.birthDate = birthDate;
     }
 
     @Override

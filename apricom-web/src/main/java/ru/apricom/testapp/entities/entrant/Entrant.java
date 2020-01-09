@@ -1,5 +1,6 @@
 package ru.apricom.testapp.entities.entrant;
 
+import ru.apricom.testapp.entities.auth.User;
 import ru.apricom.testapp.entities.documents.BaseDocument;
 import ru.apricom.testapp.entities.person.PersonInfo;
 
@@ -37,6 +38,13 @@ public class Entrant implements Serializable {
     @Column
     @Enumerated(EnumType.STRING)
     private EntrantStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column
+    private String email;
 
     public long getId() {
         return id;
