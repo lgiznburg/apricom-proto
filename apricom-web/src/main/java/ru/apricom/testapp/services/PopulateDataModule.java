@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -315,7 +316,7 @@ public class PopulateDataModule {
         InputStream is = PopulateDataModule.class
                 .getClassLoader().getResourceAsStream( "catalogs/countries.csv" );
         if ( is != null ) {
-            BufferedReader br = new BufferedReader(new InputStreamReader( is ));
+            BufferedReader br = new BufferedReader(new InputStreamReader( is, StandardCharsets.UTF_8));
             boolean skipFirstLine = true;
             try {
                 for ( String strLine; (strLine = br.readLine()) != null; ) {

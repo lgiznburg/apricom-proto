@@ -7,7 +7,9 @@ import org.apache.tapestry5.ioc.annotations.ImportModule;
 import org.apache.tapestry5.ioc.annotations.Match;
 import ru.apricom.seedentity.hibernate.SeedEntity;
 import ru.apricom.seedentity.hibernate.SeedEntityImpl;
+import ru.apricom.testapp.dao.RequestDao;
 import ru.apricom.testapp.dao.UserDao;
+import ru.apricom.testapp.dao.implementaion.RequestDaoImpl;
 import ru.apricom.testapp.dao.implementaion.UserDaoImpl;
 
 /**
@@ -20,6 +22,7 @@ public class HibernateModule {
     public static void bind( ServiceBinder binder)
     {
         binder.bind( UserDao.class, UserDaoImpl.class );
+        binder.bind( RequestDao.class, RequestDaoImpl.class );
 
         //seed entity - initial DB population
         binder.bind( SeedEntity.class, SeedEntityImpl.class);
