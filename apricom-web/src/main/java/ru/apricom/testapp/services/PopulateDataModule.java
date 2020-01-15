@@ -3,7 +3,9 @@ package ru.apricom.testapp.services;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import ru.apricom.seedentity.SeedEntityIdentifier;
+import ru.apricom.seedentity.SeedEntityUpdater;
 import ru.apricom.seedentity.hibernate.SeedEntity;
+import ru.apricom.testapp.entities.auth.GrantedPermission;
 import ru.apricom.testapp.entities.auth.RolesNames;
 import ru.apricom.testapp.entities.auth.User;
 import ru.apricom.testapp.entities.auth.UserRole;
@@ -35,6 +37,14 @@ public class PopulateDataModule {
     }
 
     private static void populateUsers( OrderedConfiguration<Object> configuration ) {
+
+        GrantedPermission createEntrant = new GrantedPermission("entrant:create");
+        GrantedPermission acceptEntrant = new GrantedPermission("entrant:accept");
+        GrantedPermission editEntrant = new GrantedPermission("entrant:edit");
+        configuration.add( editEntrant.getPermission(), editEntrant );
+        configuration.add( acceptEntrant.getPermission(), acceptEntrant );
+        configuration.add( createEntrant.getPermission(), createEntrant );
+
         //Roles:
         UserRole adminRole = null;
         UserRole headMaster = null;
@@ -46,10 +56,20 @@ public class PopulateDataModule {
 
             if ( roleName == RolesNames.SYSTEM_ADMIN ) {
                 adminRole = role;
+                role.getPermissions().add( editEntrant );
             }
             if ( roleName == RolesNames.HEADMASTER ) {
                 headMaster = role;
+                role.getPermissions().add( acceptEntrant );
             }
+            if ( roleName == RolesNames.ENTRANT ) {
+                role.getPermissions().add( createEntrant );
+            }
+            if ( roleName == RolesNames.CHIEF_HEADMASTER ) {
+                role.getPermissions().add( editEntrant );
+                role.getPermissions().add( acceptEntrant );
+            }
+            configuration.add( roleName.name() + "_update", new SeedEntityUpdater( role, role, true ) );
         }
 
         User admin = new User();
@@ -158,8 +178,8 @@ public class PopulateDataModule {
 
         configuration.add( "IdDocumentType", new SeedEntityIdentifier( IdDocumentType.class, "title" ) );
         configuration.add( "PASSPORT", new IdDocumentType( 1, "Паспорт", "паспорт") );
-        configuration.add( "FOREIGN_PASSPORT", new IdDocumentType( 1, "Паспорт иностранного гражданина", "паспорт ино") );
-        configuration.add( "MILITARY", new IdDocumentType( 1, "Военный билет", "военный") );
+        configuration.add( "FOREIGN_PASSPORT", new IdDocumentType( 2, "Паспорт иностранного гражданина", "паспорт ино") );
+        configuration.add( "MILITARY", new IdDocumentType( 3, "Военный билет", "военный") );
 
 
         Speciality therapy = new Speciality();

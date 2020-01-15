@@ -18,7 +18,7 @@ public class PersonName implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
 
-    @Column(name = "firstName")
+    @Column(name = "first_name")
     @NotEmpty
     private String firstName;
 

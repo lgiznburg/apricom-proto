@@ -41,6 +41,13 @@ public class GrantedPermission implements Serializable {
         this.permission = permission;
     }
 
+    public GrantedPermission() {
+    }
+
+    public GrantedPermission( String permission ) {
+        this.permission = permission;
+    }
+
     @Override
     public boolean equals( Object o ) {
         if ( this == o ) return true;

@@ -1,4 +1,71 @@
-<html t:type="container" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
+<t:form t:id="personInfoForm" validate="personInfo" class="form-horizontal">
+    <div class="form-group">
+        <div class="col-sm-3"><t:label for="surname"/>*</div>
+        <div class="col-sm-3"><t:label for="firstName"/>*</div>
+        <div class="col-sm-3"><t:label for="patronymic"/></div>
+        <div class="col-sm-3"><t:label for="birthDate"/>*</div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-3">
+            <t:textfield t:id="surname" value="personInfo.name.surname" validate="required" />
+        </div>
+        <div class="col-sm-3">
+            <t:textfield t:id="firstName" value="personInfo.name.firstName" validate="required" />
+        </div>
+        <div class="col-sm-3">
+            <t:textfield t:id="patronymic" value="personInfo.name.patronymic" />
+        </div>
+        <div class="col-sm-3">
+            <t:datefield t:id="birthDate" value="proxyBirthDate" validate="required" format="prop:correctDateFormat" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-3"><t:label for="contactPhone"/>*</div>
+        <div class="col-sm-3"><t:label for="homePhone"/></div>
+        <div class="col-sm-3"><t:label for="mobilePhone"/></div>
+        <div class="col-sm-3"><t:label for="email"/></div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-3">
+            <t:textfield t:id="contactPhone" value="personInfo.contactPhone" validate="required" />
+        </div>
+        <div class="col-sm-3">
+            <t:textfield t:id="homePhone" value="personInfo.homePhone"  />
+        </div>
+        <div class="col-sm-3">
+            <t:textfield t:id="mobilePhone" value="personInfo.mobilePhone"  />
+        </div>
+        <div class="col-sm-3">
+            <t:textfield t:id="email" value="entrant.email"  />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">${message:registrationAddress}</div>
+    </div>
+    <t:wizard.personinfo.addressedit address="personInfo.registrationAddress"/>
+    <div class="form-group">
+        <div class="col">
+            <t:checkbox t:id="addressesEqual" value="addressesNotEqual" t:mixins="triggerfragment" fragment="currentAddressZone"/>
+            <t:label for="addressesEqual"/>
+        </div>
+    </div>
+    <t:formfragment t:id="currentAddressZone" visible="addressesNotEqual">
+        <div class="row">
+            <div class="col-sm-4">${message:currentAddress}</div>
+        </div>
+        <t:wizard.personinfo.addressedit address="personInfo.currentAddress"/>
+    </t:formfragment>
+
+    <div class="form-group">
+        <div class="col-sm-4">
+            <t:textfield value="citizenship" t:id="citizenship" t:mixins="autocomplete"/>
+        </div>
+    </div>
+
+</t:form>
 </html>

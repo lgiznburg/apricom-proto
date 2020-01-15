@@ -1,6 +1,8 @@
 package ru.apricom.testapp.components;
 
+import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.annotations.Import;
+import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.tynamo.security.services.SecurityService;
@@ -14,6 +16,10 @@ import ru.apricom.testapp.pages.Index;
 @Import(stylesheet = "context:static/css/apricom.css",
         module = {"layout","bootstrap/dropdown", "bootstrap/collapse"})
 public class Layout {
+
+    @Property
+    @Parameter(defaultPrefix = BindingConstants.LITERAL, value = "")
+    private String pageTitle;
 
     @Inject
     private SecurityService securityService;
