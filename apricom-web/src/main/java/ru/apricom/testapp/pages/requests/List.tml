@@ -1,9 +1,31 @@
-<html t:type="layout" t:pageTitle="Список заявок"
+<html t:type="layout"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
 <div class="content">
-    <h4>здесь будет список</h4>
+    <h4>список</h4>
+</div>
+
+<div class="eg">
+    <t:form t:id="filterCriteria" async="true" class="form-inline">
+
+        <div class="form-group">
+            <t:label for="title"/>:
+            <t:select t:id="title" model="titles" value="title" onchange="document.getElementById('filterSubmit').click()" secure="never"/>
+        </div>
+
+        <div class="form-group">
+            <t:submit t:id="filterSubmit" id="filterSubmit" style="display: none;"/>
+        </div>
+
+
+    </t:form>
+
+    <div>
+        <t:zone t:id="personsZone" id="personsZone">
+            <t:grid id="grid" source="listRows" rowsPerPage="4" pagerPosition="bottom" inplace="true"/>
+        </t:zone>
+    </div>
 </div>
 
 </html>
