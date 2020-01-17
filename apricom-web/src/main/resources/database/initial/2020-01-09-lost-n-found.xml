@@ -31,4 +31,17 @@
                                  referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
 
+    <changeSet id="add-main-to-id-documents" author="leonid">
+        <addColumn tableName="id_documents">
+            <column name="main" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-main-to-edu-documents" author="leonid">
+        <addColumn tableName="diploma_documents">
+            <column name="main" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+
 </databaseChangeLog>

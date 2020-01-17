@@ -29,4 +29,55 @@ public class DiplomaDocument extends BaseDocument {
 
     @Column(name = "average_score")
     private int averageScore;
+
+    @Column
+    private boolean main;
+
+    public EducationDocumentType getDiplomaType() {
+        return diplomaType;
+    }
+
+    public void setDiplomaType( EducationDocumentType diplomaType ) {
+        this.diplomaType = diplomaType;
+    }
+
+    public boolean isOriginal() {
+        return original;
+    }
+
+    public void setOriginal( boolean original ) {
+        this.original = original;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName( String organizationName ) {
+        this.organizationName = organizationName;
+    }
+
+    public EducationLevelType getEducationLevelType() {
+        return educationLevelType;
+    }
+
+    public void setEducationLevelType( EducationLevelType educationLevelType ) {
+        this.educationLevelType = educationLevelType;
+    }
+
+    public int getAverageScore() {
+        return averageScore;
+    }
+
+    public void setAverageScore( int averageScore ) {
+        this.averageScore = averageScore;
+    }
+
+    public boolean isMain() {
+        return main;
+    }
+
+    public void setMain( boolean main ) {
+        this.main = main;
+    }
 }

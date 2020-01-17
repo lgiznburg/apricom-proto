@@ -13,10 +13,10 @@ import java.util.List;
  * @author leonid.
  */
 public class CatalogSelectModel extends AbstractSelectModel {
-    private List<BaseCatalog> catalogs;
+    private List<? extends BaseCatalog> catalogs;
 
-    public CatalogSelectModel( List<BaseCatalog> catalogs ) {
-        this.catalogs = catalogs;
+    public CatalogSelectModel( List<? extends BaseCatalog> catalogs ) {
+        this.catalogs = (List<BaseCatalog>) catalogs;
     }
 
     @Override

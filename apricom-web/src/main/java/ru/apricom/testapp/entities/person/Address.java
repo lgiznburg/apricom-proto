@@ -120,4 +120,14 @@ public class Address implements Serializable {
     public int hashCode() {
         return Objects.hash( id, postCode, country, region, city, street, buildingInfo, additional );
     }
+
+    public void copyFrom( Address address ) {
+        postCode = address.postCode;
+        country = address.country;
+        region = address.region;
+        city = address.city;
+        street = address.street;
+        buildingInfo = address.buildingInfo;
+        additional = address.additional;
+    }
 }

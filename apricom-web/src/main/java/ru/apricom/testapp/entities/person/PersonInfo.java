@@ -20,16 +20,16 @@ public class PersonInfo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "name_id")
     @NotNull
     private PersonName name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "current_address_id")
     private Address currentAddress;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "registration_address_id")
     private Address registrationAddress;
 

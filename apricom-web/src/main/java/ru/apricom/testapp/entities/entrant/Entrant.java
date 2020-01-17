@@ -21,7 +21,7 @@ public class Entrant implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_info_id")
     @NotNull
     private PersonInfo personInfo;

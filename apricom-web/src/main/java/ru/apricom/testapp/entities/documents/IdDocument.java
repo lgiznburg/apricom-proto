@@ -34,6 +34,9 @@ public class IdDocument extends BaseDocument{
     @JoinColumn(name = "citizenship_id")
     private Country citizenship;
 
+    @Column
+    private boolean main;
+
     public IdDocumentType getIdDocumentType() {
         return idDocumentType;
     }
@@ -80,5 +83,13 @@ public class IdDocument extends BaseDocument{
 
     public void setCitizenship( Country citizenship ) {
         this.citizenship = citizenship;
+    }
+
+    public boolean isMain() {
+        return main;
+    }
+
+    public void setMain( boolean main ) {
+        this.main = main;
     }
 }
