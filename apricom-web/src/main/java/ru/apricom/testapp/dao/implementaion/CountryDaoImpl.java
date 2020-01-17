@@ -31,4 +31,13 @@ public class CountryDaoImpl extends BaseDaoImpl implements CountryDao {
                 .setMaxResults( 1 )
                 .uniqueResult();
     }
+
+    @Override
+    public Country findByIso2( String iso2 ) {
+        return (Country) session.createCriteria( Country.class )
+                .add( Restrictions.eq( "iso2", iso2 ) )
+                .setMaxResults( 1 )
+                .uniqueResult();
+    }
+
 }

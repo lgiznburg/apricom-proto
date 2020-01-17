@@ -1,6 +1,7 @@
 package ru.apricom.testapp.dao;
 
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
+import ru.apricom.testapp.entities.entrant.Entrant;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,4 +24,6 @@ public interface BaseDao {
 
     @CommitAfter
     <T> void delete( T entity );
+
+    <T> void merge( T entity );
 }

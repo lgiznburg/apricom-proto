@@ -44,7 +44,7 @@ public class Wizard {
     @Inject
     private CountryDao countryDao;
 
-    Object setupRender() {
+    Object onActivate() {
         if ( wizardState == null ) wizardState = new WizardState();
         if ( !wizardState.isInitialized() ) {
             if ( !securityService.isUser() ) {
@@ -87,4 +87,5 @@ public class Wizard {
     public boolean isOnStep( String stepName ) {
         return WizardStep.valueOf( stepName ) == wizardState.getStep();
     }
+
 }

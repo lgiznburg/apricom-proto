@@ -31,7 +31,7 @@ public class BaseDocument implements Serializable {
     @Temporal( TemporalType.DATE )
     private Date issuanceDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "file_id")
     private StoredFile file;
 

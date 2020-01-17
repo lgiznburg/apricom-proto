@@ -178,9 +178,9 @@ public class PopulateDataModule {
         configuration.add( "HIGH_EDU", new EducationLevel( 3, "высшее", "высшее") );
 
         configuration.add( "IdDocumentType", new SeedEntityIdentifier( IdDocumentType.class, "title" ) );
-        configuration.add( "PASSPORT", new IdDocumentType( 1, "Паспорт", "паспорт") );
-        configuration.add( "FOREIGN_PASSPORT", new IdDocumentType( 2, "Паспорт иностранного гражданина", "паспорт ино") );
-        configuration.add( "MILITARY", new IdDocumentType( 3, "Военный билет", "военный") );
+        configuration.add( "PASSPORT", new IdDocumentType( IdDocumentTypeCode.PASSPORT_RU.ordinal()+1, "Паспорт", "паспорт") );
+        configuration.add( "FOREIGN_PASSPORT", new IdDocumentType( IdDocumentTypeCode.FOREIGN_PASSPORT.ordinal()+1, "Паспорт иностранного гражданина", "паспорт ино") );
+        configuration.add( "MILITARY", new IdDocumentType( IdDocumentTypeCode.MILITARY_ID.ordinal()+1, "Военный билет", "военный") );
 
 
         Speciality therapy = new Speciality();

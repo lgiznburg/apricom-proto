@@ -39,6 +39,11 @@ public class BaseDaoImpl implements BaseDao {
     }
 
     @Override
+    public <T> void merge( T entity ) {
+        session.merge( entity );
+    }
+
+    @Override
     public <T> void refresh( T entity ) {
         session.refresh( entity );
     }
