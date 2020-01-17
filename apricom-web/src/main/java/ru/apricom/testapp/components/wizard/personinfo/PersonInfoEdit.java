@@ -1,6 +1,7 @@
 package ru.apricom.testapp.components.wizard.personinfo;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.ValidationException;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.InjectComponent;
@@ -97,6 +98,9 @@ public class PersonInfoEdit {
 
     @InjectComponent("citizenship")
     private TextField countryField;
+
+    @Inject
+    private ComponentResources componentResources;
 
 
 
@@ -268,6 +272,9 @@ public class PersonInfoEdit {
             documentDao.save( entrant );
             mainIdDocument.setEntrant( entrant );
             documentDao.save( mainIdDocument );
+
+            // go to next step
+            componentResources.triggerEvent( "nextStep", new Object[]{}, null );
         }
         return true;
     }

@@ -88,4 +88,11 @@ public class Wizard {
         return WizardStep.valueOf( stepName ) == wizardState.getStep();
     }
 
+    public void onNextStep() {
+        WizardStep step = wizardState.getStep();
+        if ( step.ordinal() < WizardStep.values().length ) {
+            wizardState.setStep( WizardStep.values()[ step.ordinal() + 1 ] );
+        }
+    }
+
 }
