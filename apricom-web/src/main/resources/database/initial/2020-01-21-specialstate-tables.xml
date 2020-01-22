@@ -1,0 +1,40 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="1" author="fedor">
+        <createTable tableName="special_state">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="person_id" type="${id.type}"/>
+            <column name="speciality_id" type="${id.type}"/>
+            <column name="file_id" type="${id.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="fedor" id="2">
+        <createIndex indexName="fk_person_index" tableName="special_state">
+            <column name="person_id"/>
+        </createIndex>
+        <createIndex indexName="fk_speciality_index" tableName="special_state">
+            <column name="speciality_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="leonid" id="3">
+        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="special_state"
+                                 constraintName="fk_person_index"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="persons_info" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="speciality_id" baseTableName="special_state"
+                                 constraintName="fk_speciality_index"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="specialities" validate="true"/>
+    </changeSet>
+
+</databaseChangeLog>

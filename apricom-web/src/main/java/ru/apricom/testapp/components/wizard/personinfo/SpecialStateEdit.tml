@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+<t:content>
+    <t:form t:id="SpecialStateForm" validate="isDisabled" class="form-horizontal">
+    <!--        <div class="form-group">
+            <div class="col">
+                <t:checkbox t:id="addressesEqual" value="isDisabled" t:mixins="triggerfragment" fragment="disableDocumentScanZone"/>
+                <t:label for="addressesEqual"/>
+            </div>
+        </div>
+
+        <t:formfragment t:id="disableDocumentScanZone" visible="isDisabled">
+            <div class="form-group">
+                <div class="col-sm-4">
+                    <t:if test="fileAttached">
+                        ${mainIdDocument.file.fileName}
+                    </t:if>
+                </div>
+                <div class="col-sm-2"><t:label for="file_id"/>*</div>
+                <div class="col-sm-4"><t:upload value="file_id" t:id="file_id"/></div>
+            </div>
+        </t:formfragment>
+
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 co-s-10">
+                <t:submit class="btn btn-primary" value="${message:save}"/>
+                <t:eventlink event="cancel" class="btn btn-default">${message:cancel}</t:eventlink>
+            </div>
+        </div>-->
+    </t:form>
+</t:content>
+</html>

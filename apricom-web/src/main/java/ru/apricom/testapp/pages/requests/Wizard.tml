@@ -5,5 +5,7 @@
     <t:if test="isOnStep('PERSON_INFO')">
         <t:wizard.personinfo.personinfoedit entrant="wizardState.entrant"/>
     </t:if>
-
+    <t:if test="isOnStep('SPECIAL_RIGHTS_INFO')">
+        <t:wizard.personinfo.specialstateedit entrant="wizardState.entrant"/>
+    </t:if>
 </html>
