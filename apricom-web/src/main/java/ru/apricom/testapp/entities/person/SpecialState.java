@@ -1,5 +1,6 @@
 package ru.apricom.testapp.entities.person;
 
+import org.hibernate.annotations.Cascade;
 import ru.apricom.testapp.entities.base.Speciality;
 import ru.apricom.testapp.entities.documents.OtherDocument;
 import ru.apricom.testapp.entities.entrant.Entrant;
@@ -18,6 +19,7 @@ public class SpecialState implements Serializable {
     private long id;
 
     @ManyToOne
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JoinColumn(name = "document_id")
     private OtherDocument document;
 
