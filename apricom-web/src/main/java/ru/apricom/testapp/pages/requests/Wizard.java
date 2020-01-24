@@ -91,7 +91,7 @@ public class Wizard {
     public void onNextStep() {
         WizardStep step = wizardState.getStep();
         if ( step.ordinal() < WizardStep.values().length ) {
-            wizardState.setStep( WizardStep.values()[ step.ordinal() + 1 ] );
+            wizardState.setStep( WizardStep.values()[ step.ordinal() + 2 ] );
         }
     }
 

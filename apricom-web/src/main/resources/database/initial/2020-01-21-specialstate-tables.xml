@@ -1,0 +1,40 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="1" author="fedor">
+        <createTable tableName="special_state">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="entrant_id" type="${id.type}"/>
+            <column name="speciality_id" type="${id.type}"/>
+            <column name="document_id" type="${id.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="fedor" id="2">
+        <createIndex indexName="fk_specialstate_entrant_index" tableName="special_state">
+            <column name="entrant_id"/>
+        </createIndex>
+        <createIndex indexName="fk_specialstate_speciality_index" tableName="special_state">
+            <column name="speciality_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="fedor" id="3">
+        <addForeignKeyConstraint baseColumnNames="entrant_id" baseTableName="special_state"
+                                 constraintName="fk_specialstate_entrant_index"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="entrants" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="speciality_id" baseTableName="special_state"
+                                 constraintName="fk_specialstate_speciality_index"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="specialities" validate="true"/>
+    </changeSet>
+
+</databaseChangeLog>
