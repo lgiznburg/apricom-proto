@@ -20,8 +20,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author leonid.
@@ -160,11 +162,6 @@ public class PopulateDataModule {
         configuration.add( "BUDGET", new EducationBase( FinancingType.BUDGET.ordinal()+1, "бюджет", "бюджет") );
         configuration.add( "CONTRACT", new EducationBase( FinancingType.CONTRACT.ordinal()+1, "договор", "договор") );
 
-        configuration.add( "EducationDocumentType", new SeedEntityIdentifier( EducationDocumentType.class, "title" ) );
-        configuration.add( "DIPLOMA", new EducationDocumentType( 1, "Аттестат о среднем общем образовании", "АОО") );
-        configuration.add( "PROF_DIPLOMA", new EducationDocumentType( 2, "Диплом о среднем специальном образовании", "ДСПО") );
-        configuration.add( "HIGH_SCHOOL_DIPLOMA", new EducationDocumentType( 3, "Диплом о высшем образовании", "ДВПО") );
-
         configuration.add( "EducationForm", new SeedEntityIdentifier( EducationForm.class, "title" ) );
         EducationForm fullTimeForm = new EducationForm( 1, "очная форма обучения", "очное");
         configuration.add( "FULL_TIME", fullTimeForm );
@@ -172,9 +169,46 @@ public class PopulateDataModule {
         configuration.add( "EVENING", new EducationForm( 3, "очно-заочная форма обучения", "вечернее") );
 
         configuration.add( "EducationLevel", new SeedEntityIdentifier( EducationLevel.class, "title" ) );
-        configuration.add( "BASE_EDU", new EducationLevel( 1, "среднее", "среднее") );
-        configuration.add( "SPECIAL_EDU", new EducationLevel( 2, "среднее специальное", "специальное") );
-        configuration.add( "HIGH_EDU", new EducationLevel( 3, "высшее", "высшее") );
+        List<EducationLevel> levels = new ArrayList<>();
+        EducationLevel BASE_COMMON = new EducationLevel( EducationLevelType.BASE_COMMON.ordinal(),
+                                                        EducationLevelType.BASE_COMMON.getTitle(),
+                                                        EducationLevelType.BASE_COMMON.getShortTitle());
+        levels.add( BASE_COMMON );
+        EducationLevel BASE_PROFESSIONAL = new EducationLevel( EducationLevelType.BASE_PROFESSIONAL.ordinal(),
+                                                        EducationLevelType.BASE_PROFESSIONAL.getTitle(),
+                                                        EducationLevelType.BASE_PROFESSIONAL.getShortTitle());
+        levels.add( BASE_PROFESSIONAL );
+        EducationLevel HIGH_BACHELOR = new EducationLevel( EducationLevelType.HIGH_BACHELOR.ordinal(),
+                                                        EducationLevelType.HIGH_BACHELOR.getTitle(),
+                                                        EducationLevelType.HIGH_BACHELOR.getShortTitle());
+        levels.add( HIGH_BACHELOR );
+        EducationLevel HIGH_MASTER = new EducationLevel( EducationLevelType.HIGH_MASTER.ordinal(),
+                                                        EducationLevelType.HIGH_MASTER.getTitle(),
+                                                        EducationLevelType.HIGH_MASTER.getShortTitle());
+        levels.add( HIGH_MASTER );
+        EducationLevel HIGH_SPECIALITY = new EducationLevel( EducationLevelType.HIGH_SPECIALITY.ordinal(),
+                                                        EducationLevelType.HIGH_SPECIALITY.getTitle(),
+                                                        EducationLevelType.HIGH_SPECIALITY.getShortTitle());
+        levels.add( HIGH_SPECIALITY );
+        EducationLevel RESIDENCY = new EducationLevel( EducationLevelType.RESIDENCY.ordinal(),
+                                                        EducationLevelType.RESIDENCY.getTitle(),
+                                                        EducationLevelType.RESIDENCY.getShortTitle());
+        levels.add( RESIDENCY );
+        EducationLevel POSTGRADUATE = new EducationLevel( EducationLevelType.POSTGRADUATE.ordinal(),
+                                                        EducationLevelType.POSTGRADUATE.getTitle(),
+                                                        EducationLevelType.POSTGRADUATE.getShortTitle());
+        levels.add( POSTGRADUATE );
+
+        for ( int i = 0; i < levels.size(); i++ ) {
+            configuration.add( Integer.toString( i ), levels.get( i ) );
+        }
+
+        configuration.add( "EducationDocumentType", new SeedEntityIdentifier( EducationDocumentType.class, "title" ) );
+        int level_index = 0;
+        for ( EducationDocumentTypeCode code : EducationDocumentTypeCode.values() ) {
+            configuration.add( code.toString(), new EducationDocumentType( code.ordinal(), code.getName(), code.getName_short(), levels.get( level_index ) ) );
+            level_index++;
+        }
 
         configuration.add( "IdDocumentType", new SeedEntityIdentifier( IdDocumentType.class, "title" ) );
         configuration.add( "PASSPORT", new IdDocumentType( IdDocumentTypeCode.PASSPORT_RU.ordinal()+1, "Паспорт", "паспорт") );

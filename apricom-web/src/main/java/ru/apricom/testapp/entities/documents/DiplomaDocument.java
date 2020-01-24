@@ -1,5 +1,6 @@
 package ru.apricom.testapp.entities.documents;
 
+import ru.apricom.testapp.entities.catalogs.Country;
 import ru.apricom.testapp.entities.catalogs.EducationDocumentType;
 import ru.apricom.testapp.entities.catalogs.EducationLevelType;
 
@@ -29,6 +30,13 @@ public class DiplomaDocument extends BaseDocument {
 
     @Column(name = "average_score")
     private int averageScore;
+
+    @Column(name = "reg_number")
+    private String regNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "diploma_country")
+    private Country country;
 
     @Column
     private boolean main;
@@ -79,5 +87,21 @@ public class DiplomaDocument extends BaseDocument {
 
     public void setMain( boolean main ) {
         this.main = main;
+    }
+
+    public String getRegNumber() {
+        return regNumber;
+    }
+
+    public void setRegNumber(String regNumber) {
+        this.regNumber = regNumber;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
     }
 }

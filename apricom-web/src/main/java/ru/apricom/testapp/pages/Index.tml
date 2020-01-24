@@ -10,12 +10,12 @@
     </div>
     <div class="row">
         <div class="col-sm-10 col-sm-offset-2">
-            <t:pagelink page="requests/wizard" class="btn btn-success">Создать заявку</t:pagelink>
+            <t:pagelink page="requests/list" class="btn btn-success">Список заявок</t:pagelink>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-10 col-sm-offset-2">
-            <t:pagelink page="requests/list" class="btn btn-success">Список заявок</t:pagelink>
+            <t:pagelink page="requests/wizard" class="btn btn-success">Мастер создания заявок</t:pagelink>
         </div>
     </div>
 </div>

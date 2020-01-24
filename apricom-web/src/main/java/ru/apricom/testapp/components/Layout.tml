@@ -11,9 +11,9 @@
     <nav class="nav_apricom">
         <ul class="nav_apricom" >
             <li style="float: left; padding: 0 1em 0 1em">
-                <!--<t:pagelink page="index">-->
-                    <img class="nav_apricom" src="${context:static/img/logoRNIMUwhite.svg}" title="На главную"/>
-                <!--</t:pagelink>-->
+                <t:pagelink page="index">
+                    <img class="nav_apricom" src="${context:static/img/apricomLOGO.png}" title="На главную"/>
+                </t:pagelink>
             </li>
             <li class="mobile" style="float: right">
                 <t:security.user>

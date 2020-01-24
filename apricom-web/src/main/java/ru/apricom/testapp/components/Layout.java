@@ -37,7 +37,7 @@ public class Layout {
         String username = (String) securityService.getSubject().getPrincipal();
         User user = userDao.findByUserName( username );
         StringBuilder nameBuilder = new StringBuilder(user.getFirstName());
-        if ( !user.getMiddleName().isEmpty() ) {
+        if ( user.getMiddleName() != null && !user.getMiddleName().isEmpty() ) {
             nameBuilder.append( " " )
                     .append( user.getMiddleName() );
         }

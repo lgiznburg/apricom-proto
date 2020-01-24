@@ -1,0 +1,40 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="add-reg-number" author="polyakov_ps">
+        <addColumn tableName="diploma_documents">
+            <column name="reg_number" type="${text.type}"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-document-to-level-connection" author="polyakov_ps">
+        <addColumn tableName="catalogs">
+            <column name="education_level_id" type="${id.type}"/>
+        </addColumn>
+        <createIndex tableName="catalogs" indexName="fk_document_type_to_education_level">
+            <column name="education_level_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="education_level_id" baseTableName="catalogs"
+                                 constraintName="fk_document_type_to_education_level"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="catalogs" validate="true"/>
+    </changeSet>
+    <changeSet id="diploma-document-issuance-country" author="polyakov_ps">
+        <addColumn tableName="diploma_documents">
+            <column name="diploma_country" type="${id.type}"/>
+        </addColumn>
+        <createIndex tableName="diploma_documents" indexName="fk_diploma_issuance_country">
+            <column name="diploma_country"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="diploma_country" baseTableName="diploma_documents"
+                                 constraintName="fk_diploma_issuance_country"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="catalogs" validate="true"/>
+    </changeSet>
+
+</databaseChangeLog>
