@@ -33,9 +33,6 @@ public class Country implements Serializable {
     @Column
     private String oksm;
 
-    @OneToMany( mappedBy = "country" )
-    private Set<DiplomaDocument> diplomaDocuments;
-
     public Country() {
     }
 
@@ -93,13 +90,5 @@ public class Country implements Serializable {
 
     public void setOksm( String oksm ) {
         this.oksm = oksm;
-    }
-
-    public Set<DiplomaDocument> getDiplomaDocuments() {
-        return diplomaDocuments;
-    }
-
-    public void setDiplomaDocuments(Set<DiplomaDocument> diplomaDocuments) {
-        this.diplomaDocuments = diplomaDocuments;
     }
 }
