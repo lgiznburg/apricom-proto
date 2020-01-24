@@ -10,20 +10,20 @@
 
     <div>
         <t:pagelink page="index">
-            <button class="mobile-menu">Кнопка 1</button>
+            <button class="mobile-menu">На главную</button>
         </t:pagelink>
     </div>
     <div>
-        <button class="mobile-menu submenu_toggle" val="drop" id="drop_btn">Кнопка 2</button>
+        <button class="mobile-menu submenu_toggle" val="drop" id="drop_btn">Работа с заявками</button>
         <div class="mobile-submenu submenu_element hidden" id="drop">
-            <t:pagelink page="index">
-                <button class="mobile-submenu"><span>Подкнопка 1</span></button>
+            <t:pagelink page="requests/wizard">
+                <button class="mobile-submenu"><span>Создать заявку</span></button>
+            </t:pagelink>
+            <t:pagelink page="requests/list">
+                <button class="mobile-submenu"><span>Список заявок</span></button>
             </t:pagelink>
             <t:pagelink page="index">
-                <button class="mobile-submenu"><span>Подкнопка 2</span></button>
-            </t:pagelink>
-            <t:pagelink page="index">
-                <button class="mobile-submenu"><span>Подкнопка 3</span></button>
+                <button class="mobile-submenu"><span>...</span></button>
             </t:pagelink>
         </div>
     </div>

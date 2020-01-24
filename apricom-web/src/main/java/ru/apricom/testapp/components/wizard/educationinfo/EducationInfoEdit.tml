@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<t:container xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+             xmlns:p="tapestry:parameter" >
+
+    <div>
+        <h2>${message:education-info}</h2>
+        <t:form t:id="eduLevelForm">
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <t:label for="eduLevel"/><span style="color: darkred;" title="${message:necessary}">* </span>
+                    <t:select class="form-control" model="eduLevelSelectModel" value="eduLevel" t:id="eduLevel" validate="required" blankOption="ALWAYS" blankLabel="${message:choose}" zone="lastFormSelectorZone"/>
+                </div>
+                <div class="col-sm-3">
+                    <t:zone t:id="lastFormSelectorZone" id="lastFormSelectorZone" style="display: inline">
+                        <t:if test="isLastFormSelectorDisplayed">
+                            <t:label for="lastSchoolClass"/><span style="color: darkred;" title="${message:necessary}">* </span>
+                            <t:select value="lastSchoolClasses" t:id="lastSchoolClass" model="lastSchoolClassSelectModel" blankOption="NEVER" zone="secondaryUploadZone"/>
+                        </t:if>
+                    </t:zone>
+                </div>
+            </div>
+            <div class="form-group">
+                <t:zone t:id="mainUploadZone" id="mainUploadZone" style="display: inline">
+                    <t:if test="isMainUploadDisplayed">
+                        <h3>${message:main-document}</h3>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <t:label for="mainDocType">${message:select-type}<span style="color: darkred;" title="${message:necessary}">* </span></t:label>
+                                    <t:select value="mainEduDoc.diplomaType" model="documentTypeModel" t:id="mainDocType" zone="mainUploadZone" validate="required" blankOption="ALWAYS" blankLabel="${message:select}"/>
+                                </div>
+                                <t:zone t:id="mainDocumentInfoZone" id="mainDocumentInfoZone" style="display: inline">
+                                    <t:if test="displayMainFields">
+                                        <t:if test="hasRegNumber">
+                                            <div class="col-sm-3">
+                                                <t:label for="regNumber"/><span style="color: darkred;" title="${message:necessary}">* </span>
+                                                <t:textfield value="mainEduDoc.regNumber" t:id="regNumber" validate="required"/>
+                                            </div>
+                                        </t:if>
+                                        <div class="col-sm-3">
+                                            <t:label for="mainNumber">${message:number-label}</t:label><span style="color: darkred;" title="${message:necessary}">* </span>
+                                            <t:textfield value="mainEduDoc.documentNumber" t:id="mainNumber" validate="required"/>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <t:label for="mainCountry">${message:country-label}</t:label><span style="color: darkred;" title="${message:necessary}">* </span>
+                                            <t:select value="mainEduDoc.country" model="countrySelectModel" t:id="mainCountry" validate="required" blankOption="NEVER"/>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <t:label for="mainOrg" style="margin-top: 15px">${message:org-label}</t:label><span style="color: darkred;" title="${message:necessary}">* </span>
+                                            <t:textfield value="mainEduDoc.organizationName" t:id="mainOrg" validate="required"/>
+                                        </div>
+                                    </t:if>
+                            </t:zone>
+                            </div>
+                        </div>
+                        <t:label for="mainEducationDocument"/><span style="color: darkred;" title="${message:necessary}">* </span>
+                        <input t:type="upload" t:id="mainEducationDocument" t:value="mainEducationDocument" validate="required" style="height: auto;" class="side-margin-fix"/>
+                    </t:if>
+                </t:zone>
+            </div>
+            <div class="form-group">
+                <t:zone t:id="secondaryUploadZone" id="secondaryUploadZone" style="display: inline">
+                    <t:if test="isSecondaryUploadDisplayed">
+                        <h3>${message:secondary-document}</h3>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <label for="secDocType">${message:select-type}<span style="color: darkred;" title="${message:necessary}">* </span></label>
+                                <input class="form-control disabled" disabled="" id="secDocType" value="Аттестат СОО"/>
+                            </div>
+                        </div>
+                        <t:label for="secondaryEducationDocument"/><span style="color: darkred;" title="${message:necessary}">* </span>
+                        <input t:type="upload" t:id="secondaryEducationDocument" t:value="secondaryEducationDocument" validate="required" style="height: auto;" class="side-margin-fix"/>
+                    </t:if>
+                </t:zone>
+            </div>
+            <div class="form-group row text-right">
+                <t:eventlink event="previousStep" class="btn btn-default">${message:back}</t:eventlink>
+                <t:submit value="${message:save}"/>
+            </div>
+        </t:form>
+    </div>
+
+</t:container>

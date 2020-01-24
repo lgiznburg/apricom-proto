@@ -1,7 +1,10 @@
 package ru.apricom.testapp.entities.catalogs;
 
+import ru.apricom.testapp.entities.documents.DiplomaDocument;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * @author leonid.
@@ -11,7 +14,8 @@ import java.io.Serializable;
 public class Country implements Serializable {
     private static final long serialVersionUID = -5608192823126010471L;
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "short_name")

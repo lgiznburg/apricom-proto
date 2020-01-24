@@ -19,12 +19,14 @@ public class HibernateModule {
 
     public static void bind( ServiceBinder binder)
     {
+        binder.bind( BaseDao.class, BaseDaoImpl.class ).withId(BaseDao.class.getSimpleName());
         binder.bind( UserDao.class, UserDaoImpl.class );
         binder.bind( CountryDao.class, CountryDaoImpl.class );
         binder.bind( EntrantDao.class, EntrantDaoImpl.class );
         binder.bind( CatalogDao.class, CatalogDaoImpl.class );
         binder.bind( RequestDao.class, RequestDaoImpl.class );
         binder.bind( DocumentDao.class, DocumentDaoImpl.class );
+        binder.bind( DocumentTypeDao.class, DocumentTypeDaoImpl.class );
 
         //seed entity - initial DB population
         binder.bind( SeedEntity.class, SeedEntityImpl.class);

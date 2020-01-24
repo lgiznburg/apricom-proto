@@ -1,11 +1,15 @@
 <html t:type="layout" t:pageTitle="Создание заявки"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
-
+<body>
     <t:if test="isOnStep('PERSON_INFO')">
         <t:wizard.personinfo.personinfoedit entrant="wizardState.entrant"/>
+    </t:if>
+    <t:if test="isOnStep('EDUCATION_INFO')">
+        <t:wizard.educationinfo.educationinfoedit entrant="wizardState.entrant"/>
     </t:if>
     <t:if test="isOnStep('SPECIAL_RIGHTS_INFO')">
         <t:wizard.personinfo.specialstateedit entrant="wizardState.entrant"/>
     </t:if>
+  </body>
 </html>

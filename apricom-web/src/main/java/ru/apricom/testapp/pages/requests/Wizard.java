@@ -95,4 +95,11 @@ public class Wizard {
         }
     }
 
+    public void onPreviousStep() {
+        WizardStep step = wizardState.getStep();
+        if ( step.ordinal() > 0 ) {
+            wizardState.setStep( WizardStep.values()[ step.ordinal() - 1 ] );
+        }
+    }
+
 }

@@ -4,26 +4,29 @@ package ru.apricom.testapp.entities.catalogs;
  * @author leonid.
  */
 public enum EducationLevelType {
-    BASE_COMMON("среднее общее", 1 ),
-    BASE_PROFESSIONAL("среднее специальное", 1 ),
-    HIGH_BACHELOR("бакалавриат", 2 ),
-    HIGH_MASTER("магистратура", 3 ),
-    HIGH_SPECIALITY("специалитет", 3 ),
-    RESIDENCY("ординатура", 4 ),
-    POSTGRADUATE("аспирантура", 4 );
+    BASE_COMMON("среднее общее", "СОО",1 ),
+    BASE_PROFESSIONAL("среднее профессиональное", "СПО", 1 ),
+    HIGH_BACHELOR("Высшее - бакалавриат","бакалавриат", 2 ),
+    HIGH_MASTER("Высшее - магистратура", "магистратура", 3 ),
+    HIGH_SPECIALITY("Высшее - специалитет", "специалитет", 3 ),
+    RESIDENCY("Постдипломное - ординатура", "ординатура", 4 ),
+    POSTGRADUATE("Постдипломное - аспирантура", "аспирантура", 4 );
 
     private String title;
-    
+    private String title_short;
     private int comparisonLevel;
 
-    EducationLevelType( String title, int comparisonLevel ) {
+    EducationLevelType( String title, String title_short, int comparisonLevel ) {
         this.title = title;
+        this.title_short = title_short;
         this.comparisonLevel = comparisonLevel;
     }
 
     public String getTitle() {
         return title;
     }
+
+    public String getShortTitle() { return title_short; }
 
     /**
      * Check if given level of education meets requirement of this level.
