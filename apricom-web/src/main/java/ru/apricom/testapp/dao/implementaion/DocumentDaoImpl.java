@@ -4,6 +4,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import ru.apricom.testapp.dao.DocumentDao;
 import ru.apricom.testapp.entities.documents.BaseDocument;
+import ru.apricom.testapp.entities.documents.DiplomaDocument;
 import ru.apricom.testapp.entities.documents.IdDocument;
 import ru.apricom.testapp.entities.entrant.Entrant;
 
@@ -23,8 +24,17 @@ public class DocumentDaoImpl extends BaseDaoImpl implements DocumentDao {
     }
 
     @Override
-    public List<BaseDocument> findForEntrant(Entrant entrant) {
-        Criteria criteria = session.createCriteria( BaseDocument.class ).add( Restrictions.eq( "entrant", entrant ) );
+    public <T extends BaseDocument> List<T> findForEntrant( Class<T> type, Entrant entrant ) {
+        Criteria criteria = session.createCriteria( type ).add( Restrictions.eq( "entrant", entrant ) );
         return criteria.list();
+    }
+
+    @Override
+    public DiplomaDocument findEduDocument( Entrant entrant, boolean main ) {
+        Criteria criteria = session.createCriteria( DiplomaDocument.class )
+                .add( Restrictions.eq( "entrant", entrant ) )
+                .add( Restrictions.eq( "main", main ) )
+                .setMaxResults( 1 );
+        return (DiplomaDocument) criteria.uniqueResult();
     }
 }

@@ -16,5 +16,6 @@
     <include file="2020-01-09-lost-n-found.xml" relativeToChangelogFile="true"/>
     <include file="2020-01-21-specialstate-tables.xml" relativeToChangelogFile="true"/>
     <include file="2020-01-23-step-two.xml" relativeToChangelogFile="true"/>
+    <include file="2020-01-23-exam_schedule-tables.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

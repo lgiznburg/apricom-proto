@@ -24,8 +24,9 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2 co-s-10">
+                <t:eventlink event="previousStep" class="btn btn-default">${message:back}</t:eventlink>
                 <t:submit class="btn btn-primary" value="${message:save}"/>
-                <t:eventlink event="cancel" class="btn btn-default">${message:cancel}</t:eventlink>
+<!--                <t:eventlink event="cancel" class="btn btn-default">${message:cancel}</t:eventlink>-->
             </div>
         </div>
     </t:form>

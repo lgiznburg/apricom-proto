@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "special_state")
 public class SpecialState implements Serializable {
+    private static final long serialVersionUID = 2698447553472650091L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )

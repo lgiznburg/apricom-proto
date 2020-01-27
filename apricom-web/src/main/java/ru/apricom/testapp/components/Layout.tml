@@ -33,7 +33,7 @@
                 <t:security.user>
                     <div class="dropdown">
                     <button class="nav_apricom dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" id="userDropdown" aria-expanded="false">
-                        <span>${message:welcome} ${user}</span><span class="caret"/>
+                        <span>${message:welcome} ${greetings}</span><span class="caret"/>
                     </button>
                         <ul class="dropdown-menu bg-light" aria-labelledby="userDropdown">
                             <li><t:eventlink event="logout">${message:navbar.logout}</t:eventlink></li>

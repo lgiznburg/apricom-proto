@@ -1,20 +1,21 @@
 package ru.apricom.testapp.components.wizard.educationinfo;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
+import org.apache.tapestry5.ValidationException;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.upload.services.UploadedFile;
-import ru.apricom.testapp.dao.BaseDao;
-import ru.apricom.testapp.dao.CountryDao;
-import ru.apricom.testapp.dao.DocumentDao;
-import ru.apricom.testapp.dao.DocumentTypeDao;
+import ru.apricom.testapp.dao.*;
 import ru.apricom.testapp.encoders.CountrySelectModel;
 import ru.apricom.testapp.encoders.DocumentSelectModel;
 import ru.apricom.testapp.encoders.EduLevelSelectModel;
@@ -22,8 +23,10 @@ import ru.apricom.testapp.encoders.StringSelectModel;
 import ru.apricom.testapp.entities.catalogs.*;
 import ru.apricom.testapp.entities.documents.BaseDocument;
 import ru.apricom.testapp.entities.documents.DiplomaDocument;
+import ru.apricom.testapp.entities.documents.StoredFile;
 import ru.apricom.testapp.entities.entrant.Entrant;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,6 +100,12 @@ public class EducationInfoEdit {
     @Property
     private SelectModel countrySelectModel;
 
+    @Property
+    private DiplomaDocument mainEduDoc;
+
+    @Property
+    private DiplomaDocument secEduDoc;
+
     //for ajax zone
     @Inject
     private Request request;
@@ -107,18 +116,22 @@ public class EducationInfoEdit {
     @InjectComponent
     private Form eduLevelForm; //form in general
 
-    @InjectService( "BaseDao" )
-    private BaseDao baseDao;
-
     @Inject
     private DocumentDao documentDao;
 
     @Inject
-    private DocumentTypeDao documentTypeDao;
+    private CatalogDao catalogDao;
 
     @Inject
     private CountryDao countryDao;
 
+    @Inject
+    private Messages messages;
+
+    @Inject
+    private ComponentResources componentResources;
+
+/*
     public DiplomaDocument getMainEduDoc() {
         return getEducationDocument( 1 );
     }
@@ -126,29 +139,48 @@ public class EducationInfoEdit {
     public DiplomaDocument getSecEduDoc() {
         return getEducationDocument( 2 );
     }
+*/
 
     public void setupRender() {
         isLastFormSelectorDisplayed = false;
         hasRegNumber = false;
         displayMainFields = false;
-        eduLevels = baseDao.findAll( EducationLevel.class );
+        eduLevels = catalogDao.findAll( EducationLevel.class );
         eduLevelSelectModel = new EduLevelSelectModel( eduLevels );
     }
 
     public void onPrepareForRender() {
-        DiplomaDocument mainDoc = new DiplomaDocument();
-        DiplomaDocument secDoc = new DiplomaDocument();
-        mainDoc.setMain( true );
-        mainDoc.setCountry( countryDao.findByIso2( "ru" ) );
-        secDoc.setMain( false );
+        prepare();
+    }
+
+    public void onPrepareForSubmit() {
+        prepare();
+    }
+
+    public void prepare() {
+        mainEduDoc = documentDao.findEduDocument( entrant, true);
+        if ( mainEduDoc == null ) {
+            mainEduDoc = new DiplomaDocument();
+            mainEduDoc.setMain( true );
+            mainEduDoc.setCountry( countryDao.findByIso2( "ru" ) );
+        }
+        secEduDoc = documentDao.findEduDocument( entrant, false );
+        if ( secEduDoc == null ) {
+            secEduDoc = new DiplomaDocument();
+            secEduDoc.setMain( false );
+        }
+/* this does not work if documents have been saved before. Fixed. (LG)
+
         List<BaseDocument> docsInit = documentDao.findForEntrant( entrant );
         docsInit.add( mainDoc );
         docsInit.add( secDoc );
         entrant.setDocuments( docsInit );
+*/
     }
 
     public void onValueChangedFromEduLevel( EducationLevel level ) {
         if ( level != null ) {
+            prepare();
             eduLevel = level;
             if ( level.getCode() == EducationLevelType.BASE_PROFESSIONAL.ordinal() ) {
                 isLastFormSelectorDisplayed = true;
@@ -157,6 +189,7 @@ public class EducationInfoEdit {
                 isSecondaryUploadDisplayed = false;
             }
 
+/*
             List<BaseDocument> documents = entrant.getDocuments();
             for ( BaseDocument document : documents ) {
                 if ( document instanceof DiplomaDocument ) {
@@ -164,13 +197,16 @@ public class EducationInfoEdit {
                     break;
                 }
             }
+*/
+            mainEduDoc.setEducationLevelType( EducationLevelType.values()[level.getCode()] );
+            secEduDoc.setEducationLevelType( EducationLevelType.values()[level.getCode()] );
 
             isMainUploadDisplayed = true;
             lastSchoolClasses = new ArrayList<>(); //fill list for last school selector
             lastSchoolClasses.add( "9" );
             lastSchoolClasses.add( "11" );
             lastSchoolClassSelectModel = new StringSelectModel( lastSchoolClasses );
-            documentTypes = documentTypeDao.findTypesByLevel( level );
+            documentTypes = catalogDao.findEduDocTypesByLevel( level );
             documentTypeModel = new DocumentSelectModel( documentTypes );
             if (request.isXHR()) {
                 ajaxResponseRenderer
@@ -187,7 +223,7 @@ public class EducationInfoEdit {
             if ( lastClass.equals( "[11]" ) ) { //tapestry returns String from t:select with "[]"
                 isSecondaryUploadDisplayed = true;
             } else isSecondaryUploadDisplayed = false;
-            documentTypes = baseDao.findAll( EducationDocumentType.class );
+            documentTypes = documentDao.findAll( EducationDocumentType.class );
             documentTypeModel = new DocumentSelectModel( documentTypes );
             if (request.isXHR()) {
                 ajaxResponseRenderer.addRender( secondaryUploadZone );
@@ -197,18 +233,20 @@ public class EducationInfoEdit {
 
     public void onValueChangedFromMainDocType( EducationDocumentType type ) {
         if ( type != null ) {
-            List<BaseDocument> documents = entrant.getDocuments();
+            prepare();
+            /*List<BaseDocument> documents = entrant.getDocuments();
             for ( BaseDocument document : documents ) {
                 if ( document instanceof DiplomaDocument ) {
                     ((DiplomaDocument) document).setDiplomaType( type );
                     break;
                 }
-            }
+            }*/
+            mainEduDoc.setDiplomaType( type );
             if ( type.getCode() != EducationDocumentTypeCode.BASIC_CERTIFICATE.ordinal()
                     && type.getCode() != EducationDocumentTypeCode.BASIC_PROFESSIONAL_DIPLOMA.ordinal() ) {
                 hasRegNumber = true;
             }
-            entrant.setDocuments( documents );
+            //entrant.setDocuments( documents );
             displayMainFields = true;
 
             List<Country> countries = countryDao.findAll( Country.class );
@@ -219,8 +257,10 @@ public class EducationInfoEdit {
         }
     }
 
-    private DiplomaDocument getEducationDocument( int order ) {
-        /*DiplomaDocument document = null;
+    /*
+        private DiplomaDocument getEducationDocument( int order ) {
+            */
+/*DiplomaDocument document = null;
         if ( entrant != null ) {
             List<BaseDocument> docs = entrant.getDocuments();
             int counter = 0;
@@ -235,7 +275,8 @@ public class EducationInfoEdit {
             }
         }
 
-        return document;*/
+        return document;*//*
+
         return educationDocs().get( order - 1 );
     }
 
@@ -253,6 +294,49 @@ public class EducationInfoEdit {
         }
         return output;
     }
+*/
+    void onValidateFromMainEducationDocument( UploadedFile file ) throws ValidationException {
+        if ( (mainEduDoc.getFile() == null || mainEduDoc.getFile().getFileName() == null)
+                && file == null ) {
+            throw new ValidationException( messages.get( "must-upload-scan" ) );
+        }
+    }
 
+    void onValidateFromSecondaryEducationDocument( UploadedFile file ) throws ValidationException {
+        if ( isSecondaryUploadDisplayed
+                && (secEduDoc.getFile() == null || secEduDoc.getFile().getFileName() == null)
+                && file == null ) {
+            throw new ValidationException( messages.get( "must-upload-scan" ) );
+        }
+    }
+
+    boolean onSuccessFromEduLevelForm() {
+        storeEduDocument( mainEduDoc, mainEducationDocument );
+
+        if ( isSecondaryUploadDisplayed ) {
+            storeEduDocument( secEduDoc, secondaryEducationDocument );
+        }
+        // go to next step
+        componentResources.triggerEvent( "nextStep", new Object[]{}, null );
+
+        return true;
+    }
+
+    private void storeEduDocument( DiplomaDocument eductionDocument, UploadedFile documentFile ) {
+        StoredFile primary = eductionDocument.getFile();
+        if ( primary == null ) {
+             primary = new StoredFile();
+            eductionDocument.setFile( primary );
+        }
+        try {
+            primary.setFileName( documentFile.getFileName() );
+            primary.setMimeType( documentFile.getContentType() );
+            primary.setContent( IOUtils.toByteArray( documentFile.getStream() ) );
+        } catch (IOException e) {
+            // what to do with the exception??
+        }
+        eductionDocument.setEntrant( entrant );
+        documentDao.save( eductionDocument );
+    }
 }
 

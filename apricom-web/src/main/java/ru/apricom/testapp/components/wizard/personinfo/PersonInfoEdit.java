@@ -279,10 +279,6 @@ public class PersonInfoEdit {
         return true;
     }
 
-    boolean onCancel() {
-        return true;
-    }
-
     public CatalogSelectModel getIdDocumentTypeSelectModel() {
         return new CatalogSelectModel( catalogDao.findCatalog( IdDocumentType.class ) );
     }

@@ -1,0 +1,110 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="add_exam_schedule" author="leonid">
+        <createTable tableName="exam_schedule">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="subject_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="schedule" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="place" type="${string.type}"/>
+            <column name="capacity" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-exam-indices" author="leonid">
+        <createIndex tableName="exam_schedule" indexName="fk_exam_subjects">
+            <column name="subject_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-exams-foreign-keys" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="subject_id" baseTableName="exam_schedule"
+                                 constraintName="fk_exam_subjects"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="catalogs" validate="true"/>
+    </changeSet>
+
+    <changeSet id="add_exams_to_entrants_table" author="leonid">
+        <createTable tableName="exams_entrants">
+            <column name="exam_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="entrant_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_exams_to_entrants_keys" author="leonid">
+        <addUniqueConstraint tableName="exams_entrants" columnNames="exam_id,entrant_id"/>
+        <createIndex tableName="exams_entrants" indexName="fk_exams_exams">
+            <column name="exam_id"/>
+        </createIndex>
+        <createIndex tableName="exams_entrants" indexName="fk_exams_entrants">
+            <column name="entrant_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-exams_to_entrants-foreign-keys" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="exam_id" baseTableName="exams_entrants"
+                                 constraintName="fk_exams_exams"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="exam_schedule" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="entrant_id" baseTableName="exams_entrants"
+                                 constraintName="fk_exams_entrants"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="entrants" validate="true"/>
+    </changeSet>
+
+    <changeSet id="create-entrant-results-table" author="leonid">
+        <createTable tableName="entrant_results">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="entrant_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subject_id" type="${id.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="score" type="int"/>
+            <column name="year" type="int"/>
+            <column name="type" type="${string.type}"/>
+            <column name="status" type="${string.type}"/>
+            <column name="additional" type="${string.type}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-entrant-results-indices" author="leonid">
+        <createIndex tableName="entrant_results" indexName="fk_result_subjects">
+            <column name="subject_id"/>
+        </createIndex>
+        <createIndex tableName="entrant_results" indexName="fk_result_entrants">
+            <column name="entrant_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-entrant-results-foreign-keys" author="leonid">
+        <addForeignKeyConstraint baseColumnNames="subject_id" baseTableName="entrant_results"
+                                 constraintName="fk_result_subjects"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="catalogs" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="entrant_id" baseTableName="entrant_results"
+                                 constraintName="fk_result_entrants"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="entrants" validate="true"/>
+    </changeSet>
+
+
+</databaseChangeLog>

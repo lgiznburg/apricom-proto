@@ -21,28 +21,36 @@ public class Layout {
     @Parameter(defaultPrefix = BindingConstants.LITERAL, value = "")
     private String pageTitle;
 
+    @Property
+    private String greetings;
+
     @Inject
     private SecurityService securityService;
 
     @Inject
     private UserDao userDao;
 
-    public void setupRender() {
-    }
-
-    public String getUser() {
+    public Object setupRender() {
         if ( !securityService.isUser() ) {
-            return ""; // no user
+            greetings = ""; // no user
+            return null;
         }
         String username = (String) securityService.getSubject().getPrincipal();
         User user = userDao.findByUserName( username );
+        if ( user == null ) {
+            // very rare case: credentials are stored by "remember-me" but user was removed from the DB
+            securityService.getSubject().logout();
+            return Index.class;  // do redirect
+        }
         StringBuilder nameBuilder = new StringBuilder(user.getFirstName());
         if ( user.getMiddleName() != null && !user.getMiddleName().isEmpty() ) {
             nameBuilder.append( " " )
                     .append( user.getMiddleName() );
         }
-        return nameBuilder.toString();
+        greetings = nameBuilder.toString();
+        return null;
     }
+
 
     /**
      * Respond to the user clicking on the "Log Out" link

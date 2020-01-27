@@ -15,6 +15,7 @@ import ru.apricom.testapp.entities.base.ProgramRequirement;
 import ru.apricom.testapp.entities.base.Speciality;
 import ru.apricom.testapp.entities.catalogs.*;
 import ru.apricom.testapp.entities.catalogs.Country;
+import ru.apricom.testapp.entities.exams.ExamSchedule;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,6 +23,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -340,8 +343,8 @@ public class PopulateDataModule {
         configuration.add( "psychologyProgram_2", new ProgramRequirement( psychologyProgram, math, 45, 2 ) );
         configuration.add( "psychologyProgram_3", new ProgramRequirement( psychologyProgram, russian, 45, 3 ) );
 
-        configuration.add( "socialWorkProgram_1", new ProgramRequirement( socialWorkProgram, chemistry, 45, 1 ) );
-        configuration.add( "socialWorkProgram_2", new ProgramRequirement( socialWorkProgram, biology, 45, 2 ) );
+        configuration.add( "socialWorkProgram_1", new ProgramRequirement( socialWorkProgram, history, 45, 1 ) );
+        configuration.add( "socialWorkProgram_2", new ProgramRequirement( socialWorkProgram, social, 45, 2 ) );
         configuration.add( "socialWorkProgram_3", new ProgramRequirement( socialWorkProgram, russian, 45, 3 ) );
 
         configuration.add( "medBiologyProgram_1", new ProgramRequirement( medBiologyProgram, biology, 50, 1 ) );
@@ -364,6 +367,23 @@ public class PopulateDataModule {
             configuration.add( program.getSpeciality().getTitle()+contractAdmission.getShortTitle(),
                     new Competition( contractAdmission, program, FinancingType.CONTRACT, sequenceNumber ) );
         }
+
+        try {
+            // exam schedules
+            configuration.add( "ExamSchedule", new SeedEntityIdentifier( ExamSchedule.class, "schedule" ) );
+            SimpleDateFormat dateFormat = new SimpleDateFormat( "dd.MM.yy  hh:mm" );
+            configuration.add( "chemistry_exam1", new ExamSchedule( chemistry, dateFormat.parse( "13.07.20 10:00" ), "Ауд. 15", 20 ) );
+            configuration.add( "chemistry_exam2", new ExamSchedule( chemistry, dateFormat.parse( "13.07.20 15:00" ), "Ауд. 230", 60 ) );
+            configuration.add( "bio_exam1", new ExamSchedule( biology, dateFormat.parse( "15.07.20 10:00" ), "Ауд. 230", 20 ) );
+            configuration.add( "russian_exam1", new ExamSchedule( russian, dateFormat.parse( "20.07.20 10:00" ), "Ауд. 230", 20 ) );
+            configuration.add( "history_exam1", new ExamSchedule( history, dateFormat.parse( "14.07.20 10:00" ), "Ауд. 15", 20 ) );
+            configuration.add( "physics_exam1", new ExamSchedule( physics, dateFormat.parse( "16.07.20 10:00" ), "Ауд. 15", 20 ) );
+            configuration.add( "soc_exam1", new ExamSchedule( social, dateFormat.parse( "14.07.20 12:00" ), "Ауд. 15", 20 ) );
+            configuration.add( "math_exam1", new ExamSchedule( history, dateFormat.parse( "16.07.20 15:00" ), "Ауд. 15", 20 ) );
+        } catch (ParseException e) {
+            //
+        }
+
     }
 
     private static void populateCountries( OrderedConfiguration<Object> configuration ) {
