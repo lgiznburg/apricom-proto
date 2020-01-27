@@ -40,6 +40,7 @@ public class EducationInfoEdit {
     @Parameter(required = true)
     private Entrant entrant;
 
+/*
     @Property
     private List<EducationLevel> eduLevels; //list of all education levels in catalogs
 
@@ -48,6 +49,7 @@ public class EducationInfoEdit {
 
     @Property
     private SelectModel eduLevelSelectModel; //algorithm for generation of labels in select
+*/
 
     @Property
     private EducationLevel eduLevel; //level that will be selected
@@ -61,11 +63,13 @@ public class EducationInfoEdit {
     @Property
     private String lastSchoolClass;
 
+/*
     @Property
     private List<String> lastSchoolClasses;
 
     @Property
     private SelectModel lastSchoolClassSelectModel;
+*/
 
     @Property
     private boolean isMainUploadDisplayed; //when user selected main education level we need to upload certificate
@@ -94,11 +98,13 @@ public class EducationInfoEdit {
     @Property
     private UploadedFile secondaryEducationDocument;
 
+/*
     @Property
     private SelectModel documentTypeModel;
 
     @Property
     private SelectModel countrySelectModel;
+*/
 
     @Property
     private DiplomaDocument mainEduDoc;
@@ -145,8 +151,10 @@ public class EducationInfoEdit {
         isLastFormSelectorDisplayed = false;
         hasRegNumber = false;
         displayMainFields = false;
+/*
         eduLevels = catalogDao.findAll( EducationLevel.class );
         eduLevelSelectModel = new EduLevelSelectModel( eduLevels );
+*/
     }
 
     public void onPrepareForRender() {
@@ -164,10 +172,26 @@ public class EducationInfoEdit {
             mainEduDoc.setMain( true );
             mainEduDoc.setCountry( countryDao.findByIso2( "ru" ) );
         }
+        else {
+            // document exists - show form
+            eduLevel = mainEduDoc.getDiplomaType().getEducationLevel();
+            isMainUploadDisplayed = true;
+            isLastFormSelectorDisplayed = mainEduDoc.getEducationLevelType() == EducationLevelType.BASE_PROFESSIONAL;
+            EducationDocumentType type = mainEduDoc.getDiplomaType();
+            if ( type.getCode() != EducationDocumentTypeCode.BASIC_CERTIFICATE.ordinal()
+                    && type.getCode() != EducationDocumentTypeCode.BASIC_PROFESSIONAL_DIPLOMA.ordinal() ) {
+                hasRegNumber = true;
+            }
+            displayMainFields = true;
+        }
         secEduDoc = documentDao.findEduDocument( entrant, false );
         if ( secEduDoc == null ) {
             secEduDoc = new DiplomaDocument();
             secEduDoc.setMain( false );
+        }
+        else {
+            // sec document selected - show second document form
+            isSecondaryUploadDisplayed = true;
         }
 /* this does not work if documents have been saved before. Fixed. (LG)
 
@@ -176,6 +200,25 @@ public class EducationInfoEdit {
         docsInit.add( secDoc );
         entrant.setDocuments( docsInit );
 */
+    }
+
+    public SelectModel getEduLevelSelectModel() {
+        return new EduLevelSelectModel( catalogDao.findAll( EducationLevel.class ) );
+    }
+
+    public SelectModel getDocumentTypeModel() {
+        return new DocumentSelectModel( documentDao.findAll( EducationDocumentType.class ) );
+    }
+
+    public SelectModel getCountrySelectModel() {
+        return new CountrySelectModel( countryDao.findAll( Country.class ) );
+    }
+
+    public SelectModel getLastSchoolClassSelectModel() {
+        List<String> lastSchoolClasses = new ArrayList<>(); //fill list for last school selector
+        lastSchoolClasses.add( "9" );
+        lastSchoolClasses.add( "11" );
+        return new StringSelectModel( lastSchoolClasses );
     }
 
     public void onValueChangedFromEduLevel( EducationLevel level ) {
@@ -202,12 +245,14 @@ public class EducationInfoEdit {
             secEduDoc.setEducationLevelType( EducationLevelType.values()[level.getCode()] );
 
             isMainUploadDisplayed = true;
+/*
             lastSchoolClasses = new ArrayList<>(); //fill list for last school selector
             lastSchoolClasses.add( "9" );
             lastSchoolClasses.add( "11" );
             lastSchoolClassSelectModel = new StringSelectModel( lastSchoolClasses );
             documentTypes = catalogDao.findEduDocTypesByLevel( level );
             documentTypeModel = new DocumentSelectModel( documentTypes );
+*/
             if (request.isXHR()) {
                 ajaxResponseRenderer
                         .addRender( lastFormSelectorZone )
@@ -220,11 +265,12 @@ public class EducationInfoEdit {
     public void onValueChangedFromLastSchoolClass( String lastClass ) {
         if ( lastClass != null ) {
             lastSchoolClass = lastClass;
-            if ( lastClass.equals( "[11]" ) ) { //tapestry returns String from t:select with "[]"
-                isSecondaryUploadDisplayed = true;
-            } else isSecondaryUploadDisplayed = false;
+            //tapestry returns String from t:select with "[]"
+            isSecondaryUploadDisplayed = lastClass.equals( "11" );
+/*
             documentTypes = documentDao.findAll( EducationDocumentType.class );
             documentTypeModel = new DocumentSelectModel( documentTypes );
+*/
             if (request.isXHR()) {
                 ajaxResponseRenderer.addRender( secondaryUploadZone );
             }
@@ -249,8 +295,10 @@ public class EducationInfoEdit {
             //entrant.setDocuments( documents );
             displayMainFields = true;
 
+/*
             List<Country> countries = countryDao.findAll( Country.class );
             countrySelectModel = new CountrySelectModel( countries );
+*/
             if (request.isXHR()) {
                 ajaxResponseRenderer.addRender( mainDocumentInfoZone );
             }
@@ -323,20 +371,22 @@ public class EducationInfoEdit {
     }
 
     private void storeEduDocument( DiplomaDocument eductionDocument, UploadedFile documentFile ) {
-        StoredFile primary = eductionDocument.getFile();
-        if ( primary == null ) {
-             primary = new StoredFile();
-            eductionDocument.setFile( primary );
+        if ( documentFile != null ) {
+            StoredFile primary = eductionDocument.getFile();
+            if ( primary == null ) {
+                 primary = new StoredFile();
+                eductionDocument.setFile( primary );
+            }
+            try {
+                primary.setFileName( documentFile.getFileName() );
+                primary.setMimeType( documentFile.getContentType() );
+                primary.setContent( IOUtils.toByteArray( documentFile.getStream() ) );
+            } catch (IOException e) {
+                // what to do with the exception??
+            }
+            eductionDocument.setEntrant( entrant );
+            documentDao.save( eductionDocument );
         }
-        try {
-            primary.setFileName( documentFile.getFileName() );
-            primary.setMimeType( documentFile.getContentType() );
-            primary.setContent( IOUtils.toByteArray( documentFile.getStream() ) );
-        } catch (IOException e) {
-            // what to do with the exception??
-        }
-        eductionDocument.setEntrant( entrant );
-        documentDao.save( eductionDocument );
     }
 }
 
