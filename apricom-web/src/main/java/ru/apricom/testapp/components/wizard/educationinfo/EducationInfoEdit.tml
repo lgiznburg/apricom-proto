@@ -65,6 +65,7 @@
                         </div>
                         <t:label for="mainEducationDocument"/><span style="color: darkred;" title="${message:necessary}">* </span>
                         <input t:type="upload" t:id="mainEducationDocument" t:value="mainEducationDocument" style="height: auto;" class="side-margin-fix"/>
+                        <div style="color: #043f3e"><i>${mainEduDoc.file?.fileName}</i></div>
                     </t:if>
                 </t:zone>
             </div>
@@ -96,6 +97,7 @@
                         </div>
                         <t:label for="secondaryEducationDocument"/><span style="color: darkred;" title="${message:necessary}">* </span>
                         <input t:type="upload" t:id="secondaryEducationDocument" t:value="secondaryEducationDocument"  style="height: auto;" class="side-margin-fix"/>
+                        <div style="color: #043f3e"><i>${secEduDoc.file?.fileName}</i></div>
                     </t:if>
                 </t:zone>
             </div>
