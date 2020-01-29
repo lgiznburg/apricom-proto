@@ -22,6 +22,8 @@ public class WizardState {
 
     private List<EducationalProgram> selectedPrograms = new ArrayList<>();
 
+    private FormContextHelper helper = new FormContextHelper();
+
     public boolean isInitialized() {
         return initialized && entrant != null;
     }
@@ -68,5 +70,13 @@ public class WizardState {
 
     public void setSelectedPrograms( List<EducationalProgram> selectedPrograms ) {
         this.selectedPrograms = selectedPrograms;
+    }
+
+    public FormContextHelper getHelper() {
+        return helper;
+    }
+
+    public void setHelper(FormContextHelper helper) {
+        this.helper = helper;
     }
 }

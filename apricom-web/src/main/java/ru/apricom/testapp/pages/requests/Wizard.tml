@@ -6,7 +6,7 @@
         <t:wizard.personinfo.personinfoedit entrant="wizardState.entrant"/>
     </t:if>
     <t:if test="isOnStep('EDUCATION_INFO')">
-        <t:wizard.educationinfo.educationinfoedit entrant="wizardState.entrant"/>
+        <t:wizard.educationinfo.educationinfoedit entrant="wizardState.entrant" helper="wizardState.helper"/>
     </t:if>
     <t:if test="isOnStep('SPECIAL_RIGHTS_INFO')">
         <t:wizard.personinfo.specialstateedit entrant="wizardState.entrant"/>

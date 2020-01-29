@@ -49,6 +49,16 @@
                                             <t:label for="mainOrg" style="margin-top: 15px">${message:org-label}</t:label><span style="color: darkred;" title="${message:necessary}">* </span>
                                             <t:textfield value="mainEduDoc.organizationName" t:id="mainOrg" validate="required"/>
                                         </div>
+                                        <div class="col-sm-3">
+                                            <t:label for="mainIssuance" style="margin-top: 15px">${message:issuance-date}</t:label><span style="color: darkred;" title="${message:necessary}">* </span>
+                                            <t:datefield value="mainEduDoc.issuanceDate" t:id="mainIssuance" format="prop:correctDateFormat" validate="required"/>
+                                        </div>
+                                        <t:if test="hasRegNumber">
+                                            <div class="col-sm-3">
+                                                <t:label for="mainScore" style="margin-top: 15px">${message:average-score}</t:label><span style="color: darkred;" title="${message:necessary}">* </span>
+                                                <t:textfield value="mainEduDoc.averageScore" t:id="mainScore" validate="required"/>
+                                            </div>
+                                        </t:if>
                                     </t:if>
                             </t:zone>
                             </div>
@@ -66,6 +76,22 @@
                             <div class="col-sm-3">
                                 <label for="secDocType">${message:select-type}<span style="color: darkred;" title="${message:necessary}">* </span></label>
                                 <input class="form-control disabled" disabled="" id="secDocType" value="Аттестат СОО"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <t:label for="secNumber">${message:number-label}</t:label><span style="color: darkred;" title="${message:necessary}">* </span>
+                                <t:textfield value="secEduDoc.documentNumber" t:id="secNumber" validate="required"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <t:label for="secCountry">${message:country-label}</t:label><span style="color: darkred;" title="${message:necessary}">* </span>
+                                <t:select value="secEduDoc.country" model="countrySelectModel" t:id="secCountry" validate="required" blankOption="NEVER"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <t:label for="secIssuance">${message:issuance-date}</t:label><span style="color: darkred;" title="${message:necessary}">* </span>
+                                <t:datefield value="secEduDoc.issuanceDate" t:id="secIssuance" format="prop:correctDateFormat" validate="required"/>
+                            </div>
+                            <div class="col-sm-12">
+                                <t:label for="secOrg" style="margin-top: 15px">${message:org-label}</t:label><span style="color: darkred;" title="${message:necessary}">* </span>
+                                <t:textfield value="secEduDoc.organizationName" t:id="secOrg" validate="required"/>
                             </div>
                         </div>
                         <t:label for="secondaryEducationDocument"/><span style="color: darkred;" title="${message:necessary}">* </span>
