@@ -186,9 +186,10 @@ public class PersonInfoEdit {
                 && mainIdDocument.getIdDocumentType().getCode() == IdDocumentTypeCode.FOREIGN_PASSPORT.ordinal() + 1;
     }
 
-    public boolean isFileAttached() {
+    //redundant. Easily replaced with "?" after "file" in template
+    /*public boolean isFileAttached() {
         return mainIdDocument.getFile() != null && mainIdDocument.getFile().getFileName() != null;
-    }
+    }*/
 
     void onValueChangedFromIdDocumentType(IdDocumentType type) {
         if ( mainIdDocument == null ) {

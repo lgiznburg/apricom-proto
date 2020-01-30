@@ -2,132 +2,119 @@
       xmlns:p="tapestry:parameter">
 <t:content>
 <t:form t:id="personInfoForm" validate="personInfo" class="form-horizontal">
-    <div class="form-group">
-        <div class="col-sm-3"><t:label for="surname"/>*</div>
-        <div class="col-sm-3"><t:label for="firstName"/>*</div>
-        <div class="col-sm-3"><t:label for="patronymic"/></div>
-        <div class="col-sm-3"><t:label for="birthDate"/>*</div>
+    <div class="row">
+        <h2>${message:personal-data}</h2>
     </div>
-    <div class="form-group">
+    <div class="form-group row">
         <div class="col-sm-3">
-            <t:textfield t:id="surname" value="personInfo.name.surname" validate="required" />
+            <t:label for="surname"/><span style="color: darkred;" title="${message:necessary}">* </span>
+            <t:textfield t:id="surname" value="personInfo.name.surname" validate="required" class="form-control"/>
         </div>
         <div class="col-sm-3">
-            <t:textfield t:id="firstName" value="personInfo.name.firstName" validate="required" />
+            <t:label for="firstName"/><span style="color: darkred;" title="${message:necessary}">* </span>
+            <t:textfield t:id="firstName" value="personInfo.name.firstName" validate="required" class="form-control"/>
         </div>
         <div class="col-sm-3">
-            <t:textfield t:id="patronymic" value="personInfo.name.patronymic" />
+            <t:label for="patronymic"/>
+            <t:textfield t:id="patronymic" value="personInfo.name.patronymic" class="form-control"/>
         </div>
         <div class="col-sm-3">
-            <t:datefield t:id="birthDate" value="proxyBirthDate" validate="required" format="prop:correctDateFormat" />
+            <t:label for="birthDate"/><span style="color: darkred;" title="${message:necessary}">* </span>
+            <t:datefield t:id="birthDate" value="proxyBirthDate" validate="required" format="prop:correctDateFormat" class="form-control"/>
         </div>
     </div>
 
     <div class="form-group">
-        <div class="col-sm-3"><t:label for="contactPhone"/>*</div>
-        <div class="col-sm-3"><t:label for="homePhone"/></div>
-        <div class="col-sm-3"><t:label for="mobilePhone"/></div>
-        <div class="col-sm-3"><t:label for="email"/></div>
-    </div>
-    <div class="form-group">
         <div class="col-sm-3">
+            <t:label for="contactPhone"/><span style="color: darkred;" title="${message:necessary}">* </span>
             <t:textfield t:id="contactPhone" value="personInfo.contactPhone" validate="required" />
         </div>
         <div class="col-sm-3">
+            <t:label for="homePhone"/>
             <t:textfield t:id="homePhone" value="personInfo.homePhone"  />
         </div>
         <div class="col-sm-3">
+            <t:label for="mobilePhone"/>
             <t:textfield t:id="mobilePhone" value="personInfo.mobilePhone"  />
         </div>
         <div class="col-sm-3">
+            <t:label for="email"/>
             <t:textfield t:id="email" value="entrant.email" validate="required,email" />
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-4">${message:registrationAddress}</div>
+        <h3>${message:registrationAddress}</h3>
     </div>
     <t:wizard.personinfo.addressedit address="personInfo.registrationAddress"/>
     <div class="form-group">
         <div class="col">
             <t:checkbox t:id="addressesEqual" value="addressesNotEqual" t:mixins="triggerfragment" fragment="currentAddressZone"/>
-            <t:label for="addressesEqual"/>
+            <t:label for="addressesEqual" style="margin-left: 15px"/>
         </div>
     </div>
     <t:formfragment t:id="currentAddressZone" visible="addressesNotEqual">
         <div class="row">
-            <div class="col-sm-4">${message:currentAddress}</div>
+            <h3>${message:currentAddress}</h3>
         </div>
         <t:wizard.personinfo.addressedit address="personInfo.currentAddress"/>
     </t:formfragment>
 
     <div class="row">
-        <div class="col-sm-4"><h5>${message:idDocument}</h5></div>
+        <h3>${message:idDocument}</h3>
     </div>
 
-
-    <div class="form-group">
-        <div class="col-sm-3"><t:label for="idDocumentType"/>*</div>
-        <div class="col-sm-3"><t:label for="citizenship"/></div>
-        <div class="col-sm-3"><t:label for="seriesNumber"/>*</div>
-        <div class="col-sm-3"><t:label for="idDocumentNumber"/>*</div>
-    </div>
     <div class="form-group">
         <div class="col-sm-3">
+            <t:label for="idDocumentType"/><span style="color: darkred;" title="${message:necessary}">* </span>
             <t:select value="mainIdDocument.idDocumentType" t:id="idDocumentType" model="idDocumentTypeSelectModel"
                       blankOption="NEVER" zone="citizenshipZone"/>
         </div>
         <div class="col-sm-3">
+            <t:label for="citizenship"/>
             <t:zone t:id="citizenshipZone" id="citizenshipZone" style="display:inline;">
                 <t:if test="citizenshipRequired">
                     <t:textfield value="citizenship" t:id="citizenship" id="citizenship" t:mixins="autocomplete"
                                  t:autocomplete.minChars="3"/>
                     <p:else>
-                        ${mainIdDocument.citizenship.name}
+                        <input class="form-control disabled" disabled="" value="${mainIdDocument.citizenship.name}"/>
                     </p:else>
                 </t:if>
             </t:zone>
         </div>
         <div class="col-sm-3">
+            <t:label for="seriesNumber"/><span style="color: darkred;" title="${message:necessary}">* </span>
             <t:textfield value="mainIdDocument.seriesNumber" t:id="seriesNumber" validate="required"/>
         </div>
         <div class="col-sm-3">
+            <t:label for="idDocumentNumber"/><span style="color: darkred;" title="${message:necessary}">* </span>
             <t:textfield value="mainIdDocument.idDocumentNumber" t:id="idDocumentNumber" validate="required"/>
         </div>
      </div>
 
-    <div class="form-group">
-        <div class="col-sm-6"><t:label for="issuedBy"/>*</div>
-        <div class="col-sm-3"><t:label for="issuedByCode"/></div>
-        <div class="col-sm-3"><t:label for="proxyIssuanceDate"/></div>
-    </div>
-    <div class="form-group">
+    <div class="form-group row">
         <div class="col-sm-6">
+            <t:label for="issuedBy"/><span style="color: darkred;" title="${message:necessary}">* </span>
             <t:textfield value="mainIdDocument.issuedBy" t:id="issuedBy" validate="required"/>
         </div>
         <div class="col-sm-3">
+            <t:label for="issuedByCode"/>
             <t:textfield value="mainIdDocument.issuedByCode" t:id="issuedByCode" />
         </div>
         <div class="col-sm-3">
+            <t:label for="proxyIssuanceDate"/>
             <t:datefield value="proxyIssuanceDate" t:id="proxyIssuanceDate" validate="required" format="prop:correctDateFormat"/>
         </div>
     </div>
-
-    <div class="form-group">
-        <div class="col-sm-4">
-            <t:if test="fileAttached">
-                ${mainIdDocument.file.fileName}
-            </t:if>
-        </div>
-        <div class="col-sm-2"><t:label for="documentScan"/>*</div>
-        <div class="col-sm-4"><t:upload value="documentScan" t:id="documentScan"/></div>
+    <div class="form-group" style="margin: 0">
+        <t:label for="documentScan"/><span style="color: darkred;" title="${message:necessary}">* </span>
+        <t:upload t:id="documentScan" t:value="documentScan" style="height: auto;" class="side-margin-fix"/>
+        <div style="color: #043f3e"><i>${mainIdDocument.file?.fileName}</i></div>
     </div>
 
-    <div class="form-group">
-        <div class="col-sm-offset-2 co-s-10">
+    <div class="form-group row text-right">
             <t:submit class="btn btn-primary" value="${message:save-continue}"/>
             <t:eventlink event="cancel" class="btn btn-default">${message:cancel}</t:eventlink>
-        </div>
     </div>
 </t:form>
 </t:content>

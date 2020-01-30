@@ -7,7 +7,11 @@
 
             <t:if test="isOnStep(wizardStep)">
                 <span class="bg-success">${stepName}</span>
-                <p:else><span>${stepName}</span></p:else>
+                <p:else>
+                    <t:eventlink event="selectStep" context="wizardStep.ordinal()">
+                        <span>${stepName}</span>
+                    </t:eventlink>
+                </p:else>
             </t:if>
             <t:if test="!stepIsLast(wizardStep)"> -> </t:if>
         </t:loop>
