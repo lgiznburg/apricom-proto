@@ -15,22 +15,22 @@ import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
-import ru.apricom.testapp.dao.RequestDao;
-import ru.apricom.testapp.entities.catalogs.AdmissionType;
+import ru.apricom.testapp.auxilary.EntrantFacade;
+import ru.apricom.testapp.dao.EntrantDao;
 
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Grid;
+import ru.apricom.testapp.entities.entrant.Entrant;
 
 import java.util.ArrayList;
-import java.util.TreeSet;
 
 /**
  * @author leonid.
  */
 @RequiresUser
 @Import (stylesheet = "context:static/css/requestList.css")
-public class List {
+public class List<E> {
     static private final int MAX_RESULTS = 30;
 
     // Screen fields
@@ -39,16 +39,22 @@ public class List {
     private java.util.List<String> titles;
 
     @Property
-    @ActivationRequestParameter(value = "title", required = false)
-    private String title;
+    @ActivationRequestParameter(value = "filterLastName")
+    private String filterLastName;
 
-    //@Property
-    private java.util.List<AdmissionType> listRows;
+    @Property
+    @ActivationRequestParameter(value = "filterFirstName")
+    private String filterFirstName;
 
-    // Generally useful bits and pieces
+    @Property
+    @ActivationRequestParameter(value = "filterMiddleName")
+    private String filterMiddleName;
+
+    @Property
+    private EntrantFacade entrant;
 
     @Inject
-    private RequestDao requestDao;
+    private EntrantDao entrantDao;
 
     @InjectComponent
     private Grid grid;
@@ -62,61 +68,47 @@ public class List {
     @Inject
     private AjaxResponseRenderer ajaxResponseRenderer;
 
-    // The code
-
-    void setupRender() {
-        // Get all persons - ask business service to find them (from the database)
-        listRows = requestDao.findAll(AdmissionType.class);
-
-        if (grid.getSortModel().getSortConstraints().isEmpty()) {
-            grid.getSortModel().updateSort("title");
-        }
-        titles = new ArrayList<String>();
-        for ( AdmissionType type : listRows ) {
-            titles.add( type.getTitle() );
-        }
-        if ( title == null ) {
-            title = "";
-        }
-    }
-
-    void onValidateFromFilterCriteria() {
+    void onSuccessFromFilterCriteria() {
         if (request.isXHR()) {
             ajaxResponseRenderer.addRender(personsZone);
         }
     }
 
     public GridDataSource getListRows() {
-        return new PersonFilteredDataSource(requestDao, title);
+        return new PersonFilteredDataSource(entrantDao, filterLastName, filterFirstName, filterMiddleName);
     }
 
     public class PersonFilteredDataSource implements GridDataSource {
-        private RequestDao requestDao;
-        private String title;
+        private EntrantDao entrantDao;
+        private String filterLastName;
+        private String filterFirstName;
+        private String filterMiddleName;
 
         private int startIndex;
-        private java.util.List<AdmissionType> preparedResults;
+        private java.util.List<EntrantFacade> preparedResults;
 
-        public PersonFilteredDataSource(RequestDao requestDao, String title) {
-            this.requestDao = requestDao;
-            this.title = title;
+        public PersonFilteredDataSource(EntrantDao entrantDao, String filterLastName, String filterFistName, String filterMiddleName) {
+            this.entrantDao = entrantDao;
+            this.filterLastName = filterLastName;
+            this.filterFirstName = filterFistName;
+            this.filterMiddleName = filterMiddleName;
         }
 
         @Override
         public int getAvailableRows() {
-            return (int) requestDao.countAdmissionType(title);
+            return (int) entrantDao.countEntrants(filterLastName, filterFirstName, filterMiddleName);
         }
 
         @Override
         public void prepare(final int startIndex, final int endIndex, final java.util.List<SortConstraint> sortConstraints) {
 
-            // Get a filtered page of persons - ask business service to find them (from the database)
+            java.util.List<Entrant> list = entrantDao.findByFilter(filterLastName, filterFirstName, filterMiddleName, startIndex, endIndex, sortConstraints);
+            preparedResults = new ArrayList<>();
 
-            /*java.util.List<SortCriterion> sortCriteria = toSortCriteria(sortConstraints);
-            preparedResults = personFinderService.findPersons(firstInitial, lastInitial, region, startIndex, endIndex
-                    - startIndex + 1, sortCriteria);*/
-            //preparedResults = requestDao.findAll(AdmissionType.class);
-            preparedResults = requestDao.findByTitle(title, startIndex, endIndex, sortConstraints);
+            for(Entrant entrant: list){
+                EntrantFacade entrantFacade = new EntrantFacade(entrant);
+                preparedResults.add(entrantFacade);
+            }
 
             this.startIndex = startIndex;
         }
@@ -127,38 +119,8 @@ public class List {
         }
 
         @Override
-        public Class<AdmissionType> getRowType() {
-            return AdmissionType.class;
+        public Class<EntrantFacade> getRowType() {
+            return EntrantFacade.class;
         }
-
-        /**
-         * Converts a list of Tapestry's SortConstraint to a list of our business tier's SortCriterion. The business tier
-         * does not use SortConstraint because that would create a dependency on Tapestry.
-         */
- /*       private List<SortCriterion> toSortCriteria(List<SortConstraint> sortConstraints) {
-            List<SortCriterion> sortCriteria = new ArrayList<SortCriterion>();
-
-            for (SortConstraint sortConstraint : sortConstraints) {
-
-                String propertyName = sortConstraint.getPropertyModel().getPropertyName();
-                SortDirection sortDirection = SortDirection.UNSORTED;
-
-                switch (sortConstraint.getColumnSort()) {
-                    case ASCENDING:
-                        sortDirection = SortDirection.ASCENDING;
-                        break;
-                    case DESCENDING:
-                        sortDirection = SortDirection.DESCENDING;
-                        break;
-                    default:
-                }
-
-                SortCriterion sortCriterion = new SortCriterion(propertyName, sortDirection);
-                sortCriteria.add(sortCriterion);
-            }
-
-            return sortCriteria;
-        }
-*/
     }
 }

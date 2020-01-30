@@ -5,6 +5,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.tapestry5.annotations.PageActivationContext;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.tynamo.security.services.SecurityService;
 import ru.apricom.testapp.auxilary.WizardState;
@@ -32,6 +33,9 @@ public class Wizard {
     @SessionState
     private WizardState wizardState;
 
+    @Property
+    private WizardStep wizardStep;
+
     @Inject
     private SecurityService securityService;
 
@@ -43,6 +47,13 @@ public class Wizard {
 
     @Inject
     private CountryDao countryDao;
+
+    @Inject
+    private Messages messages;
+
+    public String getStepName(){
+        return messages.get(wizardStep.name());
+    }
 
     Object onActivate() {
         if ( wizardState == null ) wizardState = new WizardState();
@@ -100,6 +111,16 @@ public class Wizard {
         if ( step.ordinal() > 0 ) {
             wizardState.setStep( WizardStep.values()[ step.ordinal() - 1 ] );
         }
+    }
+
+    public WizardStep[] getAllSteps(){
+        return  WizardStep.values();
+    }
+    public Boolean stepIsLast(WizardStep step){
+        if(step.getOrder()==WizardStep.values().length){
+            return Boolean.TRUE;
+        }
+        else return Boolean.FALSE;
     }
 
     public Object onCancel() {

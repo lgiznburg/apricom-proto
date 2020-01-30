@@ -2,6 +2,17 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 <body>
+    <div>
+        <t:loop source="allSteps" value="wizardStep">
+
+            <t:if test="isOnStep(wizardStep)">
+                <span class="bg-success">${stepName}</span>
+                <p:else><span>${stepName}</span></p:else>
+            </t:if>
+            <t:if test="!stepIsLast(wizardStep)"> -> </t:if>
+        </t:loop>
+    </div>
+
     <t:if test="isOnStep('PERSON_INFO')">
         <t:wizard.personinfo.personinfoedit entrant="wizardState.entrant"/>
     </t:if>

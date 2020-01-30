@@ -3,19 +3,31 @@
       xmlns:p="tapestry:parameter">
 
 <div class="content">
-    <h4>список</h4>
+    <h4>Абитуриенты</h4>
 </div>
 
 <div class="eg">
     <t:form t:id="filterCriteria" async="true" class="form-inline">
 
         <div class="form-group">
-            <t:label for="title"/>:
-            <t:select t:id="title" model="titles" value="title" onchange="document.getElementById('filterSubmit').click()" secure="never"/>
+            <t:label for="filterLastName"/>:
+            <t:textfield t:id="filterLastName" value="filterLastName" />
         </div>
 
         <div class="form-group">
-            <t:submit t:id="filterSubmit" id="filterSubmit" style="display: none;"/>
+            <t:label for="filterFirstName"/>:
+            <t:textfield t:id="filterFirstName" value="filterFirstName" />
+        </div>
+
+        <div class="form-group">
+            <t:label for="filterMiddleName"/>:
+            <t:textfield t:id="filterMiddleName" value="filterMiddleName" />
+        </div>
+
+        <div class="form-group">
+            <t:submit t:id="filterSubmit" id="filterSubmit" class="glyphicon glyphicon-search">
+                <!--<span class="glyphicon glyphicon-search" aria-hidden="true"></span>-->
+            </t:submit>
         </div>
 
 
@@ -23,7 +35,8 @@
 
     <div>
         <t:zone t:id="personsZone" id="personsZone">
-            <t:grid id="grid" source="listRows" rowsPerPage="4" pagerPosition="bottom" inplace="true"/>
+            <t:grid id="grid" source="listRows" row="entrant" exclude="id"  rowsPerPage="4" pagerPosition="bottom" inplace="true">
+            </t:grid>
         </t:zone>
     </div>
 </div>
