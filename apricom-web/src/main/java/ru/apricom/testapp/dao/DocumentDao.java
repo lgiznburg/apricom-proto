@@ -16,4 +16,5 @@ public interface DocumentDao extends BaseDao {
     <T extends BaseDocument> List<T> findForEntrant( Class<T> type, Entrant entrant );
 
     DiplomaDocument findEduDocument( Entrant entrant, boolean main );
+
 }
