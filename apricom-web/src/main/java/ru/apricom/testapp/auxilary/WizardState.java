@@ -24,6 +24,8 @@ public class WizardState {
 
     private FormContextHelper helper = new FormContextHelper();
 
+    private boolean isEditMode = false; //for the editing from the BrowseEntrant page
+
     public boolean isInitialized() {
         return initialized && entrant != null;
     }
@@ -79,4 +81,8 @@ public class WizardState {
     public void setHelper(FormContextHelper helper) {
         this.helper = helper;
     }
+
+    public boolean isEditMode() { return isEditMode; }
+
+    public void setEditMode(boolean editMode) { isEditMode = editMode; }
 }

@@ -165,6 +165,7 @@ public class EducationInfoEdit {
         } else {
             // sec document selected - show second document form
             isSecondaryUploadDisplayed = true;
+            helper.setSecFormDisplayed(true);
         }
     }
 

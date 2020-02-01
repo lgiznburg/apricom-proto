@@ -6,14 +6,19 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.annotations.PageActivationContext;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import ru.apricom.testapp.auxilary.AttachmentImage;
+import ru.apricom.testapp.auxilary.WizardState;
+import ru.apricom.testapp.auxilary.WizardStep;
 import ru.apricom.testapp.dao.DocumentDao;
+import ru.apricom.testapp.dao.ExamDao;
 import ru.apricom.testapp.entities.documents.BaseDocument;
 import ru.apricom.testapp.entities.documents.DiplomaDocument;
 import ru.apricom.testapp.entities.documents.IdDocument;
 import ru.apricom.testapp.entities.entrant.Entrant;
+import ru.apricom.testapp.entities.exams.EntrantResult;
 import ru.apricom.testapp.entities.person.Address;
 
 import java.io.IOException;
@@ -36,11 +41,21 @@ public class BrowseEntrant {
     @Property
     private Entrant entrant;
 
+    @Property
+    @SessionState
+    private WizardState wizardState;
+
+    @Property
+    private EntrantResult result;
+
     @Inject
     private Messages messages;
 
     @Inject
     private DocumentDao documentDao;
+
+    @Inject
+    private ExamDao examDao;
 
     public IdDocument getIdDocument() {
         return documentDao.findMainIdDocument( entrant );
@@ -52,6 +67,30 @@ public class BrowseEntrant {
 
     public DiplomaDocument getSecondaryDiploma() {
         return documentDao.findEduDocument(entrant, false);
+    }
+
+    public java.util.List<EntrantResult> getExamResults() {
+        return examDao.findEntrantResults( entrant );
+    }
+
+    public boolean hasResults() {
+        return getExamResults().size() != 0;
+    }
+
+    public boolean mainDiplomaExists() {
+        return getMainDiploma() != null;
+    }
+
+    public boolean secDiplomaExists() {
+        return getSecondaryDiploma() != null;
+    }
+
+    public boolean hasRegNum( DiplomaDocument doc ) {
+        if ( doc != null ) {
+            return doc.getRegNumber() != null;
+        } else {
+            return false;
+        }
     }
 
     public boolean hasCaseNumber() {
@@ -95,6 +134,15 @@ public class BrowseEntrant {
         return new AttachmentImage( document );
     }
 
+    public WizardStep getPersonStep() { return WizardStep.PERSON_INFO; }
+    public WizardStep getEduStep() { return WizardStep.EDUCATION_INFO; }
+    public Object onRedirectToWizard( WizardStep step ) {
+        wizardState.setStep( step );
+        wizardState.setEditMode( true );
+
+        return Wizard.class;
+    }
+
     private String buildAddress( boolean main ) {
         Address address = main ? entrant.getPersonInfo().getRegistrationAddress() : entrant.getPersonInfo().getCurrentAddress();
         String out = "";
@@ -107,5 +155,7 @@ public class BrowseEntrant {
 
         return out;
     }
+
+    public void setEntrantAlt( Entrant entrant ) { this.entrant = entrant; }
 
 }
