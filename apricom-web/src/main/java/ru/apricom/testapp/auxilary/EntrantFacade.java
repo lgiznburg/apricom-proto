@@ -17,6 +17,8 @@ public class EntrantFacade {
 
     private String email;
 
+    private Entrant entrant;
+
     public EntrantFacade (Entrant entrant){
         this.id = entrant.getId();
         this.fullName = entrant.getPersonInfo().getName().getSurname() + " "
@@ -25,6 +27,7 @@ public class EntrantFacade {
         this.caseNumber = entrant.getCaseNumber();
         this.status = entrant.getStatus();
         this.email = entrant.getEmail();
+        this.entrant = entrant;
     }
 
     public long getId() {
@@ -66,4 +69,8 @@ public class EntrantFacade {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Entrant getEntrant() { return entrant; }
+
+    public void setEntrant(Entrant entrant) { this.entrant = entrant; }
 }

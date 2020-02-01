@@ -36,6 +36,9 @@
     <div>
         <t:zone t:id="personsZone" id="personsZone">
             <t:grid id="grid" source="listRows" row="entrant" exclude="id"  rowsPerPage="4" pagerPosition="bottom" inplace="true">
+                <p:fullNameCell>
+                    <t:pagelink page="requests/browseentrant" context="entrant.entrant">${entrant.fullName}</t:pagelink>
+                </p:fullNameCell>
             </t:grid>
         </t:zone>
     </div>

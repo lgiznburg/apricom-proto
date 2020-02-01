@@ -136,12 +136,10 @@ public class EducationInfoEdit {
     public void prepare() {
         helper.setMainEduDoc( documentDao.findEduDocument(entrant, true) );
         if ( helper.getMainEduDoc() == null ) {
-            //if ( helper.getMainEduDoc() == null ) {
-                DiplomaDocument mainEduDoc = new DiplomaDocument();
-                mainEduDoc.setMain(true);
-                mainEduDoc.setCountry(countryDao.findByIso2("ru"));
-                helper.setMainEduDoc( mainEduDoc );
-            //}
+            DiplomaDocument mainEduDoc = new DiplomaDocument();
+            mainEduDoc.setMain(true);
+            mainEduDoc.setCountry(countryDao.findByIso2("ru"));
+            helper.setMainEduDoc( mainEduDoc );
         } else {
             // document exists - show form
             eduLevel = helper.getMainEduDoc().getDiplomaType().getEducationLevel();

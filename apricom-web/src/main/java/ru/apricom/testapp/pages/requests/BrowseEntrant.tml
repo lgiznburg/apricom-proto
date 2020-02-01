@@ -1,0 +1,168 @@
+<html t:type="layout" t:pageTitle="APriCom Просмотр заявки"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+<body>
+    <div>
+        <h2>${message:browse-entrant}</h2>
+    </div>
+    <t:if test="hasCaseNumber()">
+        <p:else>
+            <div class="alert alert-warning">
+                ${message:case-not-created-alert}
+                <t:eventlink event="createCase" class="btn btn-success" style="margin-left: 10px">${message:create-case}</t:eventlink>
+            </div>
+        </p:else>
+    </t:if>
+    <div>
+        <h3>${message:entrant-info}</h3>
+    </div>
+    <table class="table table-primary" style="width: auto">
+        <tr>
+            <td class="text-right"><span style="font-weight: bold">${message:state}</span></td>
+            <td>${entrant.status?.getDescription()}</td>
+        </tr>
+        <tr>
+            <td class="text-right"><span style="font-weight: bold">${message:case-number}</span></td>
+            <td>
+                <t:if test="hasCaseNumber()">
+                    ${entrant.caseNumber}
+                    <p:else>
+                        ${message:case-not-created}
+                    </p:else>
+                </t:if>
+            </td>
+        </tr>
+    </table>
+
+    <div class="row">
+
+        <div class="col-sm-6">
+            <div>
+                <h3>${message:person-info}</h3>
+            </div>
+            <table class="table table-primary" style="width: auto">
+                <tr>
+                    <td class="text-left"><span style="font-weight: bold">${message:fio}</span></td>
+                    <td>
+                        <u title="${message:last-name}">${entrant.personInfo?.name?.surname}</u>
+                        &nbsp;<u title="${message:first-name}">${entrant.personInfo?.name?.firstName}</u>
+                        &nbsp;<u title="${message:middle-name}">${entrant.personInfo?.name?.patronymic}</u>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-left"><span style="font-weight: bold">${message:birth-date}</span></td><td>${correctBirthDate} ${age})</td>
+                </tr>
+                <tr>
+                    <td class="text-left"><span style="font-weight: bold">${message:email}</span></td><td>${entrant.email}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-left"><span style="font-weight: bold">${message:phones}</span></td>
+                </tr>
+                <tr>
+                    <td class="text-right"><i>${message:phone-contact}</i></td><td>${entrant.personInfo?.contactPhone}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><i>${message:phone-home}</i></td><td>${entrant.personInfo?.homePhone}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><i>${message:phone-mobile}</i></td><td>${entrant.personInfo?.mobilePhone}</td>
+                </tr>
+                <tr>
+                    <td class="text-left"><span style="font-weight: bold">${message:citizenship}</span></td><td>${idDocument?.citizenship?.name}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-left"><span style="font-weight: bold">${message:addresses}</span></td>
+                </tr>
+                <tr>
+                    <td class="text-right"><i>${message:address-register}</i></td>
+                    <td>${regAddress}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><i>${message:address-current}</i></td>
+                    <td>
+                        <t:if test="currentAddressEqualsReg()">
+                            ${message:current-equals-register}
+                            <p:else>${currAddress}</p:else>
+                        </t:if>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-left"><span style="font-weight: bold">${message:edu-level}</span></td>
+                    <td>${mainDiploma?.diplomaType?.educationLevel?.title}</td>
+                </tr>
+                <tr>
+                    <td class="text-left"><span style="font-weight: bold">${message:last-edu-org}</span></td>
+                    <td>${mainDiploma?.organizationName}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-sm-6">
+            <div>
+                <h3>${message:documents}</h3>
+            </div>
+            <table class="table table-primary" style="width: auto">
+                <tr>
+                    <td colspan="2" class="text-left"><span style="font-weight: bold">${message:id-document}</span></td>
+                </tr>
+                <tr>
+                    <td class="text-right"><i>${message:document-type}</i></td><td>${idDocument?.idDocumentType?.title}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><i>${message:seria-n-number}</i></td>
+                    <td>
+                        <u title="${message:seria}">${idDocument?.seriesNumber}</u>
+                        &nbsp;<u title="${message:number}">${idDocument?.idDocumentNumber}</u>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right"><i>${message:issuance-date}</i></td><td>${idDocument?.getFormattedIssuanceDate()}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><i>${message:issued-by}</i></td>
+                    <td>${idDocument?.issuedBy} ${message:issued-by-code} ${idDocument?.issuedByCode} )</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><i>${message:download-scan}</i></td>
+                    <td>
+                        <t:eventlink event="downloadScan" context="idDocument">
+                            <span class="glyphicon glyphicon-save-file"/>
+                        </t:eventlink>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-left"><span style="font-weight: bold">${message:education-docs}</span></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-center"><i><span style="font-weight: bold">${message:main}</span></i></td>
+                </tr>
+                <tr>
+                    <td class="text-right"><i>${message:document-type}</i></td><td>${mainDiploma?.diplomaType?.title}</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><i>${message:download-scan}</i></td>
+                    <td>
+                        <t:eventlink event="downloadScan" context="mainDiploma">
+                            <span class="glyphicon glyphicon-save-file"/>
+                        </t:eventlink>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-center"><i><span style="font-weight: bold">${message:secondary}</span></i></td>
+                </tr>
+                <tr><td><i>etwas</i></td></tr>
+                <tr>
+                    <td colspan="2" class="text-left"><span style="font-weight: bold">${message:other}</span></td>
+                </tr>
+                <tr><td><i>etwas</i></td></tr>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="form-group row text-right">
+        <t:pagelink page="requests/list" class="btn btn-primary">${message:to-list}</t:pagelink>
+    </div>
+</body>
+
+</html>

@@ -6,6 +6,7 @@ import ru.apricom.testapp.entities.entrant.Entrant;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -85,5 +86,9 @@ public class BaseDocument implements Serializable {
 
     public void setIssuanceDate( Date issuanceDate ) {
         this.issuanceDate = issuanceDate;
+    }
+
+    public String getFormattedIssuanceDate() {
+        return new SimpleDateFormat( "dd/MM/yyyy" ).format( issuanceDate );
     }
 }
