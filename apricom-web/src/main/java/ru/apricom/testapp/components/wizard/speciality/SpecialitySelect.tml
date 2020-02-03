@@ -43,19 +43,40 @@
 
             <div class="form-group">
                 <div class="col-sm-12">
+                    <h5>${message:exam-results}</h5>
                     <table>
-                        <tr t:type="loop" source="entrantResults" value="resultInList">
+                        <tr>
+                            <th>${message:exam-subject}</th>
+                            <th>${message:exam-score}</th>
+                            <th>${message:exam-year}</th>
+                            <th>${message:exam-type}</th>
+                        </tr>
+                        <tr t:type="loop" source="entrantResults" value="resultInList" formstate="ITERATION">
                             <td>${resultInList.educationalSubject.title}</td>
                             <td>
                                 <t:textfield value="resultInList.score"/>
                             </td>
                             <td>
-                                <t:textfield value="resultInList.year"/>
+                                <t:select value="resultInList.year" model="lastYears" blankOption="NEVER"/>
+                            </td>
+                            <td>
+                                <t:if test="examAvailable">
+                                    <t:select value="resultInList.type" model="examTypeModel" blankOption="NEVER"/>
+                                    <p:else>${examTypeName}</p:else>
+                                </t:if>
                             </td>
                         </tr>
                     </table>
                 </div>
             </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 co-s-10">
+                    <t:eventlink event="previousStep" class="btn btn-default">${message:back}</t:eventlink>
+                    <t:submit class="btn btn-primary" value="${message:save-continue}"/>
+                </div>
+            </div>
+
         </t:form>
     </t:zone>
 

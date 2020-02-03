@@ -21,6 +21,7 @@
         <div class="col-sm-3">
             <t:label for="birthDate"/><span style="color: darkred;" title="${message:necessary}">* </span>
             <t:datefield t:id="birthDate" value="proxyBirthDate" validate="required" format="prop:correctDateFormat" class="form-control"/>
+
         </div>
     </div>
 
@@ -38,7 +39,7 @@
             <t:textfield t:id="mobilePhone" value="personInfo.mobilePhone"  />
         </div>
         <div class="col-sm-3">
-            <t:label for="email"/>
+            <t:label for="email"/>*
             <t:textfield t:id="email" value="entrant.email" validate="required,email" />
         </div>
     </div>
