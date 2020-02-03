@@ -25,9 +25,7 @@
         </div>
 
         <div class="form-group">
-            <t:submit t:id="filterSubmit" id="filterSubmit" class="glyphicon glyphicon-search">
-                <!--<span class="glyphicon glyphicon-search" aria-hidden="true"></span>-->
-            </t:submit>
+            <t:submit t:id="filterSubmit" id="filterSubmit"/>
         </div>
 
 

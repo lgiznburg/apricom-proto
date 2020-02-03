@@ -20,7 +20,7 @@
                     <td class="text-right"><span style="font-weight: bold">${message:case-number}</span></td>
                     <td>
                         <t:if test="hasCaseNumber()">
-                            ${entrant.caseFile.number}
+                            ${entrant.caseNumber}
                             <p:else>
                                 ${message:case-not-created}
                             </p:else>
