@@ -6,17 +6,20 @@
         <div>
             <t:loop source="allSteps" value="wizardStep">
 
-                <t:if test="isOnStep(wizardStep)">
-                    <span class="bg-success">${stepName}</span>
+                <t:if test="stepIsHref(wizardStep)">
+                    <!--<span><t:eventlink  ="/requests/wizard">${stepName}</a></span>-->
+                    <span><t:eventlink event="selectStep" context="wizardStep.name()">${stepName}</t:eventlink></span>
+                    <!--<span>${stepName}</span>-->
                     <p:else>
-                        <t:eventlink event="selectStep" context="wizardStep.ordinal()">
-                            <span>${stepName}</span>
-                        </t:eventlink>
+                        <t:if test="isOnStep(wizardStep)">
+                            <span class="bg-success">${stepName}</span>
+                            <p:else><span>${stepName}</span></p:else>
+                        </t:if>
                     </p:else>
                 </t:if>
-                <t:if test="!stepIsLast(wizardStep)"> -> </t:if>
-            </t:loop>
-        </div>
+            <t:if test="!stepIsLast(wizardStep)"> -> </t:if>
+        </t:loop>
+    </div>
     </t:unless>
 
     <t:if test="isOnStep('PERSON_INFO')">

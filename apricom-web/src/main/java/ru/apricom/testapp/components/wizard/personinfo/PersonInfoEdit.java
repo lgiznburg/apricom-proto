@@ -16,6 +16,7 @@ import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.upload.services.UploadedFile;
+import ru.apricom.testapp.auxilary.WizardStep;
 import ru.apricom.testapp.dao.CatalogDao;
 import ru.apricom.testapp.dao.CountryDao;
 import ru.apricom.testapp.dao.DocumentDao;
@@ -275,13 +276,17 @@ public class PersonInfoEdit {
             documentDao.save( mainIdDocument );
 
             // go to next step
-            componentResources.triggerEvent( "nextStep", new Object[]{}, null );
+            componentResources.triggerEvent( "nextStep", new Object[]{getStepName()}, null );
         }
         return true;
     }
 
     public CatalogSelectModel getIdDocumentTypeSelectModel() {
         return new CatalogSelectModel( catalogDao.findCatalog( IdDocumentType.class ) );
+    }
+
+    public String getStepName(){
+        return WizardStep.PERSON_INFO.name();
     }
 
 }

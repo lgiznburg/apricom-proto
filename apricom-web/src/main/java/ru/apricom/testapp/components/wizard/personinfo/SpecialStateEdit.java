@@ -10,6 +10,7 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.upload.services.UploadedFile;
+import ru.apricom.testapp.auxilary.WizardStep;
 import ru.apricom.testapp.dao.DocumentDao;
 import ru.apricom.testapp.dao.EntrantDao;
 import ru.apricom.testapp.encoders.CatalogSelectModel;
@@ -146,13 +147,17 @@ public class SpecialStateEdit {
             entrantDao.save(state);
 
             // go to next wizard step
-            componentResources.triggerEvent( "nextStep", new Object[]{}, null );
+            componentResources.triggerEvent( "nextStep", new Object[]{getStepName()}, null );
         }
         return true;
     }
 
     boolean onCancel() {
         return true;
+    }
+
+    public String getStepName(){
+        return WizardStep.SPECIAL_RIGHTS_INFO.name();
     }
 
 }

@@ -101,31 +101,50 @@ public class Wizard {
         return WizardStep.valueOf( stepName ) == wizardState.getStep();
     }
 
-    public void onNextStep() {
+    public void onNextStep(String stepName) {
         if ( !wizardState.isEditMode() ) {
-            WizardStep step = wizardState.getStep();
-            if (step.ordinal() < WizardStep.values().length) {
-                wizardState.setStep(WizardStep.values()[step.ordinal() + 1]);
+            WizardStep step = WizardStep.valueOf( stepName );
+            if ( step.ordinal() < WizardStep.values().length ) {
+                wizardState.setStep( WizardStep.values()[step.ordinal() + 1] );
             }
         }
     }
 
-    public void onPreviousStep() {
+    public void onPreviousStep(String stepName) {
         if ( !wizardState.isEditMode() ) {
-            WizardStep step = wizardState.getStep();
-            if (step.ordinal() > 0) {
-                wizardState.setStep(WizardStep.values()[step.ordinal() - 1]);
+            WizardStep step = WizardStep.valueOf( stepName );
+            if ( step.ordinal() > 0 ) {
+                wizardState.setStep( WizardStep.values()[step.ordinal() - 1] );
             }
         }
     }
 
+    // todo compare with nest method
     public void onSelectStep( int ordinal ) {
         wizardState.setStep( WizardStep.values()[ ordinal ] );
+    }
+
+    public void goToPage(String stepName){
+        wizardState.setStep( WizardStep.valueOf(stepName) );
     }
 
     public WizardStep[] getAllSteps(){
         return  WizardStep.values();
     }
+
+    public Boolean stepIsHref(WizardStep step){
+        if(entrant.getStatus()!=EntrantStatus.NEW && step.getOrder()!=wizardState.getStep().getOrder()){
+            return Boolean.TRUE;
+        }
+        else {
+            if (step.getOrder() < wizardState.getStep().getOrder()) {
+                return Boolean.TRUE;
+            } else {
+                return Boolean.FALSE;
+            }
+        }
+    }
+
     public Boolean stepIsLast(WizardStep step){
         if(step.getOrder()==WizardStep.values().length){
             return Boolean.TRUE;
