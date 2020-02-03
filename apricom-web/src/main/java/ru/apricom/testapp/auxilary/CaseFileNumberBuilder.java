@@ -3,7 +3,6 @@ package ru.apricom.testapp.auxilary;
 import ru.apricom.testapp.entities.catalogs.CaseFileNumberingRule;
 import ru.apricom.testapp.entities.entrant.CaseFile;
 
-import java.text.ParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
