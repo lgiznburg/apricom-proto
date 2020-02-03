@@ -375,7 +375,7 @@ public class PopulateDataModule {
         try {
             // exam schedules
             configuration.add( "ExamSchedule", new SeedEntityIdentifier( ExamSchedule.class, "schedule" ) );
-            SimpleDateFormat dateFormat = new SimpleDateFormat( "dd.MM.yy  hh:mm" );
+            SimpleDateFormat dateFormat = new SimpleDateFormat( "dd.MM.yy HH:mm" );
             configuration.add( "chemistry_exam1", new ExamSchedule( chemistry, dateFormat.parse( "13.07.20 10:00" ), "Ауд. 15", 20 ) );
             configuration.add( "chemistry_exam2", new ExamSchedule( chemistry, dateFormat.parse( "13.07.20 15:00" ), "Ауд. 230", 60 ) );
             configuration.add( "bio_exam1", new ExamSchedule( biology, dateFormat.parse( "15.07.20 10:00" ), "Ауд. 230", 20 ) );

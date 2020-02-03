@@ -131,7 +131,13 @@ public class AutoConfigureLiquibaseDatasourceModule {
 
     private static Map<String,String> parsePropertiesFromHibernate( String hibernateConfigName ) throws ParserConfigurationException, IOException, SAXException {
         Map<String,String> props = new HashMap<>();
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        //* Parse a document with validation switched off and the loading of external dtds disabled
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        builderFactory.setValidating(false);
+        builderFactory.setAttribute("http://xml.org/sax/features/validation",Boolean.FALSE);
+        builderFactory.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd",Boolean.FALSE);
+
+        DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document doc = builder.parse( AutoConfigureLiquibaseDatasourceModule.class.getResourceAsStream( hibernateConfigName ));
 
             NodeList nodes = doc.getElementsByTagName( "session-factory" ).item( 0 ).getChildNodes();
