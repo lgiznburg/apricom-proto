@@ -6,8 +6,7 @@ import ru.apricom.testapp.entities.entrant.Entrant;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author leonid.
@@ -37,12 +36,16 @@ public class ExamSchedule implements Serializable {
     @Column
     private int capacity;
 
+/*
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable( name = "exams_entrants",
             inverseJoinColumns = @JoinColumn(name = "entrant_id"),
             joinColumns = @JoinColumn(name = "exam_id")
     )
-    private List<Entrant> entrants;
+*/
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true,
+        mappedBy = "examSchedule")
+    private List<EntrantToExam> entrants;
 
     public ExamSchedule() {
     }
@@ -94,11 +97,48 @@ public class ExamSchedule implements Serializable {
         this.capacity = capacity;
     }
 
-    public List<Entrant> getEntrants() {
+    public List<EntrantToExam> getEntrants() {
         return entrants;
     }
 
-    public void setEntrants( List<Entrant> entrants ) {
+    public void setEntrants( List<EntrantToExam> entrants ) {
         this.entrants = entrants;
+    }
+
+    public void addEntrant( Entrant entrant ) {
+        if ( entrants == null ) {
+            entrants = new ArrayList<>();
+        }
+        EntrantToExam entrantToExam = new EntrantToExam( entrant, this );
+        entrants.add( entrantToExam );
+    }
+
+    public void removeEntrant( Entrant entrant ) {
+        if ( entrants != null ) {
+            Iterator<EntrantToExam> iterator = entrants.iterator();
+            EntrantToExam entrantToExam = iterator.next();
+            if ( entrantToExam.getEntrant().equals( entrant )
+                    && entrantToExam.getExamSchedule().equals( this ) ) {
+                entrantToExam.setEntrant( null );
+                entrantToExam.setExamSchedule( null );
+                iterator.remove();
+            }
+        }
+    }
+
+    @Override
+    public boolean equals( Object o ) {
+        if ( this == o ) return true;
+        if ( !(o instanceof ExamSchedule) ) return false;
+        ExamSchedule that = (ExamSchedule) o;
+        return capacity == that.capacity &&
+                subject.equals( that.subject ) &&
+                schedule.equals( that.schedule ) &&
+                place.equals( that.place );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash( subject, schedule, place, capacity );
     }
 }

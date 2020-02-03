@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -108,5 +109,20 @@ public class Entrant implements Serializable {
 
     public void setEmail( String email ) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals( Object o ) {
+        if ( this == o ) return true;
+        if ( !(o instanceof Entrant) ) return false;
+        Entrant entrant = (Entrant) o;
+        return id == entrant.id &&
+                Objects.equals( caseNumber, entrant.caseNumber ) &&
+                Objects.equals( email, entrant.email );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash( id, caseNumber, email );
     }
 }
