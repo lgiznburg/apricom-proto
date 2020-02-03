@@ -1,0 +1,64 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="add-numbering-rule" author="polyakov_ps">
+        <createTable tableName="numbering_rules">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="${string.type}"/>
+            <column name="pattern" type="${string.type}"/>
+            <column name="counter" type="${id.type}" defaultValue="0"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="add-admission-campaign" author="polyakov_ps">
+        <createTable tableName="admission_campaigns">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="campaign_name" type="${string.type}"/>
+            <column name="begin_date" type="date"/>
+            <column name="end_date" type="date"/>
+            <column name="exam_last_date" type="date"/>
+            <column name="max_specialities" type="${id.type}"/>
+            <column name="numbering_rule_id" type="${id.type}"/>
+        </createTable>
+        <createIndex tableName="admission_campaigns" indexName="fk_campaign_rule">
+            <column name="numbering_rule_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="numbering_rule_id" baseTableName="admission_campaigns"
+                                 constraintName="fk_campaign_rule"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="numbering_rules" validate="true"/>
+    </changeSet>
+    <changeSet id="add_competitions_to_campaign" author="polyakov_ps">
+        <addColumn tableName="competitions">
+            <column name="campaign_id" type="${id.type}"/>
+        </addColumn>
+        <createIndex tableName="competitions" indexName="fk_competition_campaign">
+            <column name="campaign_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="campaign_id" baseTableName="competitions"
+                                 constraintName="fk_competition_campaign"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="admission_campaigns" validate="true"/>
+    </changeSet>
+    <changeSet id="add_competitions_to_entrant_request" author="polyakov_ps">
+        <addColumn tableName="entrant_requests">
+            <column name="campaign_id" type="${id.type}"/>
+        </addColumn>
+        <createIndex tableName="entrant_requests" indexName="fk_request_campaign">
+            <column name="campaign_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="campaign_id" baseTableName="entrant_requests"
+                                 constraintName="fk_request_campaign"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="admission_campaigns" validate="true"/>
+    </changeSet>
+
+</databaseChangeLog>

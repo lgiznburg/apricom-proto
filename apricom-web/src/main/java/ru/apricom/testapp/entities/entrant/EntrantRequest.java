@@ -1,5 +1,7 @@
 package ru.apricom.testapp.entities.entrant;
 
+import ru.apricom.testapp.entities.base.AdmissionCampaign;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -27,6 +29,10 @@ public class EntrantRequest implements Serializable {
 
     @OneToMany(mappedBy = "entrantRequest", fetch = FetchType.EAGER)
     private List<RequestedCompetition> requestedCompetitions;
+
+    @ManyToOne
+    @JoinColumn( name = "campaign_id" )
+    private AdmissionCampaign admissionCampaign;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -71,4 +77,8 @@ public class EntrantRequest implements Serializable {
     public void setStatus( EntrantStatus status ) {
         this.status = status;
     }
+
+    public AdmissionCampaign getAdmissionCampaign() { return admissionCampaign; }
+
+    public void setAdmissionCampaign(AdmissionCampaign admissionCampaign) { this.admissionCampaign = admissionCampaign; }
 }

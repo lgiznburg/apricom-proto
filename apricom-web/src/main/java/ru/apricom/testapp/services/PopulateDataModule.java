@@ -9,10 +9,7 @@ import ru.apricom.testapp.entities.auth.GrantedPermission;
 import ru.apricom.testapp.entities.auth.RolesNames;
 import ru.apricom.testapp.entities.auth.User;
 import ru.apricom.testapp.entities.auth.UserRole;
-import ru.apricom.testapp.entities.base.Competition;
-import ru.apricom.testapp.entities.base.EducationalProgram;
-import ru.apricom.testapp.entities.base.ProgramRequirement;
-import ru.apricom.testapp.entities.base.Speciality;
+import ru.apricom.testapp.entities.base.*;
 import ru.apricom.testapp.entities.catalogs.*;
 import ru.apricom.testapp.entities.catalogs.Country;
 import ru.apricom.testapp.entities.exams.ExamSchedule;
@@ -21,13 +18,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.*;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author leonid.
@@ -120,6 +114,16 @@ public class PopulateDataModule {
     }
 
     private static void populateBaseObjects( OrderedConfiguration<Object> configuration ) {
+        CaseFileNumberingRule rule = new CaseFileNumberingRule( "тестовый", "{year}{number}5" );
+        configuration.add( rule.getName(), rule );
+        Date begin = new Date(), end = new Date();
+        try {
+            begin = new SimpleDateFormat("dd/MM/yyyy").parse("12/01/2019");
+            end = new SimpleDateFormat("dd/MM/yyyy").parse("12/10/2020");
+        } catch ( Exception e ) { System.err.println( e ); }
+        AdmissionCampaign campaign = new AdmissionCampaign( "Тестовая кампания", begin, end, rule );
+        configuration.add( campaign.getName(), campaign );
+
         configuration.add( "admissionType", new SeedEntityIdentifier( AdmissionType.class, "title" ) );
         AdmissionType baseAdmission = new AdmissionType( 1, "общий конкурс", "общий");
         configuration.add("BASE_ADMISSION", baseAdmission );
@@ -362,10 +366,10 @@ public class PopulateDataModule {
             int sequenceNumber = 1;
             for ( AdmissionType admissionType : admissionTypes ) {
                 configuration.add( program.getSpeciality().getTitle()+admissionType.getShortTitle(),
-                        new Competition( admissionType, program, FinancingType.BUDGET, sequenceNumber++ ) );
+                        new Competition( admissionType, program, FinancingType.BUDGET, sequenceNumber++, campaign ) );
             }
             configuration.add( program.getSpeciality().getTitle()+contractAdmission.getShortTitle(),
-                    new Competition( contractAdmission, program, FinancingType.CONTRACT, sequenceNumber ) );
+                    new Competition( contractAdmission, program, FinancingType.CONTRACT, sequenceNumber, campaign ) );
         }
 
         try {

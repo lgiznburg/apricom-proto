@@ -34,14 +34,19 @@ public class Competition implements Serializable {
     @Column(name = "sequence_number")
     private int sequenceNumber;
 
+    @ManyToOne
+    @JoinColumn( name = "campaign_id" )
+    private AdmissionCampaign admissionCampaign;
+
     public Competition() {
     }
 
-    public Competition( AdmissionType admissionType, EducationalProgram program, FinancingType financingType, int sequenceNumber ) {
+    public Competition( AdmissionType admissionType, EducationalProgram program, FinancingType financingType, int sequenceNumber, AdmissionCampaign admissionCampaign ) {
         this.admissionType = admissionType;
         this.program = program;
         this.financingType = financingType;
         this.sequenceNumber = sequenceNumber;
+        this.admissionCampaign = admissionCampaign;
     }
 
     public long getId() {
@@ -83,4 +88,8 @@ public class Competition implements Serializable {
     public void setSequenceNumber( int sequenceNumber ) {
         this.sequenceNumber = sequenceNumber;
     }
+
+    public AdmissionCampaign getAdmissionCampaign() { return admissionCampaign; }
+
+    public void setAdmissionCampaign(AdmissionCampaign admissionCampaign) { this.admissionCampaign = admissionCampaign; }
 }

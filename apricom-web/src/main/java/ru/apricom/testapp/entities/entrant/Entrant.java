@@ -28,12 +28,12 @@ public class Entrant implements Serializable {
     private PersonInfo personInfo;
 
     @OneToMany(mappedBy = "entrant")
-    private Set<EntrantRequest> requests;
+    private List<EntrantRequest> requests;
 
     @OneToMany(mappedBy = "entrant")
     private List<BaseDocument> documents;
 
-    @Column(name = "case_number")
+    @Column( name = "case_number" )
     private String caseNumber;
 
     @Column
@@ -63,11 +63,11 @@ public class Entrant implements Serializable {
         this.personInfo = personInfo;
     }
 
-    public Set<EntrantRequest> getRequests() {
+    public List<EntrantRequest> getRequests() {
         return requests;
     }
 
-    public void setRequests( Set<EntrantRequest> requests ) {
+    public void setRequests( List<EntrantRequest> requests ) {
         this.requests = requests;
     }
 
@@ -77,14 +77,6 @@ public class Entrant implements Serializable {
 
     public void setDocuments( List<BaseDocument> documents ) {
         this.documents = documents;
-    }
-
-    public String getCaseNumber() {
-        return caseNumber;
-    }
-
-    public void setCaseNumber( String caseNumber ) {
-        this.caseNumber = caseNumber;
     }
 
     public EntrantStatus getStatus() {
@@ -111,6 +103,10 @@ public class Entrant implements Serializable {
         this.email = email;
     }
 
+    public String getCaseNumber() { return caseNumber; }
+
+    public void setCaseNumber(String caseNumber) { this.caseNumber = caseNumber; }
+  
     @Override
     public boolean equals( Object o ) {
         if ( this == o ) return true;

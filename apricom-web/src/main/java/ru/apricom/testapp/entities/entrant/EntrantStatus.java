@@ -12,9 +12,9 @@ public enum EntrantStatus {
     ENROLLED("Зачислен"),
     WITHDRAWN("Отозвал документы");
 
-    public String description;
+    private String description;
 
-    EntrantStatus( String description ) {}
+    EntrantStatus( String description ) { this.description = description; }
 
     public String getDescription() { return description; }
 }

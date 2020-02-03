@@ -2,20 +2,22 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 <body>
-    <div>
-        <t:loop source="allSteps" value="wizardStep">
+    <t:unless test="wizardState?.editMode">
+        <div>
+            <t:loop source="allSteps" value="wizardStep">
 
-            <t:if test="isOnStep(wizardStep)">
-                <span class="bg-success">${stepName}</span>
-                <p:else>
-                    <t:eventlink event="selectStep" context="wizardStep.ordinal()">
-                        <span>${stepName}</span>
-                    </t:eventlink>
-                </p:else>
-            </t:if>
-            <t:if test="!stepIsLast(wizardStep)"> -> </t:if>
-        </t:loop>
-    </div>
+                <t:if test="isOnStep(wizardStep)">
+                    <span class="bg-success">${stepName}</span>
+                    <p:else>
+                        <t:eventlink event="selectStep" context="wizardStep.ordinal()">
+                            <span>${stepName}</span>
+                        </t:eventlink>
+                    </p:else>
+                </t:if>
+                <t:if test="!stepIsLast(wizardStep)"> -> </t:if>
+            </t:loop>
+        </div>
+    </t:unless>
 
     <t:if test="isOnStep('PERSON_INFO')">
         <t:wizard.personinfo.personinfoedit entrant="wizardState.entrant"/>
@@ -30,5 +32,12 @@
         <t:wizard.speciality.specialityselect entrant="wizardState.entrant" programs="wizardState.selectedPrograms"/>
     </t:if>
 
+    <t:if test="wizardState.editMode">
+        <div class="row text-right">
+        <t:pagelink page="requests/browseentrant" context="wizardState.entrant" class="btn btn-success">
+            ${message:back-to-browser}
+        </t:pagelink>
+        </div>
+    </t:if>
   </body>
 </html>

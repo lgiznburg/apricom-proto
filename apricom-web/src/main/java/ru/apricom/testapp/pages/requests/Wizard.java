@@ -2,10 +2,8 @@ package ru.apricom.testapp.pages.requests;
 
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.tapestry5.annotations.OnEvent;
-import org.apache.tapestry5.annotations.PageActivationContext;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.tynamo.security.services.SecurityService;
@@ -51,6 +49,9 @@ public class Wizard {
 
     @Inject
     private Messages messages;
+
+    @InjectPage
+    private BrowseEntrant browseEntrant;
 
     public String getStepName(){
         return messages.get(wizardStep.name());
@@ -101,16 +102,20 @@ public class Wizard {
     }
 
     public void onNextStep() {
-        WizardStep step = wizardState.getStep();
-        if ( step.ordinal() < WizardStep.values().length ) {
-            wizardState.setStep( WizardStep.values()[ step.ordinal() + 1 ] );
+        if ( !wizardState.isEditMode() ) {
+            WizardStep step = wizardState.getStep();
+            if (step.ordinal() < WizardStep.values().length) {
+                wizardState.setStep(WizardStep.values()[step.ordinal() + 1]);
+            }
         }
     }
 
     public void onPreviousStep() {
-        WizardStep step = wizardState.getStep();
-        if ( step.ordinal() > 0 ) {
-            wizardState.setStep( WizardStep.values()[ step.ordinal() - 1 ] );
+        if ( !wizardState.isEditMode() ) {
+            WizardStep step = wizardState.getStep();
+            if (step.ordinal() > 0) {
+                wizardState.setStep(WizardStep.values()[step.ordinal() - 1]);
+            }
         }
     }
 
@@ -129,6 +134,12 @@ public class Wizard {
     }
 
     public Object onCancel() {
-        return Index.class;
+        if ( wizardState.isEditMode() ) {
+            wizardState.setEditMode(false);
+            browseEntrant.setEntrantAlt( wizardState.getEntrant() );
+            return browseEntrant;
+        } else {
+            return Index.class;
+        }
     }
 }
