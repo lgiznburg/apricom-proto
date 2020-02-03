@@ -28,7 +28,10 @@
     <t:if test="isOnStep('SPECIAL_RIGHTS_INFO')">
         <t:wizard.personinfo.specialstateedit entrant="wizardState.entrant"/>
     </t:if>
-    <t:if test="isOnStep('SPECIALITIES_AND_EXAMS')">
+    <t:if test="isOnStep('CAMPAIGNS_AND_SPECIALITIES')">
+        <t:wizard.speciality.campaignselect entrant="wizardState.entrant" programs="wizardState.selectedPrograms" campaigns="wizardState.selectedCampaigns"/>
+    </t:if>
+    <t:if test="isOnStep('COMPETITIONS_AND_EXAMS')">
         <t:wizard.speciality.specialityselect entrant="wizardState.entrant" programs="wizardState.selectedPrograms"/>
     </t:if>
 
