@@ -3,7 +3,9 @@
              xmlns:p="tapestry:parameter" >
 
     <div>
-        <h2>${message:education-info}</h2>
+        <div class="row">
+            <h2>${message:education-info}</h2>
+        </div>
         <t:form t:id="eduLevelForm">
             <div class="form-group row">
                 <div class="col-sm-3">
@@ -22,7 +24,9 @@
             <div class="form-group">
                 <t:zone t:id="mainUploadZone" id="mainUploadZone" style="display: inline">
                     <t:if test="isMainUploadDisplayed">
-                        <h3>${message:main-document}</h3>
+                        <div class="row">
+                            <h3>${message:main-document}</h3>
+                        </div>
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-3">
@@ -72,7 +76,9 @@
             <div class="form-group">
                 <t:zone t:id="secondaryUploadZone" id="secondaryUploadZone" style="display: inline">
                     <t:if test="isSecondaryUploadDisplayed">
-                        <h3>${message:secondary-document}</h3>
+                        <div class="row">
+                            <h3>${message:secondary-document}</h3>
+                        </div>
                         <div class="form-group row">
                             <div class="col-sm-3">
                                 <label for="secDocType">${message:select-type}<span style="color: darkred;" title="${message:necessary}">* </span></label>

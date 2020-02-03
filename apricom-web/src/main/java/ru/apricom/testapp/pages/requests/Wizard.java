@@ -2,6 +2,7 @@ package ru.apricom.testapp.pages.requests;
 
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.PageActivationContext;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
@@ -111,6 +112,10 @@ public class Wizard {
         if ( step.ordinal() > 0 ) {
             wizardState.setStep( WizardStep.values()[ step.ordinal() - 1 ] );
         }
+    }
+
+    public void onSelectStep( int ordinal ) {
+        wizardState.setStep( WizardStep.values()[ ordinal ] );
     }
 
     public WizardStep[] getAllSteps(){
