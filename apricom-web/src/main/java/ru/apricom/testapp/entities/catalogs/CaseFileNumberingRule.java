@@ -28,10 +28,14 @@ public class CaseFileNumberingRule implements Serializable  {
     @OneToMany( mappedBy = "numberingRule" )
     private List<AdmissionCampaign> campaigns;
 
+    @Column
+    private long counter; //for numeration
+
     public CaseFileNumberingRule() {}
     public CaseFileNumberingRule( String name, String pattern ) {
         this.name = name;
         this.pattern = pattern;
+        counter = 0;
     }
 
     public long getId() {
@@ -61,4 +65,12 @@ public class CaseFileNumberingRule implements Serializable  {
     public String getName() { return name; }
 
     public void setName(String name) { this.name = name; }
+
+    public long getCounter() { return counter; }
+
+    public void setCounter(long counter) { this.counter = counter; }
+
+    public void incrementCounter() { counter++; }
+    public void decrementCounter() { if ( counter > 0 ) counter--; }
+    public void resetCounter() { counter = 0; }
 }

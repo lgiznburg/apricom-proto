@@ -13,15 +13,7 @@
             </column>
             <column name="name" type="${string.type}"/>
             <column name="pattern" type="${string.type}"/>
-        </createTable>
-    </changeSet>
-    <changeSet id="add-counter" author="polyakov_ps">
-        <createTable tableName="counters">
-            <column autoIncrement="true" name="id" type="${id.type}">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="name" type="${string.type}"/>
-            <column name="value" type="${id.type}" defaultValue="0"/>
+            <column name="counter" type="${id.type}" defaultValue="0"/>
         </createTable>
     </changeSet>
     <changeSet id="add-admission-campaign" author="polyakov_ps">
@@ -33,22 +25,14 @@
             <column name="begin_date" type="date"/>
             <column name="end_date" type="date"/>
             <column name="numbering_rule_id" type="${id.type}"/>
-            <column name="counter_id" type="${id.type}"/>
         </createTable>
         <createIndex tableName="admission_campaigns" indexName="fk_campaign_rule">
             <column name="numbering_rule_id"/>
-        </createIndex>
-        <createIndex tableName="admission_campaigns" indexName="fk_campaign_counter">
-            <column name="counter_id"/>
         </createIndex>
         <addForeignKeyConstraint baseColumnNames="numbering_rule_id" baseTableName="admission_campaigns"
                                  constraintName="fk_campaign_rule"
                                  deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="id" referencedTableName="numbering_rules" validate="true"/>
-        <addForeignKeyConstraint baseColumnNames="counter_id" baseTableName="admission_campaigns"
-                                 constraintName="fk_campaign_counter"
-                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
-                                 referencedColumnNames="id" referencedTableName="counters" validate="true"/>
     </changeSet>
     <changeSet id="add-casefile" author="polyakov_ps">
         <createTable tableName="case_files">

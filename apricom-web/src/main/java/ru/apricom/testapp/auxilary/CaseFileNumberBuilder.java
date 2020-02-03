@@ -8,12 +8,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CaseFileNumberBuilder {
-    private CaseFile file;
+    private CaseFile caseFile;
     private CaseFileNumberingRule rule;
     private long length;
     private String number;
 
-    public void setFile(CaseFile file) { this.file = file; }
+    public void setCaseFile(CaseFile caseFile) { this.caseFile = caseFile; }
 
     public void setRule(CaseFileNumberingRule rule) { this.rule = rule; }
 
@@ -55,7 +55,7 @@ public class CaseFileNumberBuilder {
                     number += Integer.toString( now.get( Calendar.YEAR ) ); //set current year if asked in rule
                 }
                 if ( component.equals( "number" ) ) {
-                    long numL = file.getCampaign().getCounter().getValue();
+                    long numL = caseFile.getCampaign().getNumberingRule().getCounter();
                     String numS = Long.toString( numL );
                     int numLength = numS.length();
                     //if asked for specific number length - we need to add 0's before the number to match length
@@ -66,7 +66,7 @@ public class CaseFileNumberBuilder {
                             }
                         }
                     } else {
-                        number += file.getCampaign().getCounter().getValue();
+                        number += numL;
                     }
                 }
             }

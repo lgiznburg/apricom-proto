@@ -188,10 +188,9 @@ public class EducationInfoEdit {
 
     public SelectModel getLastSchoolClassSelectModel() {
         List<String> lastSchoolClasses = new ArrayList<>(); //fill list for last school selector
-        if ( getSecEduDoc() != null ) {
-            lastSchoolClasses.add( "11" );
-        } else {
+        if (getSecEduDoc().getDiplomaType() == null) {
             lastSchoolClasses.add("9");
+        } else {
             lastSchoolClasses.add("11");
         }
         return new StringSelectModel( lastSchoolClasses );

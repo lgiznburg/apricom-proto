@@ -378,8 +378,6 @@ public class PopulateDataModule {
             //
         }
 
-        Counter counter = new Counter( "Тестовый счетчик" );
-        configuration.add( counter.getName(), counter );
         CaseFileNumberingRule rule = new CaseFileNumberingRule( "тестовый", "{year}{number}5" );
         configuration.add( rule.getName(), rule );
         Date begin = new Date(), end = new Date();
@@ -387,7 +385,7 @@ public class PopulateDataModule {
             begin = new SimpleDateFormat("dd/MM/yyyy").parse("12/01/2019");
             end = new SimpleDateFormat("dd/MM/yyyy").parse("12/10/2020");
         } catch ( Exception e ) { System.err.println( e ); }
-        AdmissionCampaign campaign = new AdmissionCampaign( "Тестовая кампания", begin, end, rule, counter );
+        AdmissionCampaign campaign = new AdmissionCampaign( "Тестовая кампания", begin, end, rule );
         configuration.add( campaign.getName(), campaign );
 
     }

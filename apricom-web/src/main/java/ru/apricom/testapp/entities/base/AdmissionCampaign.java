@@ -34,18 +34,13 @@ public class AdmissionCampaign implements Serializable {
     @JoinColumn( name = "numbering_rule_id" )
     private CaseFileNumberingRule numberingRule;
 
-    @ManyToOne
-    @JoinColumn( name = "counter_id" )
-    private Counter counter;
-
     public AdmissionCampaign() {}
 
-    public AdmissionCampaign( String name, Date beginDate, Date endDate, CaseFileNumberingRule numberingRule, Counter counter) {
+    public AdmissionCampaign( String name, Date beginDate, Date endDate, CaseFileNumberingRule numberingRule ) {
         this.name = name;
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.numberingRule = numberingRule;
-        this.counter = counter;
     }
 
     public long getId() {
@@ -83,10 +78,6 @@ public class AdmissionCampaign implements Serializable {
     public void setNumberingRule(CaseFileNumberingRule numberingRule) {
         this.numberingRule = numberingRule;
     }
-
-    public Counter getCounter() { return counter; }
-
-    public void setCounter(Counter counter) { this.counter = counter; }
 
     @Transient
     public boolean isActive() {
