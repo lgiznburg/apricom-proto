@@ -35,8 +35,8 @@ public class AdmissionCampaign implements Serializable {
     @Temporal( TemporalType.DATE )
     private Date examLastDate;
 
-    @Column ( name = "max_competitions" )
-    private int maxCompetitions;
+    @Column ( name = "max_specialities" )
+    private int maxSpecialities;
 
     @ManyToOne
     @JoinColumn( name = "numbering_rule_id" )
@@ -98,9 +98,9 @@ public class AdmissionCampaign implements Serializable {
 
     public void setExamLastDate(Date examLastDate) { this.examLastDate = examLastDate; }
 
-    public int getMaxCompetitions() { return maxCompetitions; }
+    public int getMaxSpecialities() { return maxSpecialities; }
 
-    public void setMaxCompetitions(int maxCompetitions) { this.maxCompetitions = maxCompetitions; }
+    public void setMaxSpecialities(int maxSpecialities) { this.maxSpecialities = maxSpecialities; }
 
     @Transient
     public boolean isActive() {

@@ -25,7 +25,7 @@
             <column name="begin_date" type="date"/>
             <column name="end_date" type="date"/>
             <column name="exam_last_date" type="date"/>
-            <column name="max_competitions" type="${id.type}"/>
+            <column name="max_specialities" type="${id.type}"/>
             <column name="numbering_rule_id" type="${id.type}"/>
         </createTable>
         <createIndex tableName="admission_campaigns" indexName="fk_campaign_rule">
