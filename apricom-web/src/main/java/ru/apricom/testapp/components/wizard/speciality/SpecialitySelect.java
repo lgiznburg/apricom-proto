@@ -16,6 +16,7 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.util.AbstractSelectModel;
+import ru.apricom.testapp.auxilary.WizardStep;
 import ru.apricom.testapp.dao.DocumentDao;
 import ru.apricom.testapp.dao.EntrantDao;
 import ru.apricom.testapp.dao.ExamDao;
@@ -322,8 +323,12 @@ public class SpecialitySelect {
 
         if ( !examRequired || !unassignedExam ) { // there is no need to schedule any exam.
             // go to next step
-            componentResources.triggerEvent( "nextStep", new Object[]{}, null );
+            componentResources.triggerEvent( "nextStep", new Object[]{getStepName()}, null );
 
         }
+    }
+
+    public String getStepName() {
+        return WizardStep.SPECIALITIES_AND_EXAMS.name();
     }
 }

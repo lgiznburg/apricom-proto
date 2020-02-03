@@ -119,12 +119,7 @@ public class Wizard {
         }
     }
 
-    // todo compare with nest method
-    public void onSelectStep( int ordinal ) {
-        wizardState.setStep( WizardStep.values()[ ordinal ] );
-    }
-
-    public void goToPage(String stepName){
+    public void onSelectStep( String stepName ) {
         wizardState.setStep( WizardStep.valueOf(stepName) );
     }
 
@@ -132,7 +127,7 @@ public class Wizard {
         return  WizardStep.values();
     }
 
-    public Boolean stepIsHref(WizardStep step){
+    public Boolean canUseLink(WizardStep step){
         if(entrant.getStatus()!=EntrantStatus.NEW && step.getOrder()!=wizardState.getStep().getOrder()){
             return Boolean.TRUE;
         }

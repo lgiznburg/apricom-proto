@@ -72,7 +72,7 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 co-s-10">
-                    <t:eventlink event="previousStep" class="btn btn-default">${message:back}</t:eventlink>
+                    <t:eventlink event="previousStep" context="stepName" class="btn btn-default">${message:back}</t:eventlink>
                     <t:submit class="btn btn-primary" value="${message:save-continue}"/>
                 </div>
             </div>

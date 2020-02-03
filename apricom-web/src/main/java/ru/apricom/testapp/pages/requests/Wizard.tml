@@ -6,10 +6,8 @@
         <div>
             <t:loop source="allSteps" value="wizardStep">
 
-                <t:if test="stepIsHref(wizardStep)">
-                    <!--<span><t:eventlink  ="/requests/wizard">${stepName}</a></span>-->
+                <t:if test="canUseLink(wizardStep)">
                     <span><t:eventlink event="selectStep" context="wizardStep.name()">${stepName}</t:eventlink></span>
-                    <!--<span>${stepName}</span>-->
                     <p:else>
                         <t:if test="isOnStep(wizardStep)">
                             <span class="bg-success">${stepName}</span>
