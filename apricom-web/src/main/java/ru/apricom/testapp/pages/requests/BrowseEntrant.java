@@ -95,10 +95,13 @@ public class BrowseEntrant {
 
     public boolean hasCaseNumber() {
         boolean ret = false;
-        if ( entrant.getCaseNumber() != null && !entrant.getCaseNumber().equals("") ) ret = true;
+        if ( entrant.getCaseFile() != null ) {
+            if (entrant.getCaseFile().getNumber() != null && !entrant.getCaseFile().getNumber().equals("")) ret = true;
+        }
         return ret;
     }
 
+    //return entrant age in years (full)
     public String getAge() {
         LocalDate today = LocalDate.now();
         LocalDate birth = ( (java.sql.Date) entrant.getPersonInfo().getBirthDate() ).toLocalDate();
@@ -106,8 +109,9 @@ public class BrowseEntrant {
         return messages.get( "age" )+ " " + -period.getYears();
     }
 
+    //get readable birth date (e.g. "27 февраля 1997 (27/02/1997)")
     public String getCorrectBirthDate() {
-        Calendar birth = Calendar.getInstance();
+        Calendar birth = Calendar.getInstance(); //since java 8 it's easier through Calendar
         Date date = entrant.getPersonInfo().getBirthDate();
         birth.setTime( date );
         return birth.get( Calendar.DAY_OF_MONTH ) + " "
@@ -116,10 +120,10 @@ public class BrowseEntrant {
                 + new SimpleDateFormat( "dd/MM/yyyy" ).format( date ) + " , ";
     }
 
-    public String getRegAddress() { return buildAddress( true ); }
+    public String getRegAddress() { return buildAddress( true ); } //registration address
 
     public String getCurrAddress() {
-        return buildAddress(false);
+        return buildAddress(false); //current address
     }
 
     public boolean currentAddressEqualsReg() {
@@ -143,6 +147,7 @@ public class BrowseEntrant {
         return Wizard.class;
     }
 
+    //build address in string version for display
     private String buildAddress( boolean main ) {
         Address address = main ? entrant.getPersonInfo().getRegistrationAddress() : entrant.getPersonInfo().getCurrentAddress();
         String out = "";

@@ -9,10 +9,7 @@ import ru.apricom.testapp.entities.auth.GrantedPermission;
 import ru.apricom.testapp.entities.auth.RolesNames;
 import ru.apricom.testapp.entities.auth.User;
 import ru.apricom.testapp.entities.auth.UserRole;
-import ru.apricom.testapp.entities.base.Competition;
-import ru.apricom.testapp.entities.base.EducationalProgram;
-import ru.apricom.testapp.entities.base.ProgramRequirement;
-import ru.apricom.testapp.entities.base.Speciality;
+import ru.apricom.testapp.entities.base.*;
 import ru.apricom.testapp.entities.catalogs.*;
 import ru.apricom.testapp.entities.catalogs.Country;
 import ru.apricom.testapp.entities.exams.ExamSchedule;
@@ -21,13 +18,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.*;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author leonid.
@@ -383,6 +377,18 @@ public class PopulateDataModule {
         } catch (ParseException e) {
             //
         }
+
+        Counter counter = new Counter( "Тестовый счетчик" );
+        configuration.add( counter.getName(), counter );
+        CaseFileNumberingRule rule = new CaseFileNumberingRule( "тестовый", "{year}{number}5" );
+        configuration.add( rule.getName(), rule );
+        Date begin = new Date(), end = new Date();
+        try {
+            begin = new SimpleDateFormat("dd/MM/yyyy").parse("12/01/2019");
+            end = new SimpleDateFormat("dd/MM/yyyy").parse("12/10/2020");
+        } catch ( Exception e ) { System.err.println( e ); }
+        AdmissionCampaign campaign = new AdmissionCampaign( "Тестовая кампания", begin, end, rule, counter );
+        configuration.add( campaign.getName(), campaign );
 
     }
 

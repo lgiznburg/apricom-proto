@@ -24,7 +24,7 @@ public class EntrantFacade {
         this.fullName = entrant.getPersonInfo().getName().getSurname() + " "
                 + entrant.getPersonInfo().getName().getFirstName() +
                 (entrant.getPersonInfo().getName().getPatronymic()==null?"":(" " + entrant.getPersonInfo().getName().getPatronymic()));
-        this.caseNumber = entrant.getCaseNumber();
+        this.caseNumber = entrant.getCaseFile() != null ? entrant.getCaseFile().getNumber() : "";
         this.status = entrant.getStatus();
         this.email = entrant.getEmail();
         this.entrant = entrant;

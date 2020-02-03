@@ -1,0 +1,88 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="add-numbering-rule" author="polyakov_ps">
+        <createTable tableName="numbering_rules">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="${string.type}"/>
+            <column name="pattern" type="${string.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="add-counter" author="polyakov_ps">
+        <createTable tableName="counters">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="${string.type}"/>
+            <column name="value" type="${id.type}" defaultValue="0"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="add-admission-campaign" author="polyakov_ps">
+        <createTable tableName="admission_campaigns">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="campaign_name" type="${string.type}"/>
+            <column name="begin_date" type="date"/>
+            <column name="end_date" type="date"/>
+            <column name="numbering_rule_id" type="${id.type}"/>
+            <column name="counter_id" type="${id.type}"/>
+        </createTable>
+        <createIndex tableName="admission_campaigns" indexName="fk_campaign_rule">
+            <column name="numbering_rule_id"/>
+        </createIndex>
+        <createIndex tableName="admission_campaigns" indexName="fk_campaign_counter">
+            <column name="counter_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="numbering_rule_id" baseTableName="admission_campaigns"
+                                 constraintName="fk_campaign_rule"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="numbering_rules" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="counter_id" baseTableName="admission_campaigns"
+                                 constraintName="fk_campaign_counter"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="counters" validate="true"/>
+    </changeSet>
+    <changeSet id="add-casefile" author="polyakov_ps">
+        <createTable tableName="case_files">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="case_number" type="${string.type}"/>
+            <column name="barcode_id" type="${id.type}"/>
+            <column name="entrant_id" type="${id.type}"/>
+            <column name="campaign_id" type="${id.type}"/>
+        </createTable>
+        <createIndex tableName="case_files" indexName="fk_casefile_barcode">
+            <column name="barcode_id"/>
+        </createIndex>
+        <createIndex tableName="case_files" indexName="fk_casefile_entrant">
+            <column name="entrant_id"/>
+        </createIndex>
+        <createIndex tableName="case_files" indexName="fk_casefile_campaign">
+            <column name="campaign_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="barcode_id" baseTableName="case_files"
+                                 constraintName="fk_casefile_barcode"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="stored_files" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="entrant_id" baseTableName="case_files"
+                                 constraintName="fk_casefile_entrant"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="entrants" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="campaign_id" baseTableName="case_files"
+                                 constraintName="fk_casefile_campaign"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="admission_campaigns" validate="true"/>
+
+        <dropColumn tableName="entrants" columnName="case_number"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -32,8 +32,8 @@ public class Entrant implements Serializable {
     @OneToMany(mappedBy = "entrant")
     private List<BaseDocument> documents;
 
-    @Column(name = "case_number")
-    private String caseNumber;
+    @OneToOne( mappedBy = "entrant" )
+    private CaseFile caseFile;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -78,13 +78,9 @@ public class Entrant implements Serializable {
         this.documents = documents;
     }
 
-    public String getCaseNumber() {
-        return caseNumber;
-    }
+    public CaseFile getCaseFile() { return caseFile; }
 
-    public void setCaseNumber( String caseNumber ) {
-        this.caseNumber = caseNumber;
-    }
+    public void setCaseFile(CaseFile caseFile) { this.caseFile = caseFile; }
 
     public EntrantStatus getStatus() {
         return status;

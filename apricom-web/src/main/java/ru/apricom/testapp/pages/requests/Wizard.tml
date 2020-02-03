@@ -33,9 +33,11 @@
     </t:if>
 
     <t:if test="wizardState.editMode">
+        <div class="row text-right">
         <t:pagelink page="requests/browseentrant" context="wizardState.entrant" class="btn btn-success">
             ${message:back-to-browser}
         </t:pagelink>
+        </div>
     </t:if>
   </body>
 </html>

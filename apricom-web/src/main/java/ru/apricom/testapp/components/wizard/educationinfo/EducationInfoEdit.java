@@ -129,10 +129,6 @@ public class EducationInfoEdit {
         }
     }
 
-    public void onPrepareForSubmit() {
-        //prepare();
-    }
-
     public void prepare() {
         helper.setMainEduDoc( documentDao.findEduDocument(entrant, true) );
         if ( helper.getMainEduDoc() == null ) {
@@ -153,7 +149,6 @@ public class EducationInfoEdit {
             displayMainFields = true;
         }
 
-        //if ( helper.getSecEduDoc() == null ) {
         helper.setSecEduDoc( documentDao.findEduDocument(entrant, false) );
         if ( helper.getSecEduDoc() == null ) {
             DiplomaDocument secEduDoc = new DiplomaDocument();
@@ -161,7 +156,6 @@ public class EducationInfoEdit {
             secEduDoc.setCountry(countryDao.findByIso2("ru"));
             secEduDoc.setDiplomaType(catalogDao.findCatalogByCode(EducationDocumentType.class, EducationDocumentTypeCode.BASIC_CERTIFICATE.ordinal()));
             helper.setSecEduDoc( secEduDoc );
-            //}
         } else {
             // sec document selected - show second document form
             isSecondaryUploadDisplayed = true;
@@ -194,7 +188,7 @@ public class EducationInfoEdit {
 
     public SelectModel getLastSchoolClassSelectModel() {
         List<String> lastSchoolClasses = new ArrayList<>(); //fill list for last school selector
-        if ( documentDao.findEduDocument(entrant, false ) != null ) {
+        if ( getSecEduDoc() != null ) {
             lastSchoolClasses.add( "11" );
         } else {
             lastSchoolClasses.add("9");
@@ -205,7 +199,7 @@ public class EducationInfoEdit {
 
     public void onValueChangedFromEduLevel( EducationLevel level ) {
         if ( level != null ) {
-            prepare();
+            //prepare();
             eduLevel = level;
             if ( level.getCode() == EducationLevelType.BASE_PROFESSIONAL.ordinal() ) {
                 isLastFormSelectorDisplayed = true;
@@ -214,8 +208,6 @@ public class EducationInfoEdit {
                 isSecondaryUploadDisplayed = false;
             }
 
-//            mainEduDoc.setEducationLevelType( EducationLevelType.values()[level.getCode()] );
-//            secEduDoc.setEducationLevelType( EducationLevelType.values()[level.getCode()] );
             getMainEduDoc().setEducationLevelType( EducationLevelType.values()[level.getCode()] );
             getSecEduDoc().setEducationLevelType( EducationLevelType.values()[level.getCode()] );
 
@@ -245,9 +237,7 @@ public class EducationInfoEdit {
 
     public void onValueChangedFromMainDocType( EducationDocumentType type ) {
         if ( type != null ) {
-            prepare();
 
-//            mainEduDoc.setDiplomaType( type );
             getMainEduDoc().setDiplomaType( type );
             if ( type.getCode() != EducationDocumentTypeCode.BASIC_CERTIFICATE.ordinal()
                     && type.getCode() != EducationDocumentTypeCode.BASIC_PROFESSIONAL_DIPLOMA.ordinal() ) {
@@ -263,7 +253,6 @@ public class EducationInfoEdit {
     }
 
     void onValidateFromMainEducationDocument( UploadedFile file ) throws ValidationException {
-//        if ( (mainEduDoc.getFile() == null || mainEduDoc.getFile().getFileName() == null)
         if ( (getMainEduDoc().getFile() == null || getMainEduDoc().getFile().getFileName() == null)
                 && file == null ) {
             throw new ValidationException( messages.get( "must-upload-scan" ) );
@@ -271,8 +260,7 @@ public class EducationInfoEdit {
     }
 
     void onValidateFromSecondaryEducationDocument( UploadedFile file ) throws ValidationException {
-        if ( isSecondaryUploadDisplayed
-//                && (secEduDoc.getFile() == null || secEduDoc.getFile().getFileName() == null)
+        if ( helper.isSecFormDisplayed()
                 && (getSecEduDoc().getFile() == null || getSecEduDoc().getFile().getFileName() == null)
                 && file == null ) {
             throw new ValidationException( messages.get( "must-upload-scan" ) );
@@ -282,7 +270,6 @@ public class EducationInfoEdit {
     boolean onSuccessFromEduLevelForm() {
         storeEduDocument( getMainEduDoc(), mainEducationDocument );
 
-//        if ( isSecondaryUploadDisplayed ) {
         if ( helper.isSecFormDisplayed() ) {
             storeEduDocument( getSecEduDoc(), secondaryEducationDocument );
         }
