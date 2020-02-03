@@ -88,6 +88,7 @@ public class BaseDocument implements Serializable {
         this.issuanceDate = issuanceDate;
     }
 
+    @Transient
     public String getFormattedIssuanceDate() {
         return new SimpleDateFormat( "dd/MM/yyyy" ).format( issuanceDate );
     }

@@ -24,6 +24,8 @@
             <column name="campaign_name" type="${string.type}"/>
             <column name="begin_date" type="date"/>
             <column name="end_date" type="date"/>
+            <column name="exam_last_date" type="date"/>
+            <column name="max_competitions" type="${id.type}"/>
             <column name="numbering_rule_id" type="${id.type}"/>
         </createTable>
         <createIndex tableName="admission_campaigns" indexName="fk_campaign_rule">
@@ -34,39 +36,29 @@
                                  deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="id" referencedTableName="numbering_rules" validate="true"/>
     </changeSet>
-    <changeSet id="add-casefile" author="polyakov_ps">
-        <createTable tableName="case_files">
-            <column autoIncrement="true" name="id" type="${id.type}">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="case_number" type="${string.type}"/>
-            <column name="barcode_id" type="${id.type}"/>
-            <column name="entrant_id" type="${id.type}"/>
+    <changeSet id="add_competitions_to_campaign" author="polyakov_ps">
+        <addColumn tableName="competitions">
             <column name="campaign_id" type="${id.type}"/>
-        </createTable>
-        <createIndex tableName="case_files" indexName="fk_casefile_barcode">
-            <column name="barcode_id"/>
-        </createIndex>
-        <createIndex tableName="case_files" indexName="fk_casefile_entrant">
-            <column name="entrant_id"/>
-        </createIndex>
-        <createIndex tableName="case_files" indexName="fk_casefile_campaign">
+        </addColumn>
+        <createIndex tableName="competitions" indexName="fk_competition_campaign">
             <column name="campaign_id"/>
         </createIndex>
-        <addForeignKeyConstraint baseColumnNames="barcode_id" baseTableName="case_files"
-                                 constraintName="fk_casefile_barcode"
-                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
-                                 referencedColumnNames="id" referencedTableName="stored_files" validate="true"/>
-        <addForeignKeyConstraint baseColumnNames="entrant_id" baseTableName="case_files"
-                                 constraintName="fk_casefile_entrant"
-                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
-                                 referencedColumnNames="id" referencedTableName="entrants" validate="true"/>
-        <addForeignKeyConstraint baseColumnNames="campaign_id" baseTableName="case_files"
-                                 constraintName="fk_casefile_campaign"
+        <addForeignKeyConstraint baseColumnNames="campaign_id" baseTableName="competitions"
+                                 constraintName="fk_competition_campaign"
                                  deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="id" referencedTableName="admission_campaigns" validate="true"/>
-
-        <dropColumn tableName="entrants" columnName="case_number"/>
+    </changeSet>
+    <changeSet id="add_competitions_to_entrant_request" author="polyakov_ps">
+        <addColumn tableName="entrant_requests">
+            <column name="campaign_id" type="${id.type}"/>
+        </addColumn>
+        <createIndex tableName="entrant_requests" indexName="fk_request_campaign">
+            <column name="campaign_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="campaign_id" baseTableName="entrant_requests"
+                                 constraintName="fk_request_campaign"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="admission_campaigns" validate="true"/>
     </changeSet>
 
 </databaseChangeLog>

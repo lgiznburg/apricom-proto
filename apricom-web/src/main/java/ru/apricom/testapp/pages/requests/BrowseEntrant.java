@@ -95,8 +95,8 @@ public class BrowseEntrant {
 
     public boolean hasCaseNumber() {
         boolean ret = false;
-        if ( entrant.getCaseFile() != null ) {
-            if (entrant.getCaseFile().getNumber() != null && !entrant.getCaseFile().getNumber().equals("")) ret = true;
+        if ( entrant.getCaseNumber() != null ) {
+            if ( !entrant.getCaseNumber().equals("") ) ret = true;
         }
         return ret;
     }

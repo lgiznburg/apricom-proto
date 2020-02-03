@@ -5,6 +5,7 @@ import ru.apricom.testapp.entities.catalogs.CaseFileNumberingRule;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author polyakov_ps
@@ -30,9 +31,19 @@ public class AdmissionCampaign implements Serializable {
     @Temporal( TemporalType.DATE )
     private Date endDate;
 
+    @Column ( name = "exam_last_date" )
+    @Temporal( TemporalType.DATE )
+    private Date examLastDate;
+
+    @Column ( name = "max_competitions" )
+    private int maxCompetitions;
+
     @ManyToOne
     @JoinColumn( name = "numbering_rule_id" )
     private CaseFileNumberingRule numberingRule;
+
+    @OneToMany( mappedBy = "admissionCampaign" )
+    private List<Competition> competitions;
 
     public AdmissionCampaign() {}
 
@@ -78,6 +89,18 @@ public class AdmissionCampaign implements Serializable {
     public void setNumberingRule(CaseFileNumberingRule numberingRule) {
         this.numberingRule = numberingRule;
     }
+
+    public List<Competition> getCompetitions() { return competitions; }
+
+    public void setCompetitions(List<Competition> competitions) { this.competitions = competitions; }
+
+    public Date getExamLastDate() { return examLastDate; }
+
+    public void setExamLastDate(Date examLastDate) { this.examLastDate = examLastDate; }
+
+    public int getMaxCompetitions() { return maxCompetitions; }
+
+    public void setMaxCompetitions(int maxCompetitions) { this.maxCompetitions = maxCompetitions; }
 
     @Transient
     public boolean isActive() {

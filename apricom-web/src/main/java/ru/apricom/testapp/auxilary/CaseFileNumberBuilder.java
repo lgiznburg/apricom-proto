@@ -1,19 +1,19 @@
 package ru.apricom.testapp.auxilary;
 
 import ru.apricom.testapp.entities.catalogs.CaseFileNumberingRule;
-import ru.apricom.testapp.entities.entrant.CaseFile;
+import ru.apricom.testapp.entities.entrant.Entrant;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CaseFileNumberBuilder {
-    private CaseFile caseFile;
+    private Entrant entrant;
     private CaseFileNumberingRule rule;
     private long length;
     private String number;
 
-    public void setCaseFile(CaseFile caseFile) { this.caseFile = caseFile; }
+    public void setEntrant(Entrant entrant) { this.entrant = entrant; }
 
     public void setRule(CaseFileNumberingRule rule) { this.rule = rule; }
 
@@ -55,7 +55,7 @@ public class CaseFileNumberBuilder {
                     number += Integer.toString( now.get( Calendar.YEAR ) ); //set current year if asked in rule
                 }
                 if ( component.equals( "number" ) ) {
-                    long numL = caseFile.getCampaign().getNumberingRule().getCounter();
+                    long numL = entrant.getRequests().get(0).getAdmissionCampaign().getNumberingRule().getCounter();
                     String numS = Long.toString( numL );
                     int numLength = numS.length();
                     //if asked for specific number length - we need to add 0's before the number to match length

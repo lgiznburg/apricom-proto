@@ -104,7 +104,7 @@ public class SpecialitySelect {
             entrant = entrantDao.find( Entrant.class, entrant.getId() );
         }
         if ( entrant.getRequests() == null ) {
-            entrant.setRequests( new HashSet<>() );
+            entrant.setRequests( new ArrayList<>() );
         }
         if ( entrant.getRequests().size() == 0 ) {
             EntrantRequest request = new EntrantRequest();
