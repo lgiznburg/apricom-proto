@@ -99,23 +99,41 @@ public class Wizard {
         return WizardStep.valueOf( stepName ) == wizardState.getStep();
     }
 
-    public void onNextStep() {
-        WizardStep step = wizardState.getStep();
+    public void onNextStep(String stepName) {
+        WizardStep step = WizardStep.valueOf(stepName);
         if ( step.ordinal() < WizardStep.values().length ) {
-            wizardState.setStep( WizardStep.values()[ step.ordinal() + 1 ] );
+            wizardState.setStep( WizardStep.values()[ step.ordinal()+1 ] );
         }
     }
 
-    public void onPreviousStep() {
-        WizardStep step = wizardState.getStep();
+    public void onPreviousStep(String stepName) {
+        WizardStep step = WizardStep.valueOf(stepName);
         if ( step.ordinal() > 0 ) {
-            wizardState.setStep( WizardStep.values()[ step.ordinal() - 1 ] );
+            wizardState.setStep( WizardStep.values()[ step.ordinal()-1 ] );
         }
+    }
+
+    public void goToPage(String stepName){
+        wizardState.setStep( WizardStep.valueOf(stepName) );
     }
 
     public WizardStep[] getAllSteps(){
         return  WizardStep.values();
     }
+
+    public Boolean stepIsHref(WizardStep step){
+        if(entrant.getStatus()!=EntrantStatus.NEW && step.getOrder()!=wizardState.getStep().getOrder()){
+            return Boolean.TRUE;
+        }
+        else {
+            if (step.getOrder() < wizardState.getStep().getOrder()) {
+                return Boolean.TRUE;
+            } else {
+                return Boolean.FALSE;
+            }
+        }
+    }
+
     public Boolean stepIsLast(WizardStep step){
         if(step.getOrder()==WizardStep.values().length){
             return Boolean.TRUE;

@@ -14,6 +14,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.upload.services.UploadedFile;
+import ru.apricom.testapp.auxilary.WizardStep;
 import ru.apricom.testapp.dao.*;
 import ru.apricom.testapp.encoders.CountrySelectModel;
 import ru.apricom.testapp.encoders.DocumentSelectModel;
@@ -288,7 +289,7 @@ public class EducationInfoEdit {
             storeEduDocument( getSecEduDoc(), secondaryEducationDocument );
         }
         // go to next step
-        componentResources.triggerEvent( "nextStep", new Object[]{}, null );
+        componentResources.triggerEvent( "nextStep", new Object[]{getStepName()}, null );
 
         return true;
     }
@@ -318,6 +319,10 @@ public class EducationInfoEdit {
         SimpleDateFormat format = new SimpleDateFormat( "dd/MM/yyyy" );
         format.setTimeZone( TimeZone.getTimeZone("GMT") );
         return format;
+    }
+
+    public String getStepName(){
+        return WizardStep.EDUCATION_INFO.name();
     }
 }
 

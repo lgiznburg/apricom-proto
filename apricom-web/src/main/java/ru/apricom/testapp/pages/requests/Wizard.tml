@@ -5,9 +5,16 @@
     <div>
         <t:loop source="allSteps" value="wizardStep">
 
-            <t:if test="isOnStep(wizardStep)">
-                <span class="bg-success">${stepName}</span>
-                <p:else><span>${stepName}</span></p:else>
+            <t:if test="stepIsHref(wizardStep)">
+                <!--<span><t:eventlink  ="/requests/wizard">${stepName}</a></span>-->
+                <span><t:eventlink event="goToPage" context="stepName">${stepName}</t:eventlink></span>
+                <!--<span>${stepName}</span>-->
+                <p:else>
+                    <t:if test="isOnStep(wizardStep)">
+                        <span class="bg-success">${stepName}</span>
+                        <p:else><span>${stepName}</span></p:else>
+                    </t:if>
+                </p:else>
             </t:if>
             <t:if test="!stepIsLast(wizardStep)"> -> </t:if>
         </t:loop>
