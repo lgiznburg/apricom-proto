@@ -1,66 +1,51 @@
 package ru.apricom.testapp.components.wizard.speciality;
 
 import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.OptionGroupModel;
-import org.apache.tapestry5.OptionModel;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
-import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
-import org.apache.tapestry5.util.AbstractSelectModel;
+import ru.apricom.testapp.auxilary.FormContextHelper;
 import ru.apricom.testapp.dao.*;
 import ru.apricom.testapp.encoders.AdmissionCampaignsModel;
 import ru.apricom.testapp.encoders.EducationalProgramsModel;
 import ru.apricom.testapp.entities.base.AdmissionCampaign;
+import ru.apricom.testapp.entities.base.Competition;
 import ru.apricom.testapp.entities.base.EducationalProgram;
-import ru.apricom.testapp.entities.base.ProgramRequirement;
-import ru.apricom.testapp.entities.catalogs.EducationLevelType;
-import ru.apricom.testapp.entities.catalogs.EducationalSubject;
-import ru.apricom.testapp.entities.documents.DiplomaDocument;
 import ru.apricom.testapp.entities.entrant.Entrant;
 import ru.apricom.testapp.entities.entrant.EntrantRequest;
 import ru.apricom.testapp.entities.entrant.EntrantStatus;
-import ru.apricom.testapp.entities.exams.EntrantResult;
-import ru.apricom.testapp.entities.exams.EntrantToExam;
-import ru.apricom.testapp.entities.exams.ExamStatus;
-import ru.apricom.testapp.entities.exams.ExamType;
-import ru.apricom.testapp.entities.person.SpecialState;
 
 import java.util.*;
 
 /**
- * @author leonid.
- * Page for select speciality (educational program), enter state exams scores or select exam schedule.
+ * @author polyakov_ps.
+ * Page for select campaign and educational programs.
  */
 public class CampaignSelect {
-
-    private static final int PROTO_MAX_SPECIALITIES = 3;
-
 
     @Property
     @Parameter(required = true)
     private Entrant entrant;
 
+    @Property
+    @Parameter(required = true)
+    private FormContextHelper helper;
+
     // property for select next program
     @Property
     private EducationalProgram chosenProgram;
 
-    @Property
-    private AdmissionCampaign chosenCampaign;
-
-    //campaigns
-    @Property
-    @Parameter(required = true)
-    private Map<EntrantRequest,AdmissionCampaign> campaigns;
+    //@Property
+    //private AdmissionCampaign chosenCampaign;
 
     // selected programs
     @Property
@@ -116,6 +101,8 @@ public class CampaignSelect {
     }
 
     private void prepare() {
+        if ( helper == null ) { helper = new FormContextHelper(); }
+
         if ( entrant.getId() > 0 ) {
             entrant = entrantDao.find( Entrant.class, entrant.getId() );
         }
@@ -135,20 +122,34 @@ public class CampaignSelect {
 
     }
 
+    public AdmissionCampaign getSelectedCampaign() {
+        return helper.getAdmissionCampaign();
+    }
+
+    public SelectModel getProgramSelectModel() {
+        List<EducationalProgram> programs = new ArrayList<>();
+        programs = specialityDao.findNotSelectedPrograms( this.programs );
+        //if some of programs are not set up in selected campaign - destroy them
+        for ( int i = ( programs.size() - 1 ); i >= 0; i-- ) {
+            boolean isPresent = false; //temporal boolean for finding fitting programs
+            for ( Competition competition : programs.get( i ).getCompetitions() ) {
+                if ( competition.getAdmissionCampaign().getId() == getSelectedCampaign().getId() ) isPresent = true;
+            }
+            if ( !isPresent ) { programs.remove( i ); }
+        }
+        return new EducationalProgramsModel( programs );
+    }
+
     public SelectModel getCampaignSelectModel() {
         List<AdmissionCampaign> camps = baseDao.findAll( AdmissionCampaign.class );
-        for ( int i = camps.size() - 1; i == 0; i-- ) {
+        for ( int i = camps.size() - 1; i >= 0; i-- ) {
             if ( !camps.get( i ).isActive() ) camps.remove( i );
         }
         return new AdmissionCampaignsModel( camps );
     }
 
-    public SelectModel getProgramSelectModel() {
-        return new EducationalProgramsModel( specialityDao.findNotSelectedPrograms( programs ) );
-    }
-
     public boolean isMoreSpecialitiesAvailable() {
-        return programs.size() < PROTO_MAX_SPECIALITIES;
+        return programs.size() < getSelectedCampaign().getMaxSpecialities();
     }
 
     /**
@@ -165,15 +166,28 @@ public class CampaignSelect {
     public boolean isDownAllowed() {
         int idx = programs.indexOf( programInList );
         return idx + 1 < programs.size();
+    }
 
+    public boolean isCampaignSelected() {
+        return getSelectedCampaign() != null;
     }
 
     public int getCurrentIndex() {
         return programs.indexOf( programInList );
     }
 
+    void onValueChangedFromSelectCampaign( AdmissionCampaign selected ) {
+        if ( selected != null ) {
+            helper.setAdmissionCampaign(selected);
+        }
+
+            if (request.isXHR()) {
+                ajaxResponseRenderer.addRender( selectSpecZone );
+            }
+    }
+
     void onValueChangedFromAddNextProgram( EducationalProgram selected ) {
-        if ( programs.size() < PROTO_MAX_SPECIALITIES ) {
+        if ( programs.size() < getSelectedCampaign().getMaxSpecialities() ) {
             programs.add( selected );
         }
         if ( request.isXHR() ) {
@@ -227,9 +241,7 @@ public class CampaignSelect {
                 }
             }
         }
-    }
-
-    public boolean isCampainSelected() {
-        return chosenCampaign != null;
+        // go to next step
+        componentResources.triggerEvent( "nextStep", new Object[]{}, null );
     }
 }

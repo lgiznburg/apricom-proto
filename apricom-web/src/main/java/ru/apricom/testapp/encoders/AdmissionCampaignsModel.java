@@ -28,7 +28,7 @@ public class AdmissionCampaignsModel extends AbstractSelectModel {
     public List<OptionModel> getOptions() {
         List<OptionModel> models = new ArrayList<>();
         for ( AdmissionCampaign campaign : campaigns) {
-            models.add( new OptionModelImpl( campaign.getName(), campaign ) );
+            models.add( new OptionModelImpl( campaign.getType().getTitle(), campaign ) );
         }
         return models;
     }

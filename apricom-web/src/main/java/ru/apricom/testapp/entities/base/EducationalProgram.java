@@ -44,6 +44,9 @@ public class EducationalProgram implements Serializable {
     @NotNull
     private EducationLevelType basedOnLevel;
 
+    @OneToMany( mappedBy = "program")
+    private List<Competition> competitions;
+
     public EducationalProgram() {
     }
 
@@ -101,4 +104,8 @@ public class EducationalProgram implements Serializable {
     public void setBasedOnLevel( EducationLevelType basedOnLevel ) {
         this.basedOnLevel = basedOnLevel;
     }
+
+    public List<Competition> getCompetitions() { return competitions; }
+
+    public void setCompetitions(List<Competition> competitions) { this.competitions = competitions; }
 }

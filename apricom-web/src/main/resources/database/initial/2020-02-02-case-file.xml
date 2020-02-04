@@ -61,4 +61,17 @@
                                  referencedColumnNames="id" referencedTableName="admission_campaigns" validate="true"/>
     </changeSet>
 
+    <changeSet id="add-campaign-type" author="polyakov_ps">
+        <addColumn tableName="admission_campaigns">
+            <column name="type_id" type="${id.type}"/>
+        </addColumn>
+        <createIndex tableName="admission_campaigns" indexName="fk_campaign_type">
+            <column name="type_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="type_id" baseTableName="admission_campaigns"
+                                 constraintName="fk_campaign_type"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="catalogs" validate="true"/>
+    </changeSet>
+
 </databaseChangeLog>

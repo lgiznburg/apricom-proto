@@ -41,18 +41,11 @@ import java.util.*;
  * @author leonid.
  * Page for select speciality (educational program), enter state exams scores or select exam schedule.
  */
-public class SpecialitySelect {
-
-    private static final int PROTO_MAX_SPECIALITIES = 3;
-
+public class CompetitionsSelect {
 
     @Property
     @Parameter(required = true)
     private Entrant entrant;
-
-    // property for select next program
-    @Property
-    private EducationalProgram chosen;
 
     // selected programs
     @Property
@@ -163,14 +156,6 @@ public class SpecialitySelect {
         return false;
     }
 
-    public SelectModel getProgramSelectModel() {
-        return new EducationalProgramsModel( specialityDao.findNotSelectedPrograms( programs ) );
-    }
-
-    public boolean isMoreSpecialitiesAvailable() {
-        return programs.size() < PROTO_MAX_SPECIALITIES;
-    }
-
     public boolean isExamAvailable() {
         // rule 1 - base professional education
         DiplomaDocument doc = documentDao.findEduDocument( entrant, true ); // main edu doc
@@ -220,70 +205,6 @@ public class SpecialitySelect {
             years.add( year );
         }
         return selectModelFactory.create( years );
-    }
-
-    /**
-     * @return true if current element in programs list could be moved up on screen (decrement its index)
-     */
-    public boolean isUpAllowed() {
-        int idx = programs.indexOf( programInList );
-        return idx > 0;
-    }
-
-    /**
-     * @return true if current element in programs list could be moved down on screen (increment its index)
-     */
-    public boolean isDownAllowed() {
-        int idx = programs.indexOf( programInList );
-        return idx + 1 < programs.size();
-
-    }
-
-    public int getCurrentIndex() {
-        return programs.indexOf( programInList );
-    }
-
-    void onValueChangedFromAddNextProgram( EducationalProgram selected ) {
-        if ( programs.size() < PROTO_MAX_SPECIALITIES ) {
-            programs.add( selected );
-        }
-        if ( request.isXHR() ) {
-            ajaxResponseRenderer.addRender( selectSpecZone );
-        }
-    }
-
-    boolean onRemoveProgram( int index ) {
-        programs.remove( index );
-        if ( request.isXHR() ) {
-            ajaxResponseRenderer.addRender( selectSpecZone );
-        }
-        return true;
-    }
-
-    boolean onElementUp( int idx ) {
-        int prevIdx = idx - 1;
-        if ( prevIdx >= 0 ) {
-            EducationalProgram program = programs.get( idx );
-            EducationalProgram old = programs.set( prevIdx, program );
-            programs.set( idx, old );
-        }
-        if ( request.isXHR() ) {
-            ajaxResponseRenderer.addRender( selectSpecZone );
-        }
-        return true;
-    }
-
-    boolean onElementDown( int idx ) {
-        int nextIdx = idx + 1;
-        if ( idx >= 0 && nextIdx < programs.size() ) {
-            EducationalProgram program = programs.get( idx );
-            EducationalProgram old = programs.set( nextIdx, program );
-            programs.set( idx, old );
-        }
-        if ( request.isXHR() ) {
-            ajaxResponseRenderer.addRender( selectSpecZone );
-        }
-        return true;
     }
 
     void onSuccessFromSpecialityForm() {
