@@ -5,42 +5,6 @@
     <t:zone t:id="selectSpecZone" id="selectSpecZone">
         <t:form t:id="specialityForm" id="specialityForm" class="form-horizontal">
 
-            <div class="col-sm-6">
-                <table class="table">
-                    <tr>
-                        <th colspan="4">${message:selectedPrograms}</th>
-                    </tr>
-                    <tr t:type="loop" source="programs" value="programInList">
-                        <td>${programInList.speciality.code} ${programInList.speciality.title} </td>
-                        <td>
-                            <t:if test="downAllowed">
-                                <t:eventlink t:id="elementDown" t:context="currentIndex" async="true">
-                                    <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-                                </t:eventlink>
-                            </t:if>
-                        </td>
-                        <td>
-                            <t:if test="upAllowed">
-                                <t:eventlink t:id="elementUp" t:context="currentIndex" async="true">
-                                    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
-                                </t:eventlink>
-                            </t:if>
-                        </td>
-                        <td>
-                            <t:eventlink t:id="removeProgram" t:context="currentIndex" async="true">
-                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                            </t:eventlink>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col-sm-6">
-                <t:if test="moreSpecialitiesAvailable">
-                    <t:select value="chosen" t:id="addNextProgram" model="programSelectModel"
-                              t:zone="selectSpecZone" blankLabel="message:add-chose-program"/>
-                </t:if>
-            </div>
-
             <div class="form-group">
                 <div class="col-sm-12">
                     <h5>${message:exam-results}</h5>

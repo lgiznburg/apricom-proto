@@ -30,10 +30,10 @@
         <t:wizard.personinfo.specialstateedit entrant="wizardState.entrant"/>
     </t:if>
     <t:if test="isOnStep('CAMPAIGNS_AND_SPECIALITIES')">
-        <t:wizard.speciality.campaignselect entrant="wizardState.entrant" programs="wizardState.selectedPrograms" campaigns="wizardState.selectedCampaigns"/>
+        <t:wizard.speciality.campaignselect entrant="wizardState.entrant" programs="wizardState.selectedPrograms" helper="wizardState.helper"/>
     </t:if>
     <t:if test="isOnStep('COMPETITIONS_AND_EXAMS')">
-        <t:wizard.speciality.specialityselect entrant="wizardState.entrant" programs="wizardState.selectedPrograms"/>
+        <t:wizard.speciality.competitionsselect entrant="wizardState.entrant" programs="wizardState.selectedPrograms"/>
     </t:if>
 
     <t:if test="wizardState.editMode">

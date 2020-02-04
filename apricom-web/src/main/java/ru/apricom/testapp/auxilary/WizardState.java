@@ -22,8 +22,6 @@ public class WizardState {
 
     private List<EducationalProgram> selectedPrograms = new ArrayList<>();
 
-    private Map<EntrantRequest, AdmissionCampaign> selectedCampaigns = new HashMap<>();
-
     private FormContextHelper helper = new FormContextHelper();
 
     private boolean isEditMode = false; //for the editing from the BrowseEntrant page
@@ -53,7 +51,6 @@ public class WizardState {
                                 selectedPrograms.add( competition.getCompetition().getProgram() );
                             }
                         }
-                        selectedCampaigns.put( request, request.getRequestedCompetitions().get(0).getCompetition().getAdmissionCampaign() );
                         break;
                     }
                 }
@@ -75,14 +72,6 @@ public class WizardState {
 
     public void setSelectedPrograms( List<EducationalProgram> selectedPrograms ) {
         this.selectedPrograms = selectedPrograms;
-    }
-
-    public Map<EntrantRequest, AdmissionCampaign> getSelectedCampaigns() {
-        return selectedCampaigns;
-    }
-
-    public void setSelectedCampaigns(Map<EntrantRequest, AdmissionCampaign> selectedCampaigns) {
-        this.selectedCampaigns = selectedCampaigns;
     }
 
     public FormContextHelper getHelper() {

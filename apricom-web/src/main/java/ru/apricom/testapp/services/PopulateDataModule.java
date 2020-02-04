@@ -118,14 +118,31 @@ public class PopulateDataModule {
         CaseFileNumberingRule rule = new CaseFileNumberingRule( "тестовый", "{year}{number}5" );
         configuration.add( rule.getName(), rule );
 
-        configuration.add( "admissionCampaign", new SeedEntityIdentifier( AdmissionCampaign.class, "campaign_name" ) );
-        Date begin = new Date(), end = new Date();
+        configuration.add( "admissionCampaignLevel", new SeedEntityIdentifier( AdmissionCampaignType.class, "title" ) );
+        AdmissionCampaignType baccAndSpecLevel = new AdmissionCampaignType( 1, "Бакалавриат и специалитет", "бак. и сп." );
+        configuration.add( "baccAndSpec", baccAndSpecLevel);
+        AdmissionCampaignType masterLevel = new AdmissionCampaignType( 2, "Магистратура", "маг." );
+        configuration.add( "master", masterLevel );
+        AdmissionCampaignType kvkLevel = new AdmissionCampaignType( 3, "Ординатура и аспирантура", "орд." );
+        configuration.add( "residency_post", kvkLevel );
+        AdmissionCampaignType monLevel = new AdmissionCampaignType( 4, "Направления МОН РФ", "ино.гос." );
+        configuration.add( "mon", monLevel );
+
+        configuration.add( "admissionCampaign", new SeedEntityIdentifier( AdmissionCampaign.class, "name" ) );
+        Date begin = new Date(), end = new Date(), exam = new Date();
         try {
             begin = new SimpleDateFormat("dd/MM/yyyy").parse("12/01/2019");
             end = new SimpleDateFormat("dd/MM/yyyy").parse("12/10/2020");
+            exam = new SimpleDateFormat("dd/MM/yyyy").parse("20/04/2020");
         } catch ( Exception e ) { System.err.println( e ); }
-        AdmissionCampaign campaign = new AdmissionCampaign( "Тестовая кампания", begin, end, rule );
-        configuration.add( campaign.getName(), campaign );
+        AdmissionCampaign campaignVO = new AdmissionCampaign( "2020_ВО", begin, end, exam, 3, rule, baccAndSpecLevel );
+        configuration.add( campaignVO.getName(), campaignVO );
+        AdmissionCampaign campaignM = new AdmissionCampaign( "2020_М", begin, end, exam, 3, rule, masterLevel );
+        configuration.add( campaignM.getName(), campaignM );
+        AdmissionCampaign campaignKVK = new AdmissionCampaign( "2020_КВК", begin, end, exam, 3, rule, kvkLevel );
+        configuration.add( campaignKVK.getName(), campaignKVK );
+        AdmissionCampaign campaignMON = new AdmissionCampaign( "2020_ИНО_ГОС", begin, end, exam, 3, rule, monLevel );
+        configuration.add( campaignMON.getName(), campaignMON );
 
         configuration.add( "admissionType", new SeedEntityIdentifier( AdmissionType.class, "title" ) );
         AdmissionType baseAdmission = new AdmissionType( 1, "общий конкурс", "общий");
@@ -369,10 +386,10 @@ public class PopulateDataModule {
             int sequenceNumber = 1;
             for ( AdmissionType admissionType : admissionTypes ) {
                 configuration.add( program.getSpeciality().getTitle()+admissionType.getShortTitle(),
-                        new Competition( admissionType, program, FinancingType.BUDGET, sequenceNumber++, campaign ) );
+                        new Competition( admissionType, program, FinancingType.BUDGET, sequenceNumber++, campaignVO ) );
             }
             configuration.add( program.getSpeciality().getTitle()+contractAdmission.getShortTitle(),
-                    new Competition( contractAdmission, program, FinancingType.CONTRACT, sequenceNumber, campaign ) );
+                    new Competition( contractAdmission, program, FinancingType.CONTRACT, sequenceNumber, campaignVO ) );
         }
 
         try {

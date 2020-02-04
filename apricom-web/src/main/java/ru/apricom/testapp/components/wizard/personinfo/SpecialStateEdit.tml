@@ -1,11 +1,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 <t:content>
+    <div class="row">
+        <h3>${message:special-state}</h3>
+    </div>
+
     <t:form t:id="SpecialStateForm" validate="isSpecialState" class="form-horizontal">
             <div class="form-group">
             <div class="col">
                 <t:checkbox t:id="isSpecialState" value="isSpecialState" t:mixins="triggerfragment" fragment="disableDocumentScanZone"/>
-                <t:label for="isSpecialState"/>
+                <t:label for="isSpecialState" style="margin-left: 15px"/>
             </div>
         </div>
 

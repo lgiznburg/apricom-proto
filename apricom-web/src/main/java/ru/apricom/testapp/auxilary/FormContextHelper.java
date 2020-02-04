@@ -1,5 +1,6 @@
 package ru.apricom.testapp.auxilary;
 
+import ru.apricom.testapp.entities.base.AdmissionCampaign;
 import ru.apricom.testapp.entities.documents.DiplomaDocument;
 
 /**
@@ -19,7 +20,12 @@ public class FormContextHelper {
     public DiplomaDocument getSecEduDoc() { return secEduDoc; }
     public void setSecEduDoc( DiplomaDocument secEduDoc ) { this.secEduDoc = secEduDoc; }
 
-    private boolean secFormDisplayed = false;
+    private boolean secFormDisplayed = false; //secondary education document form
     public boolean isSecFormDisplayed() { return secFormDisplayed; }
     public void setSecFormDisplayed(boolean secFormDisplayed) { this.secFormDisplayed = secFormDisplayed; }
+
+    /** Helpers for admission campaign selector */
+    private AdmissionCampaign admissionCampaign;
+    public AdmissionCampaign getAdmissionCampaign() { return admissionCampaign; }
+    public void setAdmissionCampaign(AdmissionCampaign admissionCampaign) { this.admissionCampaign = admissionCampaign; }
 }

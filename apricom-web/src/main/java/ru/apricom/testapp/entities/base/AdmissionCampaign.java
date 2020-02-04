@@ -1,5 +1,6 @@
 package ru.apricom.testapp.entities.base;
 
+import ru.apricom.testapp.entities.catalogs.AdmissionCampaignType;
 import ru.apricom.testapp.entities.catalogs.CaseFileNumberingRule;
 
 import javax.persistence.*;
@@ -45,13 +46,20 @@ public class AdmissionCampaign implements Serializable {
     @OneToMany( mappedBy = "admissionCampaign" )
     private List<Competition> competitions;
 
+    @ManyToOne
+    @JoinColumn( name = "type_id" )
+    private AdmissionCampaignType type;
+
     public AdmissionCampaign() {}
 
-    public AdmissionCampaign( String name, Date beginDate, Date endDate, CaseFileNumberingRule numberingRule ) {
+    public AdmissionCampaign( String name, Date beginDate, Date endDate, Date examLastDate, int maxSpecialities, CaseFileNumberingRule numberingRule, AdmissionCampaignType type ) {
         this.name = name;
         this.beginDate = beginDate;
         this.endDate = endDate;
+        this.examLastDate = examLastDate;
+        this.maxSpecialities = maxSpecialities;
         this.numberingRule = numberingRule;
+        this.type = type;
     }
 
     public long getId() {
@@ -101,6 +109,10 @@ public class AdmissionCampaign implements Serializable {
     public int getMaxSpecialities() { return maxSpecialities; }
 
     public void setMaxSpecialities(int maxSpecialities) { this.maxSpecialities = maxSpecialities; }
+
+    public AdmissionCampaignType getType() { return type; }
+
+    public void setType(AdmissionCampaignType type) { this.type = type; }
 
     @Transient
     public boolean isActive() {

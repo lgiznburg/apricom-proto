@@ -107,7 +107,7 @@
                     </t:if>
                 </t:zone>
             </div>
-            <div class="form-group row text-right">
+            <div class="form-group row text-right" style="margin-top: 10px">
                 <t:eventlink event="previousStep" context="stepName" class="btn btn-default">${message:back}</t:eventlink>
                 <t:submit value="${message:save-continue}"/>
             </div>
