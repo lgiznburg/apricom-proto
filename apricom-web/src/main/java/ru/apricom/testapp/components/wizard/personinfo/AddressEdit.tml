@@ -8,7 +8,8 @@
     </div>
     <div class="col-sm-2">
         <t:label for="postCode"/><span style="color: darkred;" title="${message:necessary}">* </span>
-        <t:textfield t:id="postCode" value="address.postCode" validate="required,maxLength=6,minLength=6" />
+        <t:textfield t:id="postCode" value="address.postCode" validate="required,maxLength=6,minLength=6"
+        t:mixins="MaskedInput" MaskedInput.mask="999999"  />
     </div>
     <div class="col-sm-2">
         <t:label for="city"/><span style="color: darkred;" title="${message:necessary}">* </span>
