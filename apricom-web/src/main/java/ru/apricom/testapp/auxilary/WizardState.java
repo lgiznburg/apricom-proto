@@ -1,13 +1,13 @@
 package ru.apricom.testapp.auxilary;
 
+import ru.apricom.testapp.entities.base.AdmissionCampaign;
 import ru.apricom.testapp.entities.base.EducationalProgram;
 import ru.apricom.testapp.entities.entrant.Entrant;
 import ru.apricom.testapp.entities.entrant.EntrantRequest;
 import ru.apricom.testapp.entities.entrant.EntrantStatus;
 import ru.apricom.testapp.entities.entrant.RequestedCompetition;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author leonid.
@@ -21,6 +21,8 @@ public class WizardState {
     private WizardStep step = WizardStep.PERSON_INFO;
 
     private List<EducationalProgram> selectedPrograms = new ArrayList<>();
+
+    private Map<EntrantRequest, AdmissionCampaign> selectedCampaigns = new HashMap<>();
 
     private FormContextHelper helper = new FormContextHelper();
 
@@ -51,6 +53,7 @@ public class WizardState {
                                 selectedPrograms.add( competition.getCompetition().getProgram() );
                             }
                         }
+                        selectedCampaigns.put( request, request.getRequestedCompetitions().get(0).getCompetition().getAdmissionCampaign() );
                         break;
                     }
                 }
@@ -72,6 +75,14 @@ public class WizardState {
 
     public void setSelectedPrograms( List<EducationalProgram> selectedPrograms ) {
         this.selectedPrograms = selectedPrograms;
+    }
+
+    public Map<EntrantRequest, AdmissionCampaign> getSelectedCampaigns() {
+        return selectedCampaigns;
+    }
+
+    public void setSelectedCampaigns(Map<EntrantRequest, AdmissionCampaign> selectedCampaigns) {
+        this.selectedCampaigns = selectedCampaigns;
     }
 
     public FormContextHelper getHelper() {

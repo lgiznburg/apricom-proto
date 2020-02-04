@@ -114,8 +114,11 @@ public class PopulateDataModule {
     }
 
     private static void populateBaseObjects( OrderedConfiguration<Object> configuration ) {
+        configuration.add( "numberingRule", new SeedEntityIdentifier( CaseFileNumberingRule.class, "name" ) );
         CaseFileNumberingRule rule = new CaseFileNumberingRule( "тестовый", "{year}{number}5" );
         configuration.add( rule.getName(), rule );
+
+        configuration.add( "admissionCampaign", new SeedEntityIdentifier( AdmissionCampaign.class, "campaign_name" ) );
         Date begin = new Date(), end = new Date();
         try {
             begin = new SimpleDateFormat("dd/MM/yyyy").parse("12/01/2019");
