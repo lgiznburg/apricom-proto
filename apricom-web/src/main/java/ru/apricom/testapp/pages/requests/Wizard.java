@@ -94,6 +94,9 @@ public class Wizard {
             wizardState.setEntrant( entrant );
             wizardState.setInitialized( true );
         }
+        else if (wizardState.isInitialized() && entrant == null){
+            entrant = wizardState.getEntrant();
+        }
         return null;
     }
 
@@ -128,11 +131,11 @@ public class Wizard {
     }
 
     public Boolean canUseLink(WizardStep step){
-        if(entrant.getStatus()!=EntrantStatus.NEW && step.getOrder()!=wizardState.getStep().getOrder()){
+        if(entrant.getStatus()!=EntrantStatus.NEW){
             return Boolean.TRUE;
         }
         else {
-            if (step.getOrder() < wizardState.getStep().getOrder()) {
+            if (step.getOrder() <= wizardState.getStep().getOrder()) {
                 return Boolean.TRUE;
             } else {
                 return Boolean.FALSE;
