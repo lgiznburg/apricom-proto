@@ -3,21 +3,40 @@
       xmlns:p="tapestry:parameter">
 <body>
     <t:unless test="wizardState?.editMode">
-        <div>
+        <ul class="nav nav-tabs">
+        <!--<div>-->
             <t:loop source="allSteps" value="wizardStep">
 
-                <t:if test="canUseLink(wizardStep)">
-                    <span><t:eventlink event="selectStep" context="wizardStep.name()">${stepName}</t:eventlink></span>
+                <!--<t:if test="canUseLink(wizardStep)">
+                    <li role="presentation" class="dropdown"><t:eventlink event="selectStep" context="wizardStep.name()">${stepName}</t:eventlink></li>
                     <p:else>
                         <t:if test="isOnStep(wizardStep)">
-                            <span class="bg-success">${stepName}</span>
-                            <p:else><span>${stepName}</span></p:else>
+                            &lt;!&ndash;<span class="bg-success">${stepName}</span>&ndash;&gt;
+                            &lt;!&ndash;<li role="presentation" class="dropdown">${stepName}</li>&ndash;&gt;
+                            <li role="presentation" class="active"><a href="#">${stepName}</a></li>
+                            <p:else><li role="presentation" class="disabled"><a href="#">${stepName}</a></li></p:else>
                         </t:if>
                     </p:else>
+                </t:if>-->
+                <!--<t:if test="!stepIsLast(wizardStep)"> -> </t:if>-->
+
+
+                <t:if test="canUseLink(wizardStep)">
+                    <t:if test="isOnStep(wizardStep)">
+                        <li role="presentation" class="active">
+                            <t:eventlink event="selectStep" context="wizardStep.name()">${stepName}</t:eventlink>
+                        </li>
+                        <p:else>
+                            <li role="presentation"><t:eventlink event="selectStep" context="wizardStep.name()">${stepName}</t:eventlink></li>
+                        </p:else>
+                    </t:if>
+                    <p:else>
+                        <li role="presentation"><a href="#">${stepName}</a></li>
+                    </p:else>
                 </t:if>
-            <t:if test="!stepIsLast(wizardStep)"> -> </t:if>
-        </t:loop>
-    </div>
+            </t:loop>
+        </ul>
+        <!--</div>-->
     </t:unless>
 
     <t:if test="isOnStep('PERSON_INFO')">

@@ -250,6 +250,6 @@ public class CompetitionsSelect {
     }
 
     public String getStepName() {
-        return WizardStep.SPECIALITIES_AND_EXAMS.name();
+        return WizardStep.CAMPAIGNS_AND_SPECIALITIES.name();
     }
 }
