@@ -4,22 +4,7 @@
 <body>
     <t:unless test="wizardState?.editMode">
         <ul class="nav nav-tabs">
-        <!--<div>-->
             <t:loop source="allSteps" value="wizardStep">
-
-                <!--<t:if test="canUseLink(wizardStep)">
-                    <li role="presentation" class="dropdown"><t:eventlink event="selectStep" context="wizardStep.name()">${stepName}</t:eventlink></li>
-                    <p:else>
-                        <t:if test="isOnStep(wizardStep)">
-                            &lt;!&ndash;<span class="bg-success">${stepName}</span>&ndash;&gt;
-                            &lt;!&ndash;<li role="presentation" class="dropdown">${stepName}</li>&ndash;&gt;
-                            <li role="presentation" class="active"><a href="#">${stepName}</a></li>
-                            <p:else><li role="presentation" class="disabled"><a href="#">${stepName}</a></li></p:else>
-                        </t:if>
-                    </p:else>
-                </t:if>-->
-                <!--<t:if test="!stepIsLast(wizardStep)"> -> </t:if>-->
-
 
                 <t:if test="canUseLink(wizardStep)">
                     <t:if test="isOnStep(wizardStep)">
@@ -36,7 +21,6 @@
                 </t:if>
             </t:loop>
         </ul>
-        <!--</div>-->
     </t:unless>
 
     <t:if test="isOnStep('PERSON_INFO')">
@@ -49,7 +33,7 @@
         <t:wizard.personinfo.specialstateedit entrant="wizardState.entrant"/>
     </t:if>
     <t:if test="isOnStep('CAMPAIGNS_AND_SPECIALITIES')">
-        <t:wizard.speciality.campaignselect entrant="wizardState.entrant" programs="wizardState.selectedPrograms" helper="wizardState.helper"/>
+        <t:wizard.campaign.campaignselect entrant="wizardState.entrant" programs="wizardState.selectedPrograms" helper="wizardState.helper"/>
     </t:if>
     <t:if test="isOnStep('COMPETITIONS_AND_EXAMS')">
         <t:wizard.speciality.competitionsselect entrant="wizardState.entrant" programs="wizardState.selectedPrograms"/>

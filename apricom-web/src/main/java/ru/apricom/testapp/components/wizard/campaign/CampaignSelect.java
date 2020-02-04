@@ -1,4 +1,4 @@
-package ru.apricom.testapp.components.wizard.speciality;
+package ru.apricom.testapp.components.wizard.campaign;
 
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
@@ -14,6 +14,7 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import ru.apricom.testapp.auxilary.FormContextHelper;
+import ru.apricom.testapp.auxilary.WizardStep;
 import ru.apricom.testapp.dao.*;
 import ru.apricom.testapp.encoders.AdmissionCampaignsModel;
 import ru.apricom.testapp.encoders.EducationalProgramsModel;
@@ -242,6 +243,11 @@ public class CampaignSelect {
             }
         }
         // go to next step
-        componentResources.triggerEvent( "nextStep", new Object[]{}, null );
+        componentResources.triggerEvent( "nextStep", new Object[]{getStepName()}, null );
     }
+
+    public String getStepName() {
+        return WizardStep.CAMPAIGNS_AND_SPECIALITIES.name();
+    }
+
 }
