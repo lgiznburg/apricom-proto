@@ -4,11 +4,16 @@ import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.tapestry5.StreamResponse;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.PageActivationContext;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.internal.services.LinkSource;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import ru.apricom.testapp.auxilary.AttachmentImage;
 import ru.apricom.testapp.auxilary.WizardState;
 import ru.apricom.testapp.auxilary.WizardStep;
@@ -17,9 +22,11 @@ import ru.apricom.testapp.dao.ExamDao;
 import ru.apricom.testapp.entities.documents.BaseDocument;
 import ru.apricom.testapp.entities.documents.DiplomaDocument;
 import ru.apricom.testapp.entities.documents.IdDocument;
+import ru.apricom.testapp.entities.documents.StoredFile;
 import ru.apricom.testapp.entities.entrant.Entrant;
 import ru.apricom.testapp.entities.exams.EntrantResult;
 import ru.apricom.testapp.entities.person.Address;
+import ru.apricom.testapp.pages.PreviewImage;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -46,7 +53,16 @@ public class BrowseEntrant {
     private WizardState wizardState;
 
     @Property
+    private BaseDocument previewDocument;
+
+    @Property
+    private boolean showPreview;
+
+    @Property
     private EntrantResult result;
+
+    @InjectComponent
+    private Zone previewZone;
 
     @Inject
     private Messages messages;
@@ -56,6 +72,15 @@ public class BrowseEntrant {
 
     @Inject
     private ExamDao examDao;
+
+    @Inject
+    private Request request;
+
+    @Inject
+    private AjaxResponseRenderer ajaxResponseRenderer;
+
+    @Inject
+    private LinkSource linkSource;
 
     public IdDocument getIdDocument() {
         return documentDao.findMainIdDocument( entrant );
@@ -136,6 +161,35 @@ public class BrowseEntrant {
 
     public StreamResponse onDownloadScan( BaseDocument document ) throws IOException {
         return new AttachmentImage( document );
+    }
+
+    /**
+     * preview document in modal
+     * */
+    public void onSetPreviewDocument( BaseDocument document ) {
+        previewDocument = document;
+        showPreview = true;
+        if ( request.isXHR() ) {
+            ajaxResponseRenderer.addRender( previewZone );
+        }
+    }
+    public String getDocumentPreviewLink() throws IOException {
+        if ( previewDocument != null && previewDocument.getFile() != null ) {
+            return linkSource.createPageRenderLink(PreviewImage.class.getSimpleName(), false, previewDocument.getFile().getId() ).toURI();
+        }
+        return "";
+    }
+    public boolean isImage() {
+        return previewDocument.getFile().getFileName().contains( ".png" ) ||
+                previewDocument.getFile().getFileName().contains( ".jpg" ) ||
+                previewDocument.getFile().getFileName().contains( ".jpeg" ) ||
+                previewDocument.getFile().getFileName().contains( ".svg" );
+    }
+    public void onClosePreview() {
+        showPreview = false;
+        if ( request.isXHR() ) {
+            ajaxResponseRenderer.addRender( previewZone );
+        }
     }
 
     public WizardStep getPersonStep() { return WizardStep.PERSON_INFO; }

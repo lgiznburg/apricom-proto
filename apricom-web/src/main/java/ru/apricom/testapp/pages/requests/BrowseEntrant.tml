@@ -158,6 +158,9 @@
                         <t:eventlink event="downloadScan" context="idDocument">
                             <span class="glyphicon glyphicon-save-file"/>
                         </t:eventlink>
+                        <t:eventlink event="setPreviewDocument" context="idDocument" async="true" style="margin-left: 15px">
+                            <span class="glyphicon glyphicon-picture" title="preview"/>
+                        </t:eventlink>
                     </td>
                 </tr>
                 <tr>
@@ -196,6 +199,9 @@
                             <t:eventlink event="downloadScan" context="mainDiploma">
                                 <span class="glyphicon glyphicon-save-file"/>
                             </t:eventlink>
+                            <t:eventlink event="setPreviewDocument" context="mainDiploma" async="true" style="margin-left: 15px">
+                                <span class="glyphicon glyphicon-picture" title="preview"/>
+                            </t:eventlink>
                         </td>
                     </tr>
                     <p:else>
@@ -231,6 +237,9 @@
                             <t:eventlink event="downloadScan" context="secondaryDiploma">
                                 <span class="glyphicon glyphicon-save-file"/>
                             </t:eventlink>
+                            <t:eventlink event="setPreviewDocument" context="secondaryDiploma" async="true" style="margin-left: 15px">
+                                <span class="glyphicon glyphicon-picture" title="preview"/>
+                            </t:eventlink>
                         </td>
                     </tr>
                 </t:if>
@@ -257,6 +266,37 @@
     <div class="form-group row text-right">
         <t:pagelink page="requests/list" class="btn btn-primary">${message:to-list}</t:pagelink>
     </div>
+
+    <t:zone t:id="previewZone" id="previewZone">
+        <div>
+            <t:if test="showPreview">
+                <div class="modal show" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModal" style="top: 30px !important; max-height: 90%">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <div class="row">
+                                    <div class="col-sm-6 text-left">
+                                        <h4 class="modal-title" id="myModalLabel">${message:document-preview}</h4>
+                                    </div>
+                                    <div class="col-sm-6 text-right">
+                                        <t:eventlink event="closePreview"><span aria-hidden="true">&times;</span></t:eventlink>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-body">
+                                <t:if test="image">
+                                    <img src="${getDocumentPreviewLink()}" style="max-width: 100%; max-height: 95%"/>
+                                    <p:else>
+                                        ${message:preview-not-displayable}
+                                    </p:else>
+                                </t:if>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t:if>
+        </div>
+    </t:zone>
 </body>
 
 </html>
