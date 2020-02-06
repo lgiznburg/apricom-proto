@@ -4,8 +4,10 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import ru.apricom.testapp.dao.CatalogDao;
 import ru.apricom.testapp.entities.catalogs.BaseCatalog;
+import ru.apricom.testapp.entities.catalogs.DocumentTemplateType;
 import ru.apricom.testapp.entities.catalogs.EducationDocumentType;
 import ru.apricom.testapp.entities.catalogs.EducationLevel;
+import ru.apricom.testapp.entities.templates.DocumentTemplateTypeCode;
 
 import java.util.List;
 

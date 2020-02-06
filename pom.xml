@@ -11,7 +11,7 @@
 
   <name>apricom-proto</name>
   <modules>
-    <module>pdf-template</module>
+    <module>rtf-template</module>
     <module>hibernate-utils</module>
     <module>apricom-web</module>
     <module>liquibase-service</module>

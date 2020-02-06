@@ -13,6 +13,10 @@
             </div>
             <table class="table table-primary" style="width: auto">
                 <tr>
+                    <td class="text-right"><span style="font-weight: bold">${message:entrant-number}</span></td>
+                    <td>${entrant.getId()}</td>
+                </tr>
+                <tr>
                     <td class="text-right"><span style="font-weight: bold">${message:state}</span></td>
                     <td>${entrant.status?.getDescription()}</td>
                 </tr>
@@ -25,6 +29,14 @@
                                 ${message:case-not-created}
                             </p:else>
                         </t:if>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right"><span style="font-weight: bold">${message:print}</span></td>
+                    <td>
+                        <t:eventlink event="printOverview">
+                            <span class="glyphicon glyphicon-print"/>
+                        </t:eventlink>
                     </td>
                 </tr>
             </table>
@@ -256,7 +268,7 @@
             </div>
             <table class="table table-primary">
                 <tr>
-                    <td>${message:nothing}</td>
+                    <td><div class="text-center">${message:nothing}</div></td>
                 </tr>
             </table>
         </div>

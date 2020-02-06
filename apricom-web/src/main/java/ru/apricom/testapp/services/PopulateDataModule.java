@@ -1,5 +1,6 @@
 package ru.apricom.testapp.services;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import ru.apricom.seedentity.SeedEntityIdentifier;
@@ -13,6 +14,8 @@ import ru.apricom.testapp.entities.base.*;
 import ru.apricom.testapp.entities.catalogs.*;
 import ru.apricom.testapp.entities.catalogs.Country;
 import ru.apricom.testapp.entities.exams.ExamSchedule;
+import ru.apricom.testapp.entities.templates.DocumentTemplate;
+import ru.apricom.testapp.entities.templates.DocumentTemplateTypeCode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -155,6 +158,26 @@ public class PopulateDataModule {
         configuration.add("SPECIAL_QUOTE", specialQuoteAdmission );
         AdmissionType contractAdmission = new AdmissionType(5, "по договору", "по договору");
         configuration.add( "CONTRACT", contractAdmission );
+
+        configuration.add( "documentTemplateType", new SeedEntityIdentifier( DocumentTemplateType.class, "title" ) );
+        DocumentTemplateType entrantOverview = new DocumentTemplateType( 1, "Информация о заявке", "entrantOverview" );
+        configuration.add( "ENTRANT_OVERVIEW", entrantOverview );
+
+        configuration.add( "documentTemplate", new SeedEntityIdentifier( DocumentTemplate.class, "name" ) );
+        InputStream is = HibernateModule.class.getClassLoader().getResourceAsStream( "templates/entrantoverview.rtf" );
+        if ( is != null ) {
+            try {
+                DocumentTemplate entrantOverviewTemplate = new DocumentTemplate();
+                entrantOverviewTemplate.setName( DocumentTemplateTypeCode.ENTRANT_OVERVIEW );
+                entrantOverviewTemplate.setFileName( "entrantoverview.rtf" );
+                entrantOverviewTemplate.setTemplateType( entrantOverview );
+                entrantOverviewTemplate.setRtfTemplate( IOUtils.toString( is ) );
+                entrantOverviewTemplate.setModified( false );
+                configuration.add( "ENTRANT_OVERVIEW_TEMPLATE", entrantOverviewTemplate );
+            } catch (IOException e) {
+                // can't read from file? ignore it, just do not create object
+            }
+        }
 
         configuration.add( "documentType", new SeedEntityIdentifier( DocumentType.class, "title" ) );
         configuration.add( "PERSON_ID", new DocumentType( 1, "Удостоверение личности", "УЛ" ) );
