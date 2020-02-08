@@ -11,6 +11,7 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import ru.apricom.rtf.FieldModifier;
 import ru.apricom.rtf.TableModifier;
+import ru.apricom.rtf.ZoneModifier;
 import ru.apricom.rtf.model.RtfDocument;
 import ru.apricom.rtf.parser.TemplateRtfListener;
 import ru.apricom.rtf.parser.TemplateRtfParser;
@@ -86,12 +87,15 @@ public class ReportPrintEngine {
 
         FieldModifier fm = (FieldModifier) parameters.get( "fm" ); //get FieldModifier from report parameters
         TableModifier tm = (TableModifier) parameters.get( "tm" ); //get TableModifier from report parameters
+        ZoneModifier zm = (ZoneModifier) parameters.get( "zm" ); //get ZoneModifier from report parameters
         if ( fm == null ) fm = new FieldModifier();
         if ( tm == null ) tm = new TableModifier();
+        if ( zm == null ) zm = new ZoneModifier();
 
         //apply modifiers
         fm.modify( doc );
         tm.modify( doc );
+        zm.modify( doc );
 
         ByteArrayOutputStream document = new ByteArrayOutputStream();
         doc.output( document );

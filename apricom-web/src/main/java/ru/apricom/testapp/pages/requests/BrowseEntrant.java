@@ -12,6 +12,7 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import ru.apricom.rtf.FieldModifier;
 import ru.apricom.rtf.TableModifier;
+import ru.apricom.rtf.ZoneModifier;
 import ru.apricom.testapp.auxilary.*;
 import ru.apricom.testapp.dao.CatalogDao;
 import ru.apricom.testapp.dao.DocumentDao;
@@ -212,6 +213,7 @@ public class BrowseEntrant {
 
         FieldModifier fm = new FieldModifier();
         TableModifier tm = new TableModifier();
+        ZoneModifier zm = new ZoneModifier();
 
         if ( entrant != null ) {
             fm.put( "caseNumber", Long.toString( entrant.getId() ) ); //TODO change to entrantNumber in template
@@ -247,6 +249,7 @@ public class BrowseEntrant {
             List<BaseDocument> documentsOfEntrant = documentDao.findForEntrant( BaseDocument.class, entrant );
 
             if ( documentsOfEntrant != null && documentsOfEntrant.size() != 0 ) {
+
                 for ( int i = documentsOfEntrant.size() - 1; i >= 0; i-- ) {
                     if  ( documentsOfEntrant.get( i ).getDocumentType() == null ) documentsOfEntrant.remove( i );
                 }
@@ -277,12 +280,20 @@ public class BrowseEntrant {
                     documents.add( row );
                 }
 
+
                 tm.put( "T1", documents );
             }
         }
 
+        /**
+         * ZoneModifier demo
+         */
+        zm.put( "zoneToKeep", true );
+        zm.put( "zoneToRemove", false );
+
         reportParameters.put( "fm", fm );
         reportParameters.put( "tm", tm );
+        reportParameters.put( "zm", zm );
 
         String filename = FileNameTransliterator.transliterateRuEn( entrant.getPersonInfo().getName().getSurname() ) + "_overview";
         reportParameters.put( "name", filename );

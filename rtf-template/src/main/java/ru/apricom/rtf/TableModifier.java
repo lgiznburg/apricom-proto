@@ -1,5 +1,6 @@
 package ru.apricom.rtf;
 
+import com.rtfparserkit.rtf.Command;
 import ru.apricom.rtf.model.*;
 
 import java.util.HashMap;
@@ -11,6 +12,8 @@ import java.util.Map;
  *
  * Works on template and produces table modification.
  * Modification should be stored in form of List<List<String>>.
+ * Each table should be enclosed in "tableStart" and "tableEnd" fields if you need to remove table if it's empty.
+ * You may include any other element in this zone if you want it to be removed with the table.
  *
  */
 public class TableModifier {
@@ -67,19 +70,58 @@ public class TableModifier {
                         }
                     }
                 }
-            } else {
-                /**
-                 * if there are no rows in input - we need to remove table (this removes only one row above table)
-                 */
-                RtfElement emptyTable = fields.get(0).getParent();
-                RtfGroup emptyTableParent = (RtfGroup) emptyTable.getParent();
-                int position = emptyTableParent.getElements().indexOf( emptyTable );
-                emptyTableParent.getElements().remove( emptyTable );
+            }
+            /**
+             * if there are no rows in input - we need to remove table (this removes only one row above table)
+             * the table needs to be surrounded by 2 fields - "tableStart" and "tableEnd"
+             */
+            RtfElement emptyTable = fields.get(0).getParent();
+            RtfGroup emptyTableParent = (RtfGroup) emptyTable.getParent();
+            int forward_position = emptyTableParent.getElements().indexOf( emptyTable );
+            int backward_position = forward_position - 1;
+            emptyTableParent.getElements().remove( emptyTable );
 
-                for ( int i = position - 1; i >= 0; i-- ) {
-                    if ( emptyTableParent.getElements().get( i ) instanceof RtfTableRow ) {
-                        emptyTableParent.getElements().remove( i );
-                        break;
+            while ( true ) {
+                RtfElement element = emptyTableParent.getElements().get( forward_position );
+                if ( element instanceof RtfField && ((RtfField) element).getKey().equals( "tableEnd" ) ) {
+                    emptyTableParent.getElements().remove( forward_position );
+                    //this removes unnecessary paragraph after removed field
+                    while ( true ) {
+                        RtfElement transitional = emptyTableParent.getElements().get( forward_position );
+                        if ( transitional instanceof RtfGroup ) {
+                            List<RtfElement> elements = ((RtfGroup)transitional).getElements();
+                            elements.removeIf(el -> el instanceof RtfCommand && ((RtfCommand) el).getCommand().equals(Command.par));
+                            break;
+                        }
+                        forward_position++;
+                    }
+                    break;
+                } else {
+                    if ( modifications.get(key) == null || modifications.get(key).size() == 0 ) {
+                        emptyTableParent.getElements().remove( forward_position );
+                    }
+                }
+                forward_position++;
+            }
+
+            for ( int i = backward_position; i >= 0; i-- ) {
+                RtfElement element = emptyTableParent.getElements().get( i );
+                if ( element instanceof RtfField && ((RtfField) element).getKey().equals( "tableStart" ) ) {
+                    emptyTableParent.getElements().remove( i );
+                    //this removes unnecessary paragraph after removed field
+                    while ( true ) {
+                        RtfElement transitional = emptyTableParent.getElements().get( i );
+                        if ( transitional instanceof RtfGroup ) {
+                            List<RtfElement> elements = ((RtfGroup)transitional).getElements();
+                            elements.removeIf(el -> el instanceof RtfCommand && ((RtfCommand) el).getCommand().equals(Command.par));
+                            break;
+                        }
+                        i++;
+                    }
+                    break;
+                } else {
+                    if ( modifications.get(key) == null || modifications.get(key).size() == 0 ) {
+                        emptyTableParent.getElements().remove(i);
                     }
                 }
             }
