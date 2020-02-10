@@ -1,14 +1,22 @@
 package ru.apricom.testapp.pages.requests;
 
+import com.mulya.PetrovichDeclinationMaker;
+import com.mulya.enums.Case;
+import com.mulya.enums.Gender;
+import com.mulya.enums.NamePart;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.annotations.PageActivationContext;
+import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.plastic.TryCatchBlock;
+import padeg.lib.Padeg;
 import ru.apricom.testapp.auxilary.AttachmentImage;
 import ru.apricom.testapp.auxilary.WizardState;
 import ru.apricom.testapp.auxilary.WizardStep;
@@ -25,6 +33,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -162,5 +171,7 @@ public class BrowseEntrant {
     }
 
     public void setEntrantAlt( Entrant entrant ) { this.entrant = entrant; }
+
+
 
 }

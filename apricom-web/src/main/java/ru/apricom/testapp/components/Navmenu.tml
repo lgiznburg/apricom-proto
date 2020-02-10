@@ -19,7 +19,7 @@
             <t:pagelink page="requests/wizard">
                 <button class="mobile-submenu"><span>Создать заявку</span></button>
             </t:pagelink>
-            <t:pagelink page="requests/list">
+            <t:pagelink page="requests/requestlist">
                 <button class="mobile-submenu"><span>Список заявок</span></button>
             </t:pagelink>
             <t:pagelink page="index">

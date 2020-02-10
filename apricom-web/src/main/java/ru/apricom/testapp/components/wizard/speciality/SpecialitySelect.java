@@ -329,6 +329,6 @@ public class SpecialitySelect {
     }
 
     public String getStepName() {
-        return WizardStep.SPECIALITIES_AND_EXAMS.name();
+        return WizardStep.SPECIAL_RIGHTS_INFO.name();
     }
 }
