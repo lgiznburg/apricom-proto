@@ -34,7 +34,7 @@ public class EntrantDaoImpl extends BaseDaoImpl implements EntrantDao {
     }
 
     @Override
-    public long countEntrants(String filterLastName, String filterFistName, String filterMiddleName) {
+    public long countEntrants(String filterLastName, String filterFistName, String filterMiddleName, String filterCaseNumber) {
         Criteria criteria = session.createCriteria(Entrant.class)
                 .createAlias("personInfo", "personInfo")
                 .createAlias("personInfo.name", "personName");
@@ -46,6 +46,9 @@ public class EntrantDaoImpl extends BaseDaoImpl implements EntrantDao {
         }
         if(filterMiddleName!=null && !filterMiddleName.isEmpty()){
             criteria.add(Restrictions.like("personName.patronymic", filterMiddleName+"%"));
+        }
+        if (filterCaseNumber!=null && !filterCaseNumber.isEmpty()){
+            criteria.add(Restrictions.like("caseNumber", filterCaseNumber+"%"));
         }
         criteria.setProjection(Projections.rowCount());
         return (long) criteria.uniqueResult();
@@ -53,7 +56,7 @@ public class EntrantDaoImpl extends BaseDaoImpl implements EntrantDao {
     }
 
     @Override
-    public List<Entrant> findByFilter(String filterLastName, String filterFistName, String filterMiddleName, int startIndex, int endIndex, List<SortConstraint> sortConstraints) {
+    public List<Entrant> findByFilter(String filterLastName, String filterFistName, String filterMiddleName, String filterCaseNumber, int startIndex, int endIndex, List<SortConstraint> sortConstraints) {
         Criteria criteria = session.createCriteria(Entrant.class)
                 .createAlias("personInfo", "personInfo")
                 .createAlias("personInfo.name", "personName");
@@ -65,6 +68,9 @@ public class EntrantDaoImpl extends BaseDaoImpl implements EntrantDao {
         }
         if(filterMiddleName!=null && !filterMiddleName.isEmpty()){
             criteria.add(Restrictions.like("personName.patronymic", filterMiddleName+"%"));
+        }
+        if (filterCaseNumber!=null && !filterCaseNumber.isEmpty()){
+            criteria.add(Restrictions.like("caseNumber", filterCaseNumber+"%"));
         }
         for( SortConstraint sortConstraint : sortConstraints ) {
             if (!sortConstraint.getPropertyModel().getPropertyName().equalsIgnoreCase("fullName")) {

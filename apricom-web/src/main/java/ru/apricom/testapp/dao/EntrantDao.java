@@ -16,7 +16,7 @@ public interface EntrantDao extends BaseDao {
 
     SpecialState findSpecialState(Entrant entrant);
 
-    long countEntrants(String filterLastName, String filterFistName, String filterMiddleName);
+    long countEntrants(String filterLastName, String filterFistName, String filterMiddleName, String filterCaseNumber);
 
-    List<Entrant> findByFilter(String filterLastName, String filterFistName, String filterMiddleName, int startIndex, int endIndex, List<SortConstraint> sortConstraints);
+    List<Entrant> findByFilter(String filterLastName, String filterFistName, String filterMiddleName, String filterCaseNumber, int startIndex, int endIndex, List<SortConstraint> sortConstraints);
 }

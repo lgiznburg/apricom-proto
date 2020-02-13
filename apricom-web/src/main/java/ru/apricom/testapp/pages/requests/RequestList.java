@@ -30,7 +30,7 @@ import java.util.ArrayList;
  */
 @RequiresUser
 @Import (stylesheet = "context:static/css/requestList.css")
-public class List<E> {
+public class RequestList<E> {
     static private final int MAX_RESULTS = 30;
 
     // Screen fields
@@ -51,6 +51,20 @@ public class List<E> {
     private String filterMiddleName;
 
     @Property
+    @ActivationRequestParameter(value = "filterCaseNumber")
+    private String filterCaseNumber;
+
+    @Property
+    @ActivationRequestParameter(value = "forChangeNumber")
+    private int forChangeNumber;
+
+    @Property
+    private int numberOfEntrant=1;
+
+    @Property
+    private int[] numberOfEntrantList = {1, 30, 50, 100};
+
+    @Property
     private EntrantFacade entrant;
 
     @Inject
@@ -68,6 +82,13 @@ public class List<E> {
     @Inject
     private AjaxResponseRenderer ajaxResponseRenderer;
 
+    void onValueChangedFromNumberOfEntrant(int numberOfEntrant){
+        this.numberOfEntrant = numberOfEntrant;
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(personsZone);
+        }
+    }
+
     void onSuccessFromFilterCriteria() {
         if (request.isXHR()) {
             ajaxResponseRenderer.addRender(personsZone);
@@ -75,7 +96,7 @@ public class List<E> {
     }
 
     public GridDataSource getListRows() {
-        return new PersonFilteredDataSource(entrantDao, filterLastName, filterFirstName, filterMiddleName);
+        return new PersonFilteredDataSource(entrantDao, filterLastName, filterFirstName, filterMiddleName, filterCaseNumber);
     }
 
     public class PersonFilteredDataSource implements GridDataSource {
@@ -83,26 +104,29 @@ public class List<E> {
         private String filterLastName;
         private String filterFirstName;
         private String filterMiddleName;
+        private String filterCaseNumber;
 
         private int startIndex;
         private java.util.List<EntrantFacade> preparedResults;
 
-        public PersonFilteredDataSource(EntrantDao entrantDao, String filterLastName, String filterFistName, String filterMiddleName) {
+        public PersonFilteredDataSource(EntrantDao entrantDao, String filterLastName,
+                                        String filterFistName, String filterMiddleName, String filterCaseNumber) {
             this.entrantDao = entrantDao;
             this.filterLastName = filterLastName;
             this.filterFirstName = filterFistName;
             this.filterMiddleName = filterMiddleName;
+            this.filterCaseNumber = filterCaseNumber;
         }
 
         @Override
         public int getAvailableRows() {
-            return (int) entrantDao.countEntrants(filterLastName, filterFirstName, filterMiddleName);
+            return (int) entrantDao.countEntrants(filterLastName, filterFirstName, filterMiddleName, filterCaseNumber);
         }
 
         @Override
         public void prepare(final int startIndex, final int endIndex, final java.util.List<SortConstraint> sortConstraints) {
 
-            java.util.List<Entrant> list = entrantDao.findByFilter(filterLastName, filterFirstName, filterMiddleName, startIndex, endIndex, sortConstraints);
+            java.util.List<Entrant> list = entrantDao.findByFilter(filterLastName, filterFirstName, filterMiddleName, filterCaseNumber, startIndex, endIndex, sortConstraints);
             preparedResults = new ArrayList<>();
 
             for(Entrant entrant: list){

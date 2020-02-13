@@ -6,6 +6,15 @@
     <h4>Абитуриенты</h4>
 </div>
 
+<div>
+    <t:form async="true" class="form-inline">
+        <div class="form-group">
+            <t:label for="numberOfEntrant"/>
+            <t:select t:id="numberOfEntrant" value="numberOfEntrant" model="numberOfEntrantList" zone="personsZone"/>
+        </div>
+    </t:form>
+</div>
+
 <div class="eg">
     <t:form t:id="filterCriteria" async="true" class="form-inline">
 
@@ -25,15 +34,19 @@
         </div>
 
         <div class="form-group">
-            <t:submit t:id="filterSubmit" id="filterSubmit"/>
+            <t:label for="filterCaseNumber"/>:
+            <t:textfield t:id="filterCaseNumber" value="filterCaseNumber" />
         </div>
 
+        <div class="form-group">
+            <t:submit t:id="filterSubmit" id="filterSubmit"/>
+        </div>
 
     </t:form>
 
     <div>
         <t:zone t:id="personsZone" id="personsZone">
-            <t:grid id="grid" source="listRows" row="entrant" exclude="id"  rowsPerPage="4" pagerPosition="bottom" inplace="true">
+            <t:grid id="grid" source="listRows" row="entrant" exclude="id"  rowsPerPage="numberOfEntrant" pagerPosition="bottom" inplace="true">
                 <p:fullNameCell>
                     <t:pagelink page="requests/browseentrant" context="entrant.entrant">${entrant.fullName}</t:pagelink>
                 </p:fullNameCell>
