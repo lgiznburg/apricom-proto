@@ -3,6 +3,7 @@ package ru.apricom.testapp.dao.implementaion;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import ru.apricom.testapp.dao.ExamDao;
+import ru.apricom.testapp.entities.catalogs.EducationalSubject;
 import ru.apricom.testapp.entities.entrant.Entrant;
 import ru.apricom.testapp.entities.exams.EntrantResult;
 import ru.apricom.testapp.entities.exams.EntrantToExam;
@@ -26,5 +27,15 @@ public class ExamDaoImpl extends BaseDaoImpl implements ExamDao {
         Criteria criteria = session.createCriteria( EntrantToExam.class )
                 .add( Restrictions.eq( "entrant", entrant ) );
         return criteria.list();
+    }
+
+    @Override
+    public EntrantToExam findExamsForEntrantAndSubject( Entrant entrant, EducationalSubject educationalSubject ) {
+        Criteria criteria = session.createCriteria( EntrantToExam.class )
+                .add( Restrictions.eq( "entrant", entrant ) )
+                .createAlias( "examSchedule", "examSchedule" )
+                .add( Restrictions.eq( "examSchedule.subject", educationalSubject ) )
+                .setMaxResults( 1 );
+        return (EntrantToExam) criteria.uniqueResult();
     }
 }

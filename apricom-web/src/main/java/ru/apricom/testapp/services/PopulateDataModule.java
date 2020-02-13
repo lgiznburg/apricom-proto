@@ -427,6 +427,7 @@ public class PopulateDataModule {
             configuration.add( "physics_exam1", new ExamSchedule( physics, dateFormat.parse( "16.07.20 10:00" ), "Ауд. 15", 20 ) );
             configuration.add( "soc_exam1", new ExamSchedule( social, dateFormat.parse( "14.07.20 12:00" ), "Ауд. 15", 20 ) );
             configuration.add( "math_exam1", new ExamSchedule( history, dateFormat.parse( "16.07.20 15:00" ), "Ауд. 15", 20 ) );
+            configuration.add( "math_exam2", new ExamSchedule( math, dateFormat.parse( "15.07.20 15:00" ), "Ауд. 15", 20 ) );
         } catch (ParseException e) {
             //
         }

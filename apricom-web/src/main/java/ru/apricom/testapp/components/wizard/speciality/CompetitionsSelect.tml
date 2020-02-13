@@ -8,7 +8,7 @@
             <div class="form-group">
                 <div class="col-sm-12">
                     <h5>${message:exam-results}</h5>
-                    <table>
+                    <table class="table">
                         <tr>
                             <th>${message:exam-subject}</th>
                             <th>${message:exam-score}</th>
@@ -27,6 +27,11 @@
                                 <t:if test="examAvailable">
                                     <t:select value="resultInList.type" model="examTypeModel" blankOption="NEVER"/>
                                     <p:else>${examTypeName}</p:else>
+                                </t:if>
+                            </td>
+                            <td>
+                                <t:if test="showExam" >
+                                    <t:select value="examInList" model="examScheduleModel" blankOption="NEVER"/>
                                 </t:if>
                             </td>
                         </tr>
