@@ -45,9 +45,6 @@ public class CampaignSelect {
     @Property
     private EducationalProgram chosenProgram;
 
-    //@Property
-    //private AdmissionCampaign chosenCampaign;
-
     // selected programs
     @Property
     @Parameter(required = true)
@@ -116,6 +113,11 @@ public class CampaignSelect {
             request.setEntrant( entrant );
             request.setRequestedCompetitions( new ArrayList<>() );
             entrant.getRequests().add( request );
+        } else {
+            /** as entrant can only have one campaign, it doesn't matter from which of his requests
+             * we should take it
+             */
+            helper.setAdmissionCampaign( entrant.getRequests().get(0).getAdmissionCampaign() );
         }
         if ( programs == null ) {
             programs = new ArrayList<>(  );

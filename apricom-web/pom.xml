@@ -31,7 +31,7 @@
         </dependency>
         <dependency>
             <groupId>ru.apricom</groupId>
-            <artifactId>pdf-template</artifactId>
+            <artifactId>rtf-template</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

@@ -136,6 +136,7 @@ public class EducationInfoEdit {
             DiplomaDocument mainEduDoc = new DiplomaDocument();
             mainEduDoc.setMain(true);
             mainEduDoc.setCountry(countryDao.findByIso2("ru"));
+            mainEduDoc.setDocumentType( catalogDao.findCatalogByCode( DocumentType.class, DocumentTypeCode.EDU_DOCUMENT.ordinal() + 1 ) );
             helper.setMainEduDoc( mainEduDoc );
         } else {
             // document exists - show form
@@ -156,6 +157,7 @@ public class EducationInfoEdit {
             secEduDoc.setMain(false);
             secEduDoc.setCountry(countryDao.findByIso2("ru"));
             secEduDoc.setDiplomaType(catalogDao.findCatalogByCode(EducationDocumentType.class, EducationDocumentTypeCode.BASIC_CERTIFICATE.ordinal()));
+            secEduDoc.setDocumentType( catalogDao.findCatalogByCode( DocumentType.class, DocumentTypeCode.EDU_DOCUMENT.ordinal() + 1 ) );
             helper.setSecEduDoc( secEduDoc );
         } else {
             // sec document selected - show second document form

@@ -27,6 +27,7 @@ public class HibernateModule {
         binder.bind( DocumentDao.class, DocumentDaoImpl.class );
         binder.bind( SpecialityDao.class, SpecialityDaoImpl.class );
         binder.bind( ExamDao.class, ExamDaoImpl.class );
+        binder.bind( RtfTemplateDao.class, RtfTemplateDaoImpl.class );
         binder.bind( BaseDao.class, BaseDaoImpl.class ).withId("BaseDao");
 
         //seed entity - initial DB population

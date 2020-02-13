@@ -29,17 +29,17 @@
         <div class="col-sm-3">
             <t:label for="contactPhone"/><span style="color: darkred;" title="${message:necessary}">* </span>
             <t:textfield t:id="contactPhone" value="personInfo.contactPhone" validate="required"
-                         t:mixins="MaskedInput" MaskedInput.mask="+7(999)999-99-99" />
+                         t:mixins="MaskedInput" MaskedInput.mask="+7 (999) 999-99-99" />
         </div>
         <div class="col-sm-3">
             <t:label for="homePhone"/>
             <t:textfield t:id="homePhone" value="personInfo.homePhone"
-                         t:mixins="MaskedInput" MaskedInput.mask="+7(999)999-99-99" />
+                         t:mixins="MaskedInput" MaskedInput.mask="+7 (999) 999-99-99" />
         </div>
         <div class="col-sm-3">
             <t:label for="mobilePhone"/>
             <t:textfield t:id="mobilePhone" value="personInfo.mobilePhone"
-                         t:mixins="MaskedInput" MaskedInput.mask="+7(999)999-99-99"  />
+                         t:mixins="MaskedInput" MaskedInput.mask="+7 (999) 999-99-99"  />
         </div>
         <div class="col-sm-3">
             <t:label for="email"/>*

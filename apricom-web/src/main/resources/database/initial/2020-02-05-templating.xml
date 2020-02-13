@@ -1,0 +1,32 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="add-templates" author="polyakov_ps">
+        <createTable tableName="document_template">
+            <column autoIncrement="true" name="id" type="${id.type}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="template_type_id" type="${id.type}">
+                <constraints unique="true"/>
+            </column>
+            <column name="name" type="${string.type}"/>
+            <column name="file_name" type="${string.type}"/>
+            <column name="rtf_template" type="${text.type}"/>
+            <column name="template_comment" type="${string.type}"/>
+            <column name="modified" type="boolean" defaultValue="false"/>
+        </createTable>
+        <createIndex tableName="document_template" indexName="fk_template_type">
+            <column name="template_type_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="template_type_id" baseTableName="document_template"
+                                 constraintName="fk_template_type"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="catalogs" validate="true"/>
+    </changeSet>
+
+</databaseChangeLog>

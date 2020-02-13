@@ -2,6 +2,8 @@ package ru.apricom.testapp.dao;
 
 import ru.apricom.testapp.dao.BaseDao;
 import ru.apricom.testapp.entities.catalogs.*;
+import ru.apricom.testapp.entities.templates.DocumentTemplate;
+import ru.apricom.testapp.entities.templates.DocumentTemplateTypeCode;
 
 import java.util.List;
 
